@@ -274,6 +274,8 @@ function toTree(vnode) {
     }
     case FiberTags.Lazy:
       return childrenToTree(node.child);
+    case FiberTags.OffscreenComponent:
+      return toTree(node.child);
     default:
       throw new Error(`Enzyme Internal Error: unknown node with tag ${node.tag}`);
   }

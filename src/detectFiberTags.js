@@ -107,5 +107,8 @@ module.exports = function detectFiberTags() {
     Lazy: supportsLazy
       ? getLazyFiber(LazyComponent).tag
       : -1,
+    OffscreenComponent: supportsLazy
+      ? getLazyFiber('div').return.return.tag // Go two levels above to find the root
+      : -1,
   };
 };
