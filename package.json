@@ -9,6 +9,7 @@
     "clean": "rimraf build",
     "lint": "eslint --ext js,jsx .",
     "prebuild": "yarn clean",
+    "prepublishOnly": "yarn build",
     "pretest": "yarn lint",
     "watch": "yarn build -w"
   },
