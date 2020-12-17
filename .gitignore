@@ -1,2 +1,5 @@
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
 build
 node_modules
