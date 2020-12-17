@@ -132,7 +132,11 @@ function checkIsSuspenseAndCloneElement(el, { suspenseFallback }) {
     children = replaceLazyWithFallback(children, fallback);
   }
 
-  const FakeSuspenseWrapper = (props) => React.createElement(el.type, { ...el.props, ...props }, children);
+  const FakeSuspenseWrapper = (props) => React.createElement(
+    el.type,
+    { ...el.props, ...props },
+    children,
+  );
   return React.createElement(FakeSuspenseWrapper, null, children);
 }
 
@@ -353,7 +357,6 @@ function getEmptyStateValue() {
   // see https://github.com/facebook/react/commit/39be83565c65f9c522150e52375167568a2a1459
   // also see https://github.com/facebook/react/pull/11965
 
-  // eslint-disable-next-line react/prefer-stateless-function
   class EmptyState extends React.Component {
     render() {
       return null;
@@ -546,16 +549,18 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
       }
       if (lastComponent !== Component) {
         if (isStateful(Component)) {
-          wrappedComponent = class extends Component {}; // eslint-disable-line react/prefer-stateless-function
+          wrappedComponent = class extends Component {};
           if (compare) {
-            wrappedComponent.prototype.shouldComponentUpdate = (nextProps) => !compare(this.props, nextProps);
+            wrappedComponent.prototype.shouldComponentUpdate = (nextProps) => (
+              !compare(this.props, nextProps)
+            );
           } else {
             wrappedComponent.prototype.isPureReactComponent = true;
           }
         } else {
           let memoized = sentinel;
           let prevProps;
-          wrappedComponent = function (props, ...args) {
+          wrappedComponent = function wrappedComponentFn(props, ...args) {
             const shouldUpdate = memoized === sentinel || (compare
               ? !compare(prevProps, props)
               : !shallowEqual(prevProps, props)

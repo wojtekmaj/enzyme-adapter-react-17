@@ -18,14 +18,14 @@ function getFiber(element) {
 function getLazyFiber(LazyComponent) {
   const container = global.document.createElement('div');
   let inst = null;
-  // eslint-disable-next-line react/prefer-stateless-function
+
   class Tester extends React.Component {
     render() {
       inst = this;
       return React.createElement(LazyComponent);
     }
   }
-  // eslint-disable-next-line react/prefer-stateless-function
+
   class SuspenseWrapper extends React.Component {
     render() {
       return React.createElement(
@@ -51,7 +51,6 @@ module.exports = function detectFiberTags() {
   function Fn() {
     return null;
   }
-  // eslint-disable-next-line react/prefer-stateless-function
   class Cls extends React.Component {
     render() {
       return null;
