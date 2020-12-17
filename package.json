@@ -12,10 +12,6 @@
     "test": "yarn lint",
     "watch": "yarn build -w"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/wojtekmaj/enzyme-adapter-react-17.git"
-  },
   "keywords": [
     "javascript",
     "shallow rendering",
@@ -34,9 +30,6 @@
   "contributors": [
     "Wojciech Maj <kontakt@wojtekmaj.pl>"
   ],
-  "funding": {
-    "url": "https://github.com/sponsors/ljharb"
-  },
   "license": "MIT",
   "dependencies": {
     "enzyme-adapter-utils": "^1.14.0",
@@ -66,5 +59,15 @@
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "rimraf": "^3.0.0"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "build/",
+    "src/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wojtekmaj/enzyme-adapter-react-17.git"
   }
 }
