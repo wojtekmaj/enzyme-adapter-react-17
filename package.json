@@ -5,12 +5,11 @@
   "homepage": "https://enzymejs.github.io/enzyme/",
   "main": "build",
   "scripts": {
-    "build": "babel --source-maps=both src --out-dir build",
+    "build": "babel --source-maps=both src -d build",
     "clean": "rimraf build",
     "lint": "eslint --ext js,jsx .",
-    "prebuild": "yarn clean",
     "prepack": "yarn clean && yarn build",
-    "pretest": "yarn lint",
+    "test": "yarn lint",
     "watch": "yarn build -w"
   },
   "repository": {
