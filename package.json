@@ -64,7 +64,8 @@
     "LICENSE",
     "README.md",
     "build/",
-    "src/"
+    "src/",
+    "index.d.ts"
   ],
   "repository": {
     "type": "git",
