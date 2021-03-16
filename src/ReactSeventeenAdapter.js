@@ -58,13 +58,6 @@ import {
 import findCurrentFiberUsingSlowPath from './findCurrentFiberUsingSlowPath';
 import detectFiberTags from './detectFiberTags';
 
-const is164 = !!TestUtils.Simulate.touchStart; // 16.4+
-const is165 = !!TestUtils.Simulate.auxClick; // 16.5+
-const is166 = is165 && !React.unstable_AsyncMode; // 16.6+
-const is168 = is166 && typeof TestUtils.act === 'function';
-
-const hasShouldComponentUpdateBug = semver.satisfies(testRendererVersion, '< 16.8');
-
 // Lazily populated if DOM is available.
 let FiberTags = null;
 
@@ -345,8 +338,8 @@ function replaceLazyWithFallback(node, fallback) {
 
 const eventOptions = {
   animation: true,
-  pointerEvents: is164,
-  auxClick: is165,
+  pointerEvents: true,
+  auxClick: true,
 };
 
 function getEmptyStateValue() {
@@ -365,9 +358,6 @@ function getEmptyStateValue() {
 }
 
 function wrapAct(fn) {
-  if (!is168) {
-    return fn();
-  }
   let returnVal;
   TestUtils.act(() => { returnVal = fn(); });
   return returnVal;
@@ -409,7 +399,7 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
           onSetState: true,
         },
         getDerivedStateFromProps: {
-          hasShouldComponentUpdateBug,
+          hasShouldComponentUpdateBug: false,
         },
         getSnapshotBeforeUpdate: true,
         setState: {
@@ -418,7 +408,7 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
         getChildContext: {
           calledByRenderer: false,
         },
-        getDerivedStateFromError: is166,
+        getDerivedStateFromError: true,
       },
     };
   }
@@ -477,7 +467,7 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
       },
       simulateError(nodeHierarchy, rootNode, error) {
         const isErrorBoundary = ({ instance: elInstance, type }) => {
-          if (is166 && type && type.getDerivedStateFromError) {
+          if (type && type.getDerivedStateFromError) {
             return true;
           }
           return elInstance && elInstance.componentDidCatch;
@@ -495,7 +485,7 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
           nodeHierarchy,
           nodeTypeFromType,
           adapter.displayNameOfNode,
-          is166 ? catchingType : undefined,
+          catchingType,
         );
       },
       simulateEvent(node, event, mock) {
@@ -521,7 +511,7 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
           }),
         };
       },
-      ...(is168 && { wrapInvoke: wrapAct }),
+      wrapInvoke: wrapAct,
     };
   }
 
@@ -541,9 +531,6 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
 
     // wrap memo components with a PureComponent, or a class component with sCU
     const wrapPureComponent = (Component, compare) => {
-      if (!is166) {
-        throw new RangeError('this function should not be called in React < 16.6. Please report this!');
-      }
       if (lastComponent !== Component) {
         if (isStateful(Component)) {
           wrappedComponent = class extends Component {};
@@ -582,7 +569,7 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
     // Wrap functional components on versions prior to 16.5,
     // to avoid inadvertently pass a `this` instance to it.
     const wrapFunctionalComponent = (Component) => {
-      if (is166 && has(Component, 'defaultProps')) {
+      if (has(Component, 'defaultProps')) {
         if (lastComponent !== Component) {
           wrappedComponent = Object.assign(
             // eslint-disable-next-line new-cap
@@ -594,25 +581,15 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
         }
         return wrappedComponent;
       }
-      if (is165) {
-        return Component;
-      }
 
-      if (lastComponent !== Component) {
-        wrappedComponent = Object.assign(
-          (...args) => Component(...args), // eslint-disable-line new-cap
-          Component,
-        );
-        lastComponent = Component;
-      }
-      return wrappedComponent;
+      return Component;
     };
 
     const renderElement = (elConfig, ...rest) => {
       const renderedEl = renderer.render(elConfig, ...rest);
 
       const typeIsExisted = !!(renderedEl && renderedEl.type);
-      if (is166 && typeIsExisted) {
+      if (typeIsExisted) {
         const clonedEl = checkIsSuspenseAndCloneElement(renderedEl, { suspenseFallback });
 
         const elementIsChanged = clonedEl.type !== renderedEl.type;
@@ -732,7 +709,7 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
           nodeHierarchy.concat(cachedNode),
           nodeTypeFromType,
           adapter.displayNameOfNode,
-          is166 ? cachedNode.type : undefined,
+          cachedNode.type,
         );
       },
       simulateEvent(node, event, ...args) {
@@ -839,7 +816,7 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
     // newer node types may be undefined, so only test if the nodeType exists
     if (nodeType) {
       switch (nodeType) {
-        case (is166 ? ConcurrentMode : AsyncMode) || NaN: return is166 ? 'ConcurrentMode' : 'AsyncMode';
+        case ConcurrentMode || NaN: return 'ConcurrentMode';
         case Fragment || NaN: return 'Fragment';
         case StrictMode || NaN: return 'StrictMode';
         case Profiler || NaN: return 'Profiler';
