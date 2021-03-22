@@ -3,13 +3,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
 import ShallowRenderer from 'react-test-renderer/shallow';
-import { version as testRendererVersion } from 'react-test-renderer/package.json';
 import TestUtils from 'react-dom/test-utils';
-import semver from 'semver';
 import checkPropTypes from 'prop-types/checkPropTypes';
 import has from 'has';
 import {
-  AsyncMode,
   ConcurrentMode,
   ContextConsumer,
   ContextProvider,
