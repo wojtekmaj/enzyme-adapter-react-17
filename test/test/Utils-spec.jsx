@@ -860,7 +860,8 @@ describe('Utils', () => {
     });
   });
 
-  describe('spyProperty', () => {
+  // FIXME: when spyProperty is released
+  describe.skip('spyProperty', () => {
     it('can spy "was assigned" status and restore it', () => {
       let holder = 1;
       const obj = {

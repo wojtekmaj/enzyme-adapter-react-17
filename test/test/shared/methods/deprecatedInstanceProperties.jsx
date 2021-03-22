@@ -35,11 +35,11 @@ export default function describeDeprecatedInstanceProperties({
       it(`warns on \`${prop}\``, () => {
         expect(() => wrapper[prop]).to.throw(
           Error,
-          new RegExp(`^Attempted to access ${isShallow ? 'Shallow' : 'React'}Wrapper::${prop}`),
+          new RegExp(`Attempted to access ${isShallow ? 'Shallow' : 'React'}Wrapper::${prop}`),
         );
         expect(() => wrapper[prop]).to.throw(
           Error,
-          new RegExp(`${extra.replace(/([(){}.\\])/g, '\\$1')}$`),
+          new RegExp(`${extra.replace(/([(){}.\\])/g, '\\$1')}`),
         );
       });
     });

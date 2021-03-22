@@ -268,6 +268,7 @@ export default function describeText({
           return (
             <span>
               It’s number
+              {' '}
               {String(number)}
             </span>
           );
@@ -278,6 +279,7 @@ export default function describeText({
         return (
           <span>
             It’s number
+            {' '}
             {String(number)}
           </span>
         );
