@@ -177,7 +177,17 @@ describe('Adapter', () => {
       render() { return (<FooBar><span><div /></span></FooBar>); }
     }
     class Four extends React.Component {
-      render() { return (<FooBar><span>{'some string'}4{'another string'}</span></FooBar>); }
+      render() {
+        return (
+          <FooBar>
+            <span>
+              some string
+              4
+              another string
+            </span>
+          </FooBar>
+        );
+      }
     }
 
     it('hydrated trees match unhydrated trees', () => {
@@ -197,7 +207,13 @@ describe('Adapter', () => {
     it('treats mixed children correctly', () => {
       class Foo extends React.Component {
         render() {
-          return (<div>hello{4}{'world'}</div>);
+          return (
+            <div>
+              hello
+              {4}
+              world
+            </div>
+          );
         }
       }
 

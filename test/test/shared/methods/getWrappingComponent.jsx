@@ -98,7 +98,11 @@ export default function describeGetWrappingComponent({
 
         return (
           <div>
-            <div>Context says: {testContext}{explicitContext}</div>
+            <div>
+              {'Context says: '}
+              {testContext}
+              {explicitContext}
+            </div>
             {renderMore && <RendersNull />}
             {renderStateTester && <StateTester />}
           </div>

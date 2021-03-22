@@ -118,7 +118,6 @@ describe('Utils', () => {
         <div foo={{ a: 2, b: 2 }} />,
         <div foo={{ a: 1, b: 2 }} />,
       )).to.equal(false);
-
     });
 
     describe('children props', () => {
@@ -143,8 +142,21 @@ describe('Utils', () => {
 
       it('matches children before and after interpolation', () => {
         expect(nodeEqual(
-          <div>{2}{' children'}{<span />} abc {'hey'}</div>,
-          <div>2 children<span /> abc hey</div>,
+          <div>
+            {2}
+            {' children'}
+            <span />
+            {' '}
+            abc
+            {' '}
+            hey
+          </div>,
+          <div>
+            2 children
+            <span />
+            {' '}
+            abc hey
+          </div>,
         )).to.equal(true);
       });
 
@@ -342,7 +354,6 @@ describe('Utils', () => {
         <div foo={{ a: 2, b: 2 }} />,
         <div foo={{ a: 1, b: 2 }} />,
       )).to.equal(false);
-
     });
 
     describe('children props', () => {
@@ -443,7 +454,7 @@ describe('Utils', () => {
         )).to.equal(false);
 
         expect(nodeMatches(
-          <div>{''}</div>,
+          <div />,
           <div>{0}</div>,
         )).to.equal(false);
       });
@@ -480,7 +491,6 @@ describe('Utils', () => {
         const result = mapNativeEventNames('click');
         expect(result).to.equal('click');
       });
-
     });
 
     describe('given a React capitalised mouse event', () => {

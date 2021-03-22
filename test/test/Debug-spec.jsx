@@ -136,6 +136,7 @@ describe('debug', () => {
 
     it('renders mixed children', () => {
       expect(debugElement((
+        // eslint-disable-next-line react/jsx-curly-brace-presence, react/jsx-one-expression-per-line
         <div>hello{'world'}</div>
       ))).to.equal((
         `<div>
@@ -264,7 +265,7 @@ describe('debug', () => {
           {false}
           {null}
           {undefined}
-          {''}
+
         </div>
       ))).to.equal('<div id="foo" />');
     });
@@ -302,6 +303,7 @@ describe('debug', () => {
       class Foo extends React.Component {
         render() {
           return (
+            // eslint-disable-next-line react/jsx-curly-brace-presence, react/jsx-one-expression-per-line
             <div>hello{'world'}</div>
           );
         }
@@ -828,7 +830,7 @@ describe('debug', () => {
           return (
             <div>
               {function Foo() { /* hi */ }}
-              {<span />}
+              <span />
               {(arrow) => arrow('function')}
               {[1, 2, NaN]}
               {function (anonymous) {}}

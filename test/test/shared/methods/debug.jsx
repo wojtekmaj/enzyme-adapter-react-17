@@ -113,7 +113,15 @@ export default function describeDebug({
 
       describe('defaultProps', () => {
         function Add({ a, b, c }) {
-          return <div>{String(a)}|{String(b)}|{String(c)}</div>;
+          return (
+            <div>
+              {String(a)}
+              |
+              {String(b)}
+              |
+              {String(c)}
+            </div>
+          );
         }
         Add.defaultProps = {
           b: 2,

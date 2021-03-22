@@ -265,7 +265,10 @@ describeWithDOM('mount', () => {
 
           return (
             <div>
-              <div>Context says: {testContext}</div>
+              <div>
+                {'Context says: '}
+                {testContext}
+              </div>
               {renderMore && <More />}
             </div>
           );
@@ -319,7 +322,12 @@ describeWithDOM('mount', () => {
               {(value1) => (
                 <Context2.Consumer>
                   {(value2) => (
-                    <div>Value 1: {value1}; Value 2: {value2}</div>
+                    <div>
+                      {'Value 1: '}
+                      {value1}
+                      {'; Value 2: '}
+                      {value2}
+                    </div>
                   )}
                 </Context2.Consumer>
               )}
@@ -561,7 +569,12 @@ describeWithDOM('mount', () => {
         expect(wrapper.text()).to.equal('hello');
 
         wrapper.setProps({
-          children: (value) => <div>Value is: {value}</div>,
+          children: (value) => (
+            <div>
+              {'Value is: '}
+              {value}
+            </div>
+          ),
         });
         expect(wrapper.text()).to.equal('Value is: hello');
       });

@@ -498,8 +498,12 @@ export default function describeSetProps({
             const { someState } = this.state;
             return (
               <div>
-                myProp: {myProp}
-                someState: {someState}
+                myProp:
+                {' '}
+                {myProp}
+                someState:
+                {' '}
+                {someState}
               </div>
             );
           }

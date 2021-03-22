@@ -10,7 +10,12 @@ export default function describeSingle({
 }) {
   describe('#single()', () => {
     it('throws if run on multiple nodes', () => {
-      const wrapper = Wrap(<div><i /><i /></div>).children();
+      const wrapper = Wrap(
+        <div>
+          <i />
+          <i />
+        </div>,
+      ).children();
       expect(wrapper).to.have.lengthOf(2);
       expect(() => wrapper.single('name!')).to.throw(
         Error,

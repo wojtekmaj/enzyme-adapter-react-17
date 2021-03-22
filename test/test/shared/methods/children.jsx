@@ -18,12 +18,24 @@ export default function describeChildren({
     });
 
     it('includes text nodes', () => {
-      const wrapper = Wrap(<div>B<span />C</div>).children();
+      const wrapper = Wrap(
+        <div>
+          B
+          <span />
+          C
+        </div>,
+      ).children();
       expect(wrapper).to.have.lengthOf(3);
     });
 
     it('does not attempt to get an instance for text nodes', () => {
-      const wrapper = WrapRendered(<div>B<span />C</div>);
+      const wrapper = WrapRendered(
+        <div>
+          B
+          <span />
+          C
+        </div>,
+      );
       expect(wrapper).to.have.lengthOf(isShallow ? 1 : 3);
     });
 
@@ -150,7 +162,11 @@ export default function describeChildren({
           const foo = 'Foo';
           return (
             <div>
-              {foo} Bar {foo} Bar {foo}
+              {foo}
+              {' Bar '}
+              {foo}
+              {' Bar '}
+              {foo}
             </div>
           );
         }

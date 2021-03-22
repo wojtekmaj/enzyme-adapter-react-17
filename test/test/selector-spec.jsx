@@ -672,8 +672,8 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
 
     it('works with empty strings', () => {
       expectAttributeMatch(<div className="" />, '[className=""]', true);
-      expectAttributeMatch(<div className={''} />, '[className=""]', true);
-      expectAttributeMatch(<div className={'bar'} />, '[className=""]', false);
+      expectAttributeMatch(<div className="" />, '[className=""]', true);
+      expectAttributeMatch(<div className="bar" />, '[className=""]', false);
     });
 
     it('works with NaN', () => {

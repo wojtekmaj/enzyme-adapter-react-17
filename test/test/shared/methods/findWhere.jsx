@@ -46,7 +46,7 @@ export default function describeFindWhere({
     it('does not pass empty wrappers', () => {
       class EditableText extends React.Component {
         render() {
-          return <div>{''}</div>;
+          return <div />;
         }
       }
 

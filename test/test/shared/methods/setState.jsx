@@ -328,7 +328,9 @@ export default function describeSetState({
           const { state } = this.state;
           return (
             <div>
-              {prop} - {state}
+              {prop}
+              {' - '}
+              {state}
             </div>
           );
         }

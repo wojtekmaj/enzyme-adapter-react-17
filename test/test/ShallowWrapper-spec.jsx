@@ -229,7 +229,11 @@ describe('shallow', () => {
           } = this.context;
           return (
             <div>
-              <div>Context says: {testContext}{explicitContext}</div>
+              <div>
+                {'Context says: '}
+                {testContext}
+                {explicitContext}
+              </div>
               {renderMore && <More />}
               {renderStateTester && <StateTester />}
             </div>
@@ -297,7 +301,12 @@ describe('shallow', () => {
               {(value1) => (
                 <Context2.Consumer>
                   {(value2) => (
-                    <div>Value 1: {value1}; Value 2: {value2}</div>
+                    <div>
+                      {'Value 1: '}
+                      {value1}
+                      {'; Value 2: '}
+                      {value2}
+                    </div>
                   )}
                 </Context2.Consumer>
               )}
@@ -528,7 +537,14 @@ describe('shallow', () => {
                 {(value) => <DivRenderer>{value}</DivRenderer>}
               </Context.Consumer>,
             );
-            wrapper.setProps({ children: (value) => <DivRenderer>Changed: {value}</DivRenderer> });
+            wrapper.setProps({
+              children: (value) => (
+                <DivRenderer>
+                  {'Changed: '}
+                  {value}
+                </DivRenderer>
+              ),
+            });
             expect(wrapper.find(DivRenderer).dive().text()).to.eql('Changed: cool');
           });
         });
@@ -557,7 +573,12 @@ describe('shallow', () => {
             const { children } = this.props;
 
             return (
-              <Provider value="foo"><div><div />{children}</div></Provider>
+              <Provider value="foo">
+                <div>
+                  <div />
+                  {children}
+                </div>
+              </Provider>
             );
           }
         }
@@ -629,7 +650,12 @@ describe('shallow', () => {
             const { children } = this.props;
 
             return (
-              <Provider value="foo"><div><div />{children}</div></Provider>
+              <Provider value="foo">
+                <div>
+                  <div />
+                  {children}
+                </div>
+              </Provider>
             );
           }
         }
@@ -1987,7 +2013,9 @@ describe('shallow', () => {
           const { fallback, requiredString } = this.props;
           return (
             <Suspense fallback={fallback}>
-              hello world {requiredString}
+              hello world
+              {' '}
+              {requiredString}
             </Suspense>
           );
         }
@@ -2000,7 +2028,9 @@ describe('shallow', () => {
       function MySFC({ fallback, requiredString }) {
         return (
           <Suspense fallback={fallback}>
-            hello world {requiredString}
+            hello world
+            {' '}
+            {requiredString}
           </Suspense>
         );
       }

@@ -90,13 +90,15 @@ export default function describeText({
       const Space = (
         <div>
           <div> test  </div>
-          <div>Hello
+          <div>
+            Hello
 
 
             World
           </div>
           <div>Hello World</div>
-          <div>Hello
+          <div>
+            Hello
             World
           </div>
           <div>Hello     World</div>
@@ -263,12 +265,22 @@ export default function describeText({
       class Dumb extends React.Component {
         render() {
           const { number } = this.props;
-          return <span>It’s number {String(number)}</span>;
+          return (
+            <span>
+              It’s number
+              {String(number)}
+            </span>
+          );
         }
       }
 
       function DumbSFC({ number }) {
-        return <span>It’s number {String(number)}</span>;
+        return (
+          <span>
+            It’s number
+            {String(number)}
+          </span>
+        );
       }
 
       function areEqual(props, nextProps) {

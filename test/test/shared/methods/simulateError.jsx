@@ -28,7 +28,12 @@ export default function describeSimulateError({
 
     class Spans extends React.Component {
       render() {
-        return <div><span /><span /></div>;
+        return (
+          <div>
+            <span />
+            <span />
+          </div>
+        );
       }
     }
 
@@ -71,7 +76,7 @@ export default function describeSimulateError({
       .withOverride(() => getAdapter(), 'createRenderer', () => {
         const adapter = getAdapter();
         const original = adapter.createRenderer;
-        return function () {
+        return function deleteSimulateError() {
           // eslint-disable-next-line prefer-rest-params
           const renderer = original.apply(this, arguments);
           delete renderer.simulateError;

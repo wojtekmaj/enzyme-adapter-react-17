@@ -12,7 +12,12 @@ export default function describeRoot({
   describe('.root()', () => {
     class Fixture extends React.Component {
       render() {
-        return <div><span /><span /></div>;
+        return (
+          <div>
+            <span />
+            <span />
+          </div>
+        );
       }
     }
 

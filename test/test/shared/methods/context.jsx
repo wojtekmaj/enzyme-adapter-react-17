@@ -96,7 +96,6 @@ export default function describeContext({
     }
 
     it('throws on non-root', () => {
-
       const wrapper = Wrap(<RendersChildren><RendersHTML /></RendersChildren>);
       const child = wrapper.find(RendersHTML);
       expect(child).to.have.lengthOf(1);

@@ -349,7 +349,7 @@ describe('RSTTraversal', () => {
       const spy = sinon.spy();
       const node = $((
         <div>
-          <p>{''}</p>
+          <p />
           <p>Test</p>
         </div>
       ));
@@ -374,7 +374,6 @@ describe('RSTTraversal', () => {
       expect(spy.args[2][0]).to.have.property('type', 'nav');
       expect(spy.args[3][0]).to.have.property('type', 'input');
     });
-
   });
 
   describe('treeFilter', () => {
@@ -400,7 +399,6 @@ describe('RSTTraversal', () => {
       expect(treeFilter(tree, (node) => node.type === 'nav').length).to.equal(1);
       expect(treeFilter(tree, (node) => node.type === 'button').length).to.equal(2);
     });
-
   });
 
   describe('pathToNode', () => {
@@ -447,7 +445,6 @@ describe('RSTTraversal', () => {
       expect(result[0]).to.have.property('type', 'div');
       expect(result[1]).to.have.property('type', 'nav');
     });
-
   });
 
   describe('getTextFromNode', () => {
@@ -484,7 +481,6 @@ describe('RSTTraversal', () => {
     });
 
     describeIf(is('> 0.13'), 'stateless function components', () => {
-
       it('returnsdisplayName for functions that provides one', () => {
         const Subject = () => <div />;
         Subject.displayName = 'CustomSubject';

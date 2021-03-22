@@ -21,7 +21,12 @@ export default function describeUseReducer({
           });
         }
 
-        return <button type="button" onClick={fire}>Add {text}</button>;
+        return (
+          <button type="button" onClick={fire}>
+            Add
+            {text}
+          </button>
+        );
       }
 
       function reducer(state, action) {
