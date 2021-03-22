@@ -7,7 +7,7 @@
   "scripts": {
     "build": "babel --source-maps=both test -d build",
     "clean": "rimraf build",
-    "lint": "eslint --ext js,jsx .",
+    "lint": "eslint . --ext .jsx,.js",
     "mocha": "yarn build && mocha --recursive build",
     "test": "yarn lint"
   },
