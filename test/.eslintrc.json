@@ -2,7 +2,31 @@
   "extends": "wojtekmaj/react",
   "rules": {
     "class-methods-use-this": "off",
+    "jsx-a11y/anchor-has-content": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/control-has-associated-label": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
     "max-classes-per-file": "off",
-    "no-underscore-dangle": "off"
+    "max-len": "off",
+    "no-param-reassign": "off",
+    "no-underscore-dangle": "off",
+    "react/display-name": "off",
+    "react/jsx-key": "off",
+    "react/no-direct-mutation-state": "off",
+    "react/no-access-state-in-setstate": "off",
+    "react/no-danger": "off",
+    "react/no-deprecated": "off",
+    "react/no-string-refs": "off",
+    "react/no-will-update-set-state": "off",
+    "react/prefer-stateless-function": "off",
+    "react/prop-types": "off",
+    "react/state-in-constructor": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "react-hooks/rules-of-hooks": "off"
+  },
+  "env": {
+    "mocha": true
   }
 }
