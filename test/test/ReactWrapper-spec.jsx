@@ -1,4 +1,3 @@
-/* globals document */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { expect } from 'chai';
@@ -31,16 +30,12 @@ import {
 } from './_helpers/react-compat';
 import {
   describeWithDOM,
-  describeIf,
   itIf,
 } from './_helpers';
 import getLoadedLazyComponent from './_helpers/getLoadedLazyComponent';
 import describeMethods from './_helpers/describeMethods';
 import describeLifecycles from './_helpers/describeLifecycles';
 import describeHooks from './_helpers/describeHooks';
-import {
-  is,
-} from './_helpers/version';
 
 describeWithDOM('mount', () => {
   describe('top level entry points', () => {
@@ -111,9 +106,7 @@ describeWithDOM('mount', () => {
         expect(spy).to.have.property('callCount', 1);
       });
 
-      /* global HTMLElement */
-
-      itIf(is('> 0.13'), 'passes an HTML element to `ref` when root rendered', () => {
+      it('passes an HTML element to `ref` when root rendered', () => {
         const spy = sinon.spy();
         mount(<div ref={spy} />);
         expect(spy).to.have.property('callCount', 1);
@@ -125,7 +118,7 @@ describeWithDOM('mount', () => {
         expect(firstArg).to.be.instanceOf(HTMLElement);
       });
 
-      itIf(is('> 0.13'), 'passes an HTML element to `ref` when sub-rendered', () => {
+      it('passes an HTML element to `ref` when sub-rendered', () => {
         const spy = sinon.spy();
         class Foo extends React.Component {
           render() {
@@ -151,7 +144,7 @@ describeWithDOM('mount', () => {
         ))).to.throw(Error, 'Can only set one of `children` or `props.dangerouslySetInnerHTML`.');
       });
 
-      itIf(is('>= 16'), 'throws when mounting Portals', () => {
+      it('throws when mounting Portals', () => {
         const portal = createPortal(
           <div />,
           { nodeType: 1 },
@@ -217,7 +210,7 @@ describeWithDOM('mount', () => {
       expect(() => wrapper.state('key')).to.throw('ReactWrapper::state("key") requires that `state` not be `null` or `undefined`');
     });
 
-    describeIf(is('>= 0.14'), 'wrappingComponent', () => {
+    describe('wrappingComponent', () => {
       const realCreateMountRenderer = getAdapter().createMountRenderer;
 
       class More extends React.Component {
@@ -301,7 +294,7 @@ describeWithDOM('mount', () => {
         expect(wrapper.text()).to.equal('Context says: I can be set!');
       });
 
-      describeIf(is('>= 16.3'), 'with createContext()', () => {
+      describe('with createContext()', () => {
         let Context1;
         let Context2;
 
@@ -397,13 +390,13 @@ describeWithDOM('mount', () => {
       }
     }
 
-    itIf(is('<=0.13'), 'throws an error if wrappingComponent is passed', () => {
+    itIf(false, 'throws an error if wrappingComponent is passed', () => {
       expect(() => mount(<div />, {
         wrappingComponent: RendersChildren,
       })).to.throw('your adapter does not support `wrappingComponent`. Try upgrading it!');
     });
 
-    describeIf(is('>= 16.3'), 'uses the isValidElementType from the Adapter to validate the prop type of Component', () => {
+    describe('uses the isValidElementType from the Adapter to validate the prop type of Component', () => {
       const Foo = () => null;
       const Bar = () => null;
       wrap()
@@ -529,7 +522,7 @@ describeWithDOM('mount', () => {
       expect(wrapper.context('name')).to.equal(context.name);
     });
 
-    describeIf(is('>= 16.3'), 'createContext()', () => {
+    describe('createContext()', () => {
       let Context;
 
       beforeEach(() => {
@@ -580,7 +573,7 @@ describeWithDOM('mount', () => {
       });
     });
 
-    describeIf(is('>= 16.3'), 'forwarded ref Components', () => {
+    describe('forwarded ref Components', () => {
       wrap().withConsoleThrows().it('mounts without complaint', () => {
         const SomeComponent = forwardRef((props, ref) => (
           <div {...props} ref={ref} />
@@ -642,7 +635,7 @@ describeWithDOM('mount', () => {
       });
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       it('can pass in context', () => {
         const SimpleComponent = (props, { name }) => (
           <div>{name}</div>
@@ -682,7 +675,7 @@ describeWithDOM('mount', () => {
         expect(() => mount(<SimpleComponent />, { context })).not.to.throw();
       });
 
-      itIf(is('< 16'), 'is introspectable through context API', () => {
+      itIf(false, 'is introspectable through context API', () => {
         const SimpleComponent = (props, { name }) => (
           <div>{name}</div>
         );
@@ -697,7 +690,7 @@ describeWithDOM('mount', () => {
     });
   });
 
-  describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+  describe('stateless function components (SFCs)', () => {
     it('works with SFCs', () => {
       const Foo = ({ foo }) => (
         <div>
@@ -739,7 +732,7 @@ describeWithDOM('mount', () => {
       expect(wrapper.find(TestItem).first().props().test).to.equal('123');
     });
 
-    describeIf(is('>= 16.6'), 'React.memo', () => {
+    describe('React.memo', () => {
       it('works with an SFC', () => {
         const InnerComp = () => <div><span>Hello</span></div>;
         const InnerFoo = ({ foo }) => (
@@ -820,7 +813,7 @@ describeWithDOM('mount', () => {
     });
   });
 
-  describeIf(is('>= 16'), 'portals', () => {
+  describe('portals', () => {
     it('shows portals in mount debug tree', () => {
       const containerDiv = global.document.createElement('div');
       const Foo = () => (
@@ -917,7 +910,7 @@ describeWithDOM('mount', () => {
     });
   });
 
-  describeIf(is('>= 16.4'), 'Profiler', () => {
+  describe('Profiler', () => {
     function SomeComponent() {
       return (
         <Profiler id="SomeComponent" onRender={() => {}}>
@@ -1033,7 +1026,7 @@ describeWithDOM('mount', () => {
     });
   });
 
-  itIf(is('>= 16.2'), 'supports fragments', () => {
+  it('supports fragments', () => {
     const wrapper = mount((
       <Fragment>
         <p>hello</p>
@@ -1141,7 +1134,7 @@ describeWithDOM('mount', () => {
     'custom',
   );
 
-  describeIf(is('>= 16.6'), 'Suspense & lazy', () => {
+  describe('Suspense & lazy', () => {
     class DynamicComponent extends React.Component {
       render() {
         return (
@@ -1400,7 +1393,7 @@ describeWithDOM('mount', () => {
       );
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       const SFC = () => (
         <div className="outer">
           <div className="inner">
@@ -1479,16 +1472,8 @@ describeWithDOM('mount', () => {
         }
       }
       const wrapper = mount(<Foo />);
-      // React 13 and 14 return instances whereas 15+ returns actual DOM nodes. In this case,
-      // the public API of enzyme is to just return what `this.refs[refName]` would be expected
-      // to return for the version of react you're using.
-      if (is('< 15')) {
-        expect(wrapper.ref('secondRef').getDOMNode().getAttribute('data-amount')).to.equal('4');
-        expect(wrapper.ref('secondRef').getDOMNode().textContent).to.equal('Second');
-      } else {
-        expect(wrapper.ref('secondRef').getAttribute('data-amount')).to.equal('4');
-        expect(wrapper.ref('secondRef').textContent).to.equal('Second');
-      }
+      expect(wrapper.ref('secondRef').getAttribute('data-amount')).to.equal('4');
+      expect(wrapper.ref('secondRef').textContent).to.equal('Second');
     });
   });
 
@@ -1613,7 +1598,7 @@ describeWithDOM('mount', () => {
       expect(document.body.childNodes).to.have.lengthOf(0);
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       it('attaches and stuff', () => {
         const Foo = () => <div className="in-foo" />;
 
@@ -1708,7 +1693,7 @@ describeWithDOM('mount', () => {
     expect(rendered.html()).to.equal(null);
   });
 
-  itIf(is('>= 16'), 'works with class components that return arrays', () => {
+  it('works with class components that return arrays', () => {
     class Foo extends React.Component {
       render() {
         return [<div />, <div />];
@@ -1721,7 +1706,7 @@ describeWithDOM('mount', () => {
     expect(wrapper.find('div')).to.have.lengthOf(2);
   });
 
-  itIf(is('>=15 || ^16.0.0-alpha'), 'works with SFCs that return null', () => {
+  it('works with SFCs that return null', () => {
     const Foo = () => null;
 
     const wrapper = mount(<Foo />);

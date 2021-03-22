@@ -5,11 +5,6 @@ import sinon from 'sinon-sandbox';
 
 import getAdapter from 'enzyme/build/getAdapter';
 
-import {
-  describeIf,
-} from '../../_helpers';
-import { is } from '../../_helpers/version';
-
 export default function describeRenderProp({
   Wrap,
   WrapRendered,
@@ -95,7 +90,7 @@ export default function describeRenderProp({
           expect(() => wrapper.find(Bar).renderProp('render')).to.throw(RangeError);
         });
 
-      describeIf(is('>= 16'), 'allows non-nodes', () => {
+      describe('allows non-nodes', () => {
         function MyComponent({ val }) {
           return <ComponentWithRenderProp val={val} r={(x) => x} />;
         }

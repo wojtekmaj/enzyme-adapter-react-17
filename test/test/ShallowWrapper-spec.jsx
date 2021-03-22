@@ -37,9 +37,6 @@ import {
 import describeMethods from './_helpers/describeMethods';
 import describeLifecycles from './_helpers/describeLifecycles';
 import describeHooks from './_helpers/describeHooks';
-import {
-  is,
-} from './_helpers/version';
 
 describe('shallow', () => {
   describe('top level entry points', () => {
@@ -93,7 +90,7 @@ describe('shallow', () => {
         ))).to.throw(Error, 'Can only set one of `children` or `props.dangerouslySetInnerHTML`.');
       });
 
-      itIf(is('>= 16'), 'throws when shallow rendering Portals', () => {
+      it('throws when shallow rendering Portals', () => {
         const portal = createPortal(
           <div />,
           { nodeType: 1 },
@@ -157,7 +154,7 @@ describe('shallow', () => {
       expect(() => wrapper.state('key')).to.throw('ShallowWrapper::state("key") requires that `state` not be `null` or `undefined`');
     });
 
-    describeIf(is('>= 0.14'), 'wrappingComponent', () => {
+    describe('wrappingComponent', () => {
       class More extends React.Component {
         render() {
           return null;
@@ -276,7 +273,7 @@ describe('shallow', () => {
         expect(wrapper.text()).to.equal('Context says: I can be set!');
       });
 
-      describeIf(is('>= 16.3'), 'with createContext()', () => {
+      describe('with createContext()', () => {
         let Context1;
         let Context2;
         beforeEach(() => {
@@ -372,13 +369,13 @@ describe('shallow', () => {
       }
     }
 
-    itIf.skip(is('<=0.13'), 'throws an error if wrappingComponent is passed', () => {
+    itIf.skip(false, 'throws an error if wrappingComponent is passed', () => {
       expect(() => shallow(<div />, {
         wrappingComponent: RendersChildren,
       })).to.throw('your adapter does not support `wrappingComponent`. Try upgrading it!');
     });
 
-    describeIf.skip(is('>= 16.3'), 'uses the isValidElementType from the Adapter to validate the prop type of Component', () => {
+    describeIf.skip(true, 'uses the isValidElementType from the Adapter to validate the prop type of Component', () => {
       const Foo = () => null;
       const Bar = () => null;
       wrap()
@@ -439,7 +436,7 @@ describe('shallow', () => {
       expect(wrapper.context('name')).to.equal(context.name);
     });
 
-    itIf(is('>= 16.3'), 'finds elements through Context elements', () => {
+    it('finds elements through Context elements', () => {
       const { Provider, Consumer } = createContext('');
 
       class Consumes extends React.Component {
@@ -464,7 +461,7 @@ describe('shallow', () => {
       expect(shallow(<Provides />).find(Consumes)).to.have.lengthOf(1);
     });
 
-    itIf(is('>= 16.3'), 'finds elements through forwarded refs elements', () => {
+    it('finds elements through forwarded refs elements', () => {
       const SomeComponent = forwardRef((props, ref) => (
         <div ref={ref}>
           <span className="child1" />
@@ -477,7 +474,7 @@ describe('shallow', () => {
       expect(wrapper.find('.child2')).to.have.lengthOf(1);
     });
 
-    describeIf(is('>= 16.3'), 'createContext()', () => {
+    describe('createContext()', () => {
       describe('rendering as root:', () => {
         let Context;
 
@@ -694,7 +691,7 @@ describe('shallow', () => {
       });
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       it('can pass in context', () => {
         const SimpleComponent = (props, { name }) => (
           <div>{name}</div>
@@ -715,7 +712,7 @@ describe('shallow', () => {
         expect(() => shallow(<SimpleComponent />, { context })).not.to.throw();
       });
 
-      itIf(is('< 16'), 'is introspectable through context API', () => {
+      itIf(false, 'is introspectable through context API', () => {
         const SimpleComponent = (props, { name }) => (
           <div>{name}</div>
         );
@@ -728,7 +725,7 @@ describe('shallow', () => {
         expect(wrapper.context('name')).to.equal(context.name);
       });
 
-      itIf(is('>= 16'), 'is not introspectable through context API', () => {
+      it('is not introspectable through context API', () => {
         const SimpleComponent = (props, { name }) => (
           <div>{name}</div>
         );
@@ -818,20 +815,7 @@ describe('shallow', () => {
         barProviderSpy.restore();
       });
 
-      describeIf(is('<= 0.13'), 'owner-based context', () => {
-        it('is not implemented', () => {
-          const wrapper = shallow(<TestComponent />, { context: { baz: 'enzyme' } });
-
-          const fooProvider = wrapper.find(FooProvider).dive();
-          const barProvider = fooProvider.find(BarProvider).dive();
-          const consumer = barProvider.find(FooBarBazConsumer).dive();
-
-          const expectedContext = { baz: 'enzyme', foo: undefined, bar: undefined };
-          expect(consumer.context()).to.eql(expectedContext);
-        });
-      });
-
-      describeIf(is('>= 0.14'), 'parent-based context', () => {
+      describe('parent-based context', () => {
         const adapter = getAdapter();
         const {
           createShallowRenderer: realCreateShallowRenderer,
@@ -987,8 +971,7 @@ describe('shallow', () => {
           }
         }
 
-        // react 0.14 and 15 throw an invariant exception in this case
-        itIf(is('0.13 || > 15'), 'warns and works but provides no context, without childContextTypes', () => {
+        it('warns and works but provides no context, without childContextTypes', () => {
           const stub = sinon.stub(console, 'warn');
           const wrapper = shallow(<Provider><Receiver /></Provider>).dive();
           expect(wrapper.debug()).to.equal(`<div>
@@ -1048,7 +1031,7 @@ describe('shallow', () => {
     });
   });
 
-  describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+  describe('stateless function components (SFCs)', () => {
     it('works with SFCs', () => {
       const Foo = ({ foo }) => (
         <div>
@@ -1063,7 +1046,7 @@ describe('shallow', () => {
     });
   });
 
-  describeIf(is('>= 16'), 'portals', () => {
+  describe('portals', () => {
     it('shows portals in shallow debug tree', () => {
       const Foo = () => (
         <div className="foo">
@@ -1149,7 +1132,7 @@ describe('shallow', () => {
     });
   });
 
-  describeIf(is('>= 16.4'), 'Profiler', () => {
+  describe('Profiler', () => {
     function SomeComponent() {
       return (
         <Profiler id="SomeComponent" onRender={() => {}}>
@@ -1265,7 +1248,7 @@ describe('shallow', () => {
     });
   });
 
-  itIf(is('>= 16.2'), 'does not support fragments', () => {
+  it('does not support fragments', () => {
     const wrapper = () => shallow((
       <Fragment>
         <p>hello</p>
@@ -1500,7 +1483,7 @@ describe('shallow', () => {
       });
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       it('returns a shallow rendered instance of the current node', () => {
         const Bar = () => (
           <div>
@@ -1551,7 +1534,7 @@ describe('shallow', () => {
           expect(() => wrapper.find(Bar).shallow({ context })).not.to.throw();
         });
 
-        itIf(is('< 16'), 'is introspectable through context API', () => {
+        itIf(false, 'is introspectable through context API', () => {
           const Bar = (props, { name }) => (
             <div>{name}</div>
           );
@@ -1569,7 +1552,7 @@ describe('shallow', () => {
           expect(wrapper.context('name')).to.equal(context.name);
         });
 
-        itIf(is('>= 16'), 'will throw when trying to inspect context', () => {
+        it('will throw when trying to inspect context', () => {
           const Bar = (props, { name }) => (
             <div>{name}</div>
           );
@@ -1692,7 +1675,7 @@ describe('shallow', () => {
       expect(underwater.is(RendersDOM)).to.equal(true);
     });
 
-    describeIf(is('>=16.3.0'), 'forwardRef Elements', () => {
+    describe('forwardRef Elements', () => {
       const ForwardRefWrapsRendersDOM = forwardRef && forwardRef(() => <WrapsRendersDOM />);
       const NestedForwarRefsWrapsRendersDom = forwardRef && forwardRef(() => <ForwardRefWrapsRendersDOM />);
 
@@ -1729,7 +1712,7 @@ describe('shallow', () => {
       expect(underwater.context()).to.deep.equal({ foo: 'enzyme!' });
     });
 
-    describeIf(is('>= 16.6'), 'memo', () => {
+    describe('memo', () => {
       const App = () => <div>Guest</div>;
 
       const AppMemoized = memo && Object.assign(memo(App), { displayName: 'AppMemoized' });
@@ -1757,7 +1740,7 @@ describe('shallow', () => {
     });
   });
 
-  describeIf(is('>= 16.6'), 'Suspense & lazy', () => {
+  describe('Suspense & lazy', () => {
     class DynamicComponent extends React.Component {
       render() {
         return (
@@ -2048,7 +2031,7 @@ describe('shallow', () => {
           shallow(<MyComponent requiredString="abc" fallback={<Fallback />} />);
         });
 
-      describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+      describe('stateless function components (SFCs)', () => {
         wrap()
           .withConsoleThrows()
           .it('renders with no propType errors with a string fallback', () => {
@@ -2064,7 +2047,7 @@ describe('shallow', () => {
     });
 
     // TODO: fix in v16.6 and v16.7
-    describeIf(is('>= 16.8'), 'avoids regressing #2200', () => {
+    describe('avoids regressing #2200', () => {
       const Home = lazy && lazy(() => new Promise(() => {}));
 
       const PageSwitchFallback = memo ? memo(() => <div aria-live="polite" aria-busy />) : {};
@@ -2222,7 +2205,7 @@ describe('shallow', () => {
           });
         });
 
-        itIf(is('< 16'), 'calls expected methods for setState', () => {
+        itIf(false, 'calls expected methods for setState', () => {
           const wrapper = shallow(<Foo />, options);
           expect(spy.args).to.deep.equal([
             ['componentWillMount'],
@@ -2239,7 +2222,7 @@ describe('shallow', () => {
         });
 
         // componentDidUpdate is not called in react 16
-        itIf(is('>= 16'), 'calls expected methods for setState', () => {
+        it('calls expected methods for setState', () => {
           const wrapper = shallow(<Foo />, options);
           expect(spy.args).to.deep.equal([
             ['componentWillMount'],
@@ -2426,7 +2409,7 @@ describe('shallow', () => {
     expect(rendered.html()).to.equal(null);
   });
 
-  itIf(is('>= 16'), 'works with class components that return arrays', () => {
+  it('works with class components that return arrays', () => {
     class Foo extends React.Component {
       render() {
         return [<div />, <div />];
@@ -2437,7 +2420,7 @@ describe('shallow', () => {
     expect(wrapper.find('div')).to.have.lengthOf(2);
   });
 
-  itIf(is('>=15 || ^16.0.0-alpha'), 'works with SFCs that return null', () => {
+  it('works with SFCs that return null', () => {
     const Foo = () => null;
 
     const wrapper = shallow(<Foo />);

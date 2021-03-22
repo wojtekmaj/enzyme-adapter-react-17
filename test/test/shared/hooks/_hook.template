@@ -14,7 +14,6 @@ import {
 } from '../../_helpers';
 import {
   is,
-  REACT16,
 } from '../../_helpers/version';
 
 import {

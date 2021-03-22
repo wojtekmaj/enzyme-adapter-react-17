@@ -6,11 +6,9 @@ import getData from 'html-element-map/getData';
 import getAdapter from 'enzyme/build/getAdapter';
 
 import {
-  describeIf,
   describeWithDOM,
   itIf,
 } from '../../_helpers';
-import { is } from '../../_helpers/version';
 
 import {
   createPortal,
@@ -528,7 +526,7 @@ export default function describeFind({
       expect(wrapper.find('[data-foo="bar  baz quz"]')).to.have.lengthOf(0);
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       it('finds a component based on a constructor', () => {
         const Foo = () => (<div />);
 
@@ -638,7 +636,7 @@ export default function describeFind({
       });
     });
 
-    describeIf(is('>= 16.2'), 'works with Fragments', () => {
+    describe('works with Fragments', () => {
       const NestedFragmentComponent = () => (
         <div className="container">
           <Fragment>
@@ -679,7 +677,7 @@ export default function describeFind({
       });
 
       // FIXME: investigate if/why mount requires the version range
-      itIf(!isMount || is('>= 16.4.1'), 'handles fragments with no content', () => {
+      itIf(!isMount || true, 'handles fragments with no content', () => {
         const EmptyFragmentComponent = () => (
           <div className="container">
             <Fragment>
@@ -696,7 +694,7 @@ export default function describeFind({
       });
     });
 
-    describeIf(is('>= 16'), 'works with Portals', () => {
+    describe('works with Portals', () => {
       it('finds portals by name', () => {
         const containerDiv = makeDOMElement();
         const Foo = () => (
@@ -744,7 +742,7 @@ export default function describeFind({
       });
     });
 
-    describeIf(is('>= 16.3'), 'forwardRef', () => {
+    describe('forwardRef', () => {
       it('finds forwardRefs', () => {
         const Component = forwardRef(() => <div />);
         class Foo extends React.Component {
@@ -783,7 +781,7 @@ export default function describeFind({
       });
     });
 
-    describeIf(is('>= 16.8'), 'hooks', () => {
+    describe('hooks', () => {
       it('handles useState', () => {
         const ComponentUsingStateHook = () => {
           const [count] = useState(0);
@@ -846,7 +844,7 @@ export default function describeFind({
         'tfoot',
       ]);
       function hasRenderError(Tag) {
-        return isMount && is('< 15') && tagsWithRenderError.has(Tag);
+        return isMount && false && tagsWithRenderError.has(Tag);
       }
 
       const { elements, all } = getData();
@@ -871,7 +869,7 @@ export default function describeFind({
       });
     });
 
-    describeIf(is('>= 16.6'), 'React.memo', () => {
+    describe('React.memo', () => {
       it('works with an SFC', () => {
         function InnerComp({ message }) {
           return <div><span>{message}</span></div>;

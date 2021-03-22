@@ -201,7 +201,7 @@ describe('debug', () => {
       ));
     });
 
-    itIf(is('> 0.13'), 'renders stateless components as tags w/ name', () => {
+    it('renders stateless components as tags w/ name', () => {
       const Foo = () => <div />;
 
       expect(debugElement((
@@ -429,7 +429,7 @@ describe('debug', () => {
       ));
     });
 
-    describeIf(is('> 0.13'), 'stateless function components', () => {
+    describe('stateless function components', () => {
       it('renders basic debug of mounted components', () => {
         const Foo = () => (
           <div className="foo">
@@ -860,7 +860,7 @@ describe('debug', () => {
     });
   });
 
-  describeIf(is('>= 16.3'), 'forwarded ref Components', () => {
+  describe('forwarded ref Components', () => {
     let Parent;
     let ParentOfNamed;
     let SomeComponent;

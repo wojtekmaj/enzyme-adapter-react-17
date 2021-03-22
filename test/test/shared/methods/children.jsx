@@ -1,11 +1,6 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  describeIf,
-} from '../../_helpers';
-import { is } from '../../_helpers/version';
-
 export default function describeChildren({
   Wrap,
   WrapRendered,
@@ -132,7 +127,7 @@ export default function describeChildren({
       expect(children.at(1).hasClass('baz')).to.equal(true);
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       it('handles mixed children with and without arrays', () => {
         const Foo = ({ items }) => (
           <div>

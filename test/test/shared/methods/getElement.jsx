@@ -2,10 +2,6 @@ import React from 'react';
 import { expect } from 'chai';
 
 import {
-  itIf,
-} from '../../_helpers';
-import { is } from '../../_helpers/version';
-import {
   createRef,
 } from '../../_helpers/react-compat';
 
@@ -40,7 +36,7 @@ export default function describeGetElement({
       expect(wrapper.instance().node).to.equal(mockNode);
     });
 
-    itIf(is('>= 16.3'), 'returns nodes with createRefs as well', () => {
+    it('returns nodes with createRefs as well', () => {
       class Foo extends React.Component {
         constructor(props) {
           super(props);
@@ -86,7 +82,7 @@ export default function describeGetElement({
       expect(wrapper.getElement()).to.have.property('key', null);
     });
 
-    itIf(is('>= 16.3'), 'does not add a "null" key to elements with a createRef and no key', () => {
+    it('does not add a "null" key to elements with a createRef and no key', () => {
       class Foo extends React.Component {
         constructor(props) {
           super(props);

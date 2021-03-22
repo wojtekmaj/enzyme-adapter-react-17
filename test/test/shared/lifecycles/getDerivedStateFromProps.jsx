@@ -2,15 +2,10 @@ import React from 'react';
 import sinon from 'sinon-sandbox';
 import { expect } from 'chai';
 
-import { is } from '../../_helpers/version';
-import {
-  describeIf,
-} from '../../_helpers';
-
 export default function describeGDSFP({
   Wrap,
 }) {
-  describeIf(is('>= 16.3'), 'getDerivedStateFromProps()', () => {
+  describe('getDerivedStateFromProps()', () => {
     let spy;
 
     beforeEach(() => {
@@ -133,7 +128,7 @@ export default function describeGDSFP({
         ['render'],
         ['componentDidUpdate', {
           ...data,
-          prevContext: is('>= 16') ? undefined : prevContext,
+          prevContext: undefined,
         }],
       ]);
     });
@@ -171,14 +166,14 @@ export default function describeGDSFP({
       expect(spy.args).to.deep.equal([
         ['UNSAFE_componentWillReceiveProps', {
           ...data,
-          nextContext: is('>= 16') ? undefined : nextContext,
+          nextContext: undefined,
         }],
         ['shouldComponentUpdate', data],
         ['componentWillUpdate', data],
         ['render'],
         ['componentDidUpdate', {
           ...data,
-          prevContext: is('>= 16') ? undefined : prevContext,
+          prevContext: undefined,
         }],
       ]);
     });
@@ -226,7 +221,7 @@ export default function describeGDSFP({
         ['render'],
         ['componentDidUpdate', {
           ...data,
-          prevContext: is('>= 16') ? undefined : prevContext,
+          prevContext: undefined,
         }],
       ]);
     });

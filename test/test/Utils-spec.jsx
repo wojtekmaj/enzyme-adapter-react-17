@@ -29,9 +29,6 @@ import { get, reset, merge as configure } from 'enzyme/build/configuration';
 
 import './_helpers/setupAdapters';
 
-import { describeIf } from './_helpers';
-import { is } from './_helpers/version';
-
 describe('Utils', () => {
   describe('nodeEqual', () => {
     it('matches empty elements of same tag', () => {
@@ -537,7 +534,7 @@ describe('Utils', () => {
         expect(displayNameOfNode(<Foo />)).to.equal('CustomWrapper');
       });
 
-      describeIf(is('> 0.13'), 'stateless function components', () => {
+      describe('stateless function components', () => {
         it('returns the displayName', () => {
           const Foo = () => <div />;
           Foo.displayName = 'CustomWrapper';
@@ -564,7 +561,7 @@ describe('Utils', () => {
         expect(displayNameOfNode(<Foo />)).to.equal('');
       });
 
-      describeIf(is('> 0.13'), 'stateless function components', () => {
+      describe('stateless function components', () => {
         it('returns the name', () => {
           const Foo = () => <div />;
 
@@ -579,7 +576,7 @@ describe('Utils', () => {
       });
     });
 
-    describeIf(is('>= 16.6'), 'given an inner displayName in Memo', () => {
+    describe('given an inner displayName in Memo', () => {
       it('returns the displayName', () => {
         const adapter = getAdapter();
         const Foo = () => <div />;
@@ -591,7 +588,7 @@ describe('Utils', () => {
       });
     });
 
-    describeIf(is('>= 16.6'), 'given an inner displayName in forwardedRef', () => {
+    describe('given an inner displayName in forwardedRef', () => {
       it('returns the displayName', () => {
         const adapter = getAdapter();
         const Foo = () => <div />;
@@ -603,7 +600,7 @@ describe('Utils', () => {
       });
     });
 
-    describeIf(is('>= 16.6'), 'given an inner displayName wrapped in Memo and forwardRef', () => {
+    describe('given an inner displayName wrapped in Memo and forwardRef', () => {
       it('returns the displayName', () => {
         const adapter = getAdapter();
         const Foo = () => <div />;
@@ -944,7 +941,7 @@ describe('Utils', () => {
             expect(isCustomComponentElement(<Foo />, adapter)).to.equal(true);
           });
 
-          describeIf(is('> 0.13'), 'stateless function elements', () => {
+          describe('stateless function elements', () => {
             it('returns true', () => {
               const Foo = () => <div />;
 
@@ -952,7 +949,7 @@ describe('Utils', () => {
             });
           });
 
-          describeIf(is('>=16.3.0'), 'forwardRef Elements', () => {
+          describe('forwardRef Elements', () => {
             it('returns false', () => {
               const Foo = React.forwardRef(() => <div />);
               expect(isCustomComponentElement(<Foo />, adapter)).to.equal(false);
@@ -991,7 +988,7 @@ describe('Utils', () => {
             expect(isCustomComponentElement(<Foo />, adapter)).to.equal(false);
           });
 
-          describeIf(is('> 0.13'), 'stateless function elements', () => {
+          describe('stateless function elements', () => {
             it('returns false', () => {
               const Foo = () => <div />;
 
@@ -999,7 +996,7 @@ describe('Utils', () => {
             });
           });
 
-          describeIf(is('>=16.3.0'), 'forwardRef Elements', () => {
+          describe('forwardRef Elements', () => {
             it('returns false', () => {
               const Foo = React.forwardRef(() => <div />);
               expect(isCustomComponentElement(<Foo />, adapter)).to.equal(false);
@@ -1038,7 +1035,7 @@ describe('Utils', () => {
             expect(isCustomComponentElement(<Foo />, adapter)).to.equal(true);
           });
 
-          describeIf(is('> 0.13'), 'stateless function elements', () => {
+          describe('stateless function elements', () => {
             it('returns true', () => {
               const Foo = () => <div />;
 
@@ -1046,7 +1043,7 @@ describe('Utils', () => {
             });
           });
 
-          describeIf(is('>=16.3.0'), 'forwardRef Elements', () => {
+          describe('forwardRef Elements', () => {
             it('returns true', () => {
               const Foo = React.forwardRef(() => <div />);
               expect(isCustomComponentElement(<Foo />, adapter)).to.equal(true);

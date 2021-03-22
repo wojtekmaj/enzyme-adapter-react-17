@@ -2,11 +2,6 @@ import React from 'react';
 import { expect } from 'chai';
 
 import {
-  describeIf,
-} from '../../_helpers';
-import { is } from '../../_helpers/version';
-
-import {
   Fragment,
 } from '../../_helpers/react-compat';
 
@@ -43,7 +38,7 @@ export default function describeHTML({
       expect(wrapper.find(Foo).html()).to.equal('<div class="in-foo"></div>');
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       it('renders out nested composite components', () => {
         const Foo = () => <div className="in-foo" />;
         const Bar = () => (
@@ -58,7 +53,7 @@ export default function describeHTML({
       });
     });
 
-    describeIf(is('>16.2'), 'Fragments', () => {
+    describe('Fragments', () => {
       class FragmentClassExample extends React.Component {
         render() {
           return (

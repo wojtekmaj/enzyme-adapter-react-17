@@ -4,11 +4,9 @@ import sinon from 'sinon-sandbox';
 import { Portal } from 'react-is';
 
 import {
-  describeIf,
   itIf,
 } from '../../_helpers';
 import realArrowFunction from '../../_helpers/realArrowFunction';
-import { is } from '../../_helpers/version';
 
 import {
   createPortal,
@@ -107,7 +105,7 @@ export default function describeFindWhere({
       expect(foundNotSpan.type()).to.equal('i');
     });
 
-    describeIf(is('>= 16.2'), 'with fragments', () => {
+    describe('with fragments', () => {
       it('finds nodes', () => {
         class FragmentFoo extends React.Component {
           render() {
@@ -235,7 +233,7 @@ export default function describeFindWhere({
       expect(wrapper.debug()).to.equal(expectedDebug);
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       it('finds nodes', () => {
         const SFC = function SFC({ selector }) {
           return (
@@ -401,7 +399,7 @@ export default function describeFindWhere({
       expect(spy).to.have.property('callCount', 2);
     });
 
-    itIf(is('>= 16'), 'finds portals by react-is Portal type', () => {
+    it('finds portals by react-is Portal type', () => {
       const containerDiv = makeDOMElement();
       const Foo = () => (
         <div>

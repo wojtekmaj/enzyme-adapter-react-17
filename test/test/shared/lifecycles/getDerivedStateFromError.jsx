@@ -2,7 +2,6 @@ import React from 'react';
 import sinon from 'sinon-sandbox';
 import { expect } from 'chai';
 
-import { is } from '../../_helpers/version';
 import {
   describeIf,
   itIf,
@@ -15,7 +14,7 @@ export default function describeCDC({
   Wrap,
   isShallow,
 }) {
-  describeIf(is('>= 16.6'), 'getDerivedStateFromError', () => {
+  describe('getDerivedStateFromError', () => {
     const errorToThrow = new EvalError('threw an error!');
     // in React 16.0 - 16.2 and 16.9+, and some older nodes, the actual error thrown isn't reported.
     const reactError = new Error('An error was thrown inside one of your components, but React doesn\'t know what it was. This is likely due to browser flakiness. React does its best to preserve the "Pause on exceptions" behavior of the DevTools, which requires some DEV-mode only tricks. It\'s possible that these don\'t work in your browser. Try triggering the error in production mode, or switching to a modern browser. If you suspect that this is actually an issue with React, please file an issue.');

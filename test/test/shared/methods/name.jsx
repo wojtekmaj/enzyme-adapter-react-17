@@ -6,11 +6,6 @@ import sinon from 'sinon-sandbox';
 import getAdapter from 'enzyme/build/getAdapter';
 
 import {
-  describeIf,
-} from '../../_helpers';
-import { is } from '../../_helpers/version';
-
-import {
   createClass,
 } from '../../_helpers/react-compat';
 
@@ -37,7 +32,7 @@ export default function describeName({
           expect(wrapper.name()).to.equal('CustomWrapper');
         });
 
-        describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+        describe('stateless function components (SFCs)', () => {
           it('returns the name of the node', () => {
             function SFC() {
               return <div />;
@@ -106,7 +101,7 @@ export default function describeName({
           expect(wrapper.name()).to.equal('Foo');
         });
 
-        describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+        describe('stateless function components (SFCs)', () => {
           it('returns the name of the node', () => {
             function SFC() {
               return <div />;

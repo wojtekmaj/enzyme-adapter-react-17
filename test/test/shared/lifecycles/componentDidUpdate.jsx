@@ -7,13 +7,9 @@ import {
   PureComponent,
 } from '../../_helpers/react-compat';
 import {
-  describeIf,
   argSpy,
   expectArgs,
 } from '../../_helpers';
-import {
-  is,
-} from '../../_helpers/version';
 
 export default function describeCDU({
   Wrap,
@@ -151,7 +147,7 @@ export default function describeCDU({
       ]);
     });
 
-    describeIf(is('>= 15.3'), 'PureComponent', () => {
+    describe('PureComponent', () => {
       let spy;
       beforeEach(() => {
         spy = argSpy();

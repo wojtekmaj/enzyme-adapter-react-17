@@ -1,11 +1,6 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  describeIf,
-} from '../../_helpers';
-import { is } from '../../_helpers/version';
-
 export default function describeRender({
   Wrap,
 }) {
@@ -41,7 +36,7 @@ export default function describeRender({
       expect(renderedFoo.find('.in-bar')).to.have.lengthOf(0);
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       it('returns a cheerio wrapper around the current node', () => {
         const Foo = () => (
           <div className="in-foo" />

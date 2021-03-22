@@ -10,8 +10,6 @@ export function is(range) {
   return semver.satisfies(VERSION, range);
 }
 
-export const REACT16 = is('16');
-
-// The shallow renderer in react 16 does not yet support batched updates. When it does,
+// The shallow renderer in React 17 does not yet support batched updates. When it does,
 // we should be able to go un-skip all of the tests that are skipped with this flag.
-export const BATCHING = !REACT16;
+export const BATCHING = false;

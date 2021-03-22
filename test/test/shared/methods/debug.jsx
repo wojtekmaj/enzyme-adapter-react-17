@@ -5,10 +5,6 @@ import inspect from 'object-inspect';
 
 import { debugNodes } from 'enzyme/build/Debug';
 
-import {
-  describeIf,
-  itIf,
-} from '../../_helpers';
 import { is } from '../../_helpers/version';
 
 import {
@@ -64,7 +60,7 @@ export default function describeDebug({
         expect(wrapper.debug()).to.equal(debugNodes(wrapper.getNodesInternal()));
       });
 
-      itIf(is('> 0.13'), 'with wrapping a stateless function component (SFC)', () => {
+      it('with wrapping a stateless function component (SFC)', () => {
         const wrapper = Wrap(<div />);
 
         expect(wrapper.debug()).to.equal('<div />');
@@ -72,7 +68,7 @@ export default function describeDebug({
       });
     });
 
-    describeIf(is('>= 16.6'), 'React.memo', () => {
+    describe('React.memo', () => {
       describe('display names', () => {
         function SFC() { return null; }
         function SFCwithDisplayName() { return null; }
@@ -162,7 +158,7 @@ export default function describeDebug({
 </div>`);
         });
 
-        describeIf(is('>= 16.8'), 'full tree', () => {
+        describe('full tree', () => {
           function TransitionGroup({ children }) { return children; }
           function CSSTransition({ children }) { return children; }
           function Body({ imageToShow, switchImage }) {

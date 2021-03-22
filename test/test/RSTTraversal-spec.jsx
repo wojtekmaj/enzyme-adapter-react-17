@@ -11,8 +11,6 @@ import {
 } from 'enzyme/build/RSTTraversal';
 
 import './_helpers/setupAdapters';
-import { describeIf } from './_helpers';
-import { is } from './_helpers/version';
 
 const $ = elementToTree;
 
@@ -480,7 +478,7 @@ describe('RSTTraversal', () => {
       expect(result).to.equal('<Subject />');
     });
 
-    describeIf(is('> 0.13'), 'stateless function components', () => {
+    describe('stateless function components', () => {
       it('returnsdisplayName for functions that provides one', () => {
         const Subject = () => <div />;
         Subject.displayName = 'CustomSubject';

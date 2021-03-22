@@ -5,9 +5,6 @@ import { expect } from 'chai';
 import {
   itIf,
 } from '../../_helpers';
-import {
-  is,
-} from '../../_helpers/version';
 
 import {
   createClass,
@@ -54,7 +51,7 @@ export default function describeContext({
       );
     });
 
-    itIf(is('>= 16'), 'throws on SFCs that lack an instance', () => {
+    it('throws on SFCs that lack an instance', () => {
       const context = { name: 'bob' };
       const wrapper = Wrap(<SimpleComponentSFC />, { context });
       expect(() => wrapper.context()).to.throw(
@@ -102,7 +99,7 @@ export default function describeContext({
       expect(() => child.context()).to.throw(Error);
     });
 
-    itIf(is('>= 16'), 'throws on an SFC without an instance', () => {
+    it('throws on an SFC without an instance', () => {
       function Bar() {
         return <RendersHTML />;
       }

@@ -3,13 +3,8 @@ import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 
 import {
-  describeIf,
   itIf,
 } from '../../_helpers';
-import {
-  is,
-  REACT16,
-} from '../../_helpers/version';
 
 import {
   memo,
@@ -26,7 +21,7 @@ export default function describeSimulate({
   // The shallow renderer in react 16 does not yet support batched updates. When it does,
   // we should be able to go un-skip all of the tests that are skipped with this flag.
   // FIXME: fix this
-  const BATCHING = !isShallow || !REACT16;
+  const BATCHING = !isShallow;
 
   describe('.simulate(eventName, data)', () => {
     it('simulates events', () => {
@@ -90,7 +85,7 @@ export default function describeSimulate({
       }
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       const ClickerSFC = ({ onClick }) => (<a onClick={onClick}>foo</a>);
 
       it('simulates events', () => {
@@ -137,7 +132,7 @@ export default function describeSimulate({
         expect(clickSpy).to.have.property('callCount', 1);
       });
 
-      describeIf(is('> 0.13'), 'normalizing mouseenter', () => {
+      describe('normalizing mouseenter', () => {
         it('converts lowercase events to React camelcase', () => {
           const spy = sinon.spy();
           class Mousetrap extends React.Component {
@@ -167,7 +162,7 @@ export default function describeSimulate({
         });
       });
 
-      describeIf(is('>= 15'), 'animation events', () => {
+      describe('animation events', () => {
         it('converts lowercase events to React camelcase', () => {
           const spy = sinon.spy();
           class Animator extends React.Component {
@@ -195,7 +190,7 @@ export default function describeSimulate({
         });
       });
 
-      describeIf(is('>= 16.4'), 'pointer events', () => {
+      describe('pointer events', () => {
         it('converts lowercase events to React camelcase', () => {
           const spy = sinon.spy();
           class Fingertrap extends React.Component {
@@ -294,7 +289,7 @@ export default function describeSimulate({
       });
     });
 
-    describeIf(is('>= 16.6'), 'React.memo', () => {
+    describe('React.memo', () => {
       itIf(isMount, 'can simulate events', () => {
         function Child({ onClick }) {
           return <button onClick={onClick} type="button" />;
@@ -319,7 +314,7 @@ export default function describeSimulate({
       });
     });
 
-    describeIf(is('>= 16.8'), 'hooks', () => {
+    describe('hooks', () => {
       // TODO: fix for shallow when useEffect works for shallow
       itIf(!isShallow, 'works with `useEffect` simulated events', () => {
         const effectSpy = sinon.spy();

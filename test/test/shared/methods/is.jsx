@@ -2,11 +2,6 @@ import React from 'react';
 import { expect } from 'chai';
 
 import {
-  describeIf,
-} from '../../_helpers';
-import { is } from '../../_helpers/version';
-
-import {
   memo,
   forwardRef,
 } from '../../_helpers/react-compat';
@@ -69,14 +64,14 @@ export default function describeIs({
       expect(wrapper.is(RendersDiv)).to.equal(true);
     });
 
-    describeIf(is('>= 16.3'), 'forwardRef', () => {
+    describe('forwardRef', () => {
       it('recognizes forwardRef', () => {
         const wrapper = WrapRendered(<RendersChildren><ForwardRef /></RendersChildren>);
         expect(wrapper.is(ForwardRef)).to.equal(true);
       });
     });
 
-    describeIf(is('>= 16.6'), 'React.memo', () => {
+    describe('React.memo', () => {
       it('recognizes memoized and inner', () => {
         const wrapper = WrapRendered(<RendersChildren><Memoized /></RendersChildren>);
         expect(wrapper.is(Memoized)).to.equal(true);

@@ -3,11 +3,9 @@ import { expect } from 'chai';
 
 import {
   delay,
-  describeIf,
   itIf,
 } from '../../_helpers';
 import sloppyReturnThis from '../../_helpers/untranspiledSloppyReturnThis';
-import { is } from '../../_helpers/version';
 
 export default function describeProps({
   Wrap,
@@ -63,7 +61,7 @@ export default function describeProps({
       expect(wrapper.props()).to.eql({ className: 'bye', id: 'hi' });
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       const FooSFC = ({ bar, foo }) => (
         <div className={bar} id={foo} />
       );

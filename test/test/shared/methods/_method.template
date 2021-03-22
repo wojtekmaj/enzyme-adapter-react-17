@@ -20,7 +20,6 @@ import realArrowFunction from '../../_helpers/realArrowFunction';
 import { getElementPropSelector, getWrapperPropSelector } from '../../_helpers/selectors';
 import {
   is,
-  REACT16,
 } from '../../_helpers/version';
 
 import {

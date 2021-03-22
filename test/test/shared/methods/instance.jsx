@@ -2,10 +2,8 @@ import React from 'react';
 import { expect } from 'chai';
 
 import {
-  describeIf,
   itIf,
 } from '../../_helpers';
-import { is } from '../../_helpers/version';
 
 export default function describeInstance({
   Wrap,
@@ -23,17 +21,17 @@ export default function describeInstance({
       expect(wrapper.instance().render).to.equal(Foo.prototype.render);
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       function SFC() {
         return <div />;
       }
 
-      itIf(is('>= 16'), 'has no instance', () => {
+      it('has no instance', () => {
         const wrapper = Wrap(<SFC />);
         expect(wrapper.instance()).to.equal(null);
       });
 
-      itIf(is('< 16'), 'has an instance', () => {
+      itIf(false, 'has an instance', () => {
         const wrapper = Wrap(<SFC />);
         expect(wrapper.instance()).not.to.equal(null);
       });

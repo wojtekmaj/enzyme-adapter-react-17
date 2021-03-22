@@ -1,11 +1,6 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  describeIf,
-} from '../../_helpers';
-import { is } from '../../_helpers/version';
-
 export default function describeHostNodes({
   Wrap,
   WrapRendered,
@@ -71,7 +66,7 @@ export default function describeHostNodes({
       expect(WrapRendered(<Foo />).equals(<Foo />)).to.equal(false);
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       it('matches composite SFCs', () => {
         const Foo = () => (
           <div />

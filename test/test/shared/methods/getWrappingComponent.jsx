@@ -3,12 +3,8 @@ import PropTypes from 'prop-types';
 import { expect } from 'chai';
 
 import {
-  describeIf,
   itIf,
 } from '../../_helpers';
-import {
-  is,
-} from '../../_helpers/version';
 
 export default function describeGetWrappingComponent({
   Wrap,
@@ -25,22 +21,8 @@ export default function describeGetWrappingComponent({
       return null;
     }
   }
-  class RendersChildren extends React.Component {
-    render() {
-      const { children } = this.props;
-      return children;
-    }
-  }
 
-  describeIf(is('<= 0.13'), '<= 0.13: .getWrappingComponent()', () => {
-    it('throws', () => {
-      expect(() => Wrap(<div />, {
-        wrappingComponent: RendersChildren,
-      })).to.throw(TypeError, 'your adapter does not support `wrappingComponent`. Try upgrading it!');
-    });
-  });
-
-  describeIf(is('> 0.13'), '> 0.13: .getWrappingComponent()', () => {
+  describe('> 0.13: .getWrappingComponent()', () => {
     class TestProvider extends React.Component {
       getChildContext() {
         const { value, renderMore, renderStateTester } = this.props;
@@ -187,7 +169,7 @@ export default function describeGetWrappingComponent({
       }
     });
 
-    itIf(is('>= 16.3'), 'updates a <Provider /> if it is rendered as root', () => {
+    it('updates a <Provider /> if it is rendered as root', () => {
       const Context = React.createContext();
       function WrappingComponent(props) {
         const { value, children } = props;

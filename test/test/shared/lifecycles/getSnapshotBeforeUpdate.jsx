@@ -1,18 +1,14 @@
 import React from 'react';
 
 import {
-  describeIf,
   argSpy,
   expectArgs,
 } from '../../_helpers';
-import {
-  is,
-} from '../../_helpers/version';
 
 export default function describeGSBU({
   Wrap,
 }) {
-  describeIf(is('>= 16.3'), 'getSnapshotBeforeUpdate()', () => {
+  describe('getSnapshotBeforeUpdate()', () => {
     it('calls getSnapshotBeforeUpdate and pass snapshot to componentDidUpdate', () => {
       const spy = argSpy();
 

@@ -2,10 +2,8 @@ import React from 'react';
 import { expect } from 'chai';
 
 import {
-  describeIf,
   itIf,
 } from '../../_helpers';
-import { is } from '../../_helpers/version';
 
 export default function describeContains({
   Wrap,
@@ -118,7 +116,7 @@ export default function describeContains({
       );
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       it('matches composite components', () => {
         function Foo() {
           return <div />;

@@ -6,8 +6,7 @@ import renderEntry from 'enzyme/render';
 import { fakeDynamicImport } from 'enzyme-adapter-utils';
 
 import './_helpers/setupAdapters';
-import { describeWithDOM, describeIf } from './_helpers';
-import { is } from './_helpers/version';
+import { describeWithDOM } from './_helpers';
 import { createClass, lazy } from './_helpers/react-compat';
 
 describeWithDOM('render', () => {
@@ -15,7 +14,7 @@ describeWithDOM('render', () => {
     expect(renderEntry).to.equal(render);
   });
 
-  describeIf(is('> 0.13'), 'context', () => {
+  describe('context', () => {
     it('can pass in context', () => {
       const SimpleComponent = createClass({
         contextTypes: {
@@ -94,17 +93,13 @@ describeWithDOM('render', () => {
       });
 
       const getWrapper = (options) => render(<StringComponent />, options);
-      if (is('>= 16')) {
-        expect(getWrapper).to.not.throw();
+      expect(getWrapper).to.not.throw();
 
-        const wrapper = getWrapper();
-        expect(wrapper.text()).to.equal('foo');
-        expect(wrapper.html()).to.equal('foo');
-        expect(String(wrapper)).to.equal('foo');
-        expect(wrapper).to.have.lengthOf(1);
-      } else {
-        expect(getWrapper).to.throw();
-      }
+      const wrapper = getWrapper();
+      expect(wrapper.text()).to.equal('foo');
+      expect(wrapper.html()).to.equal('foo');
+      expect(String(wrapper)).to.equal('foo');
+      expect(wrapper).to.have.lengthOf(1);
     });
 
     it('can render numbers', () => {
@@ -115,21 +110,17 @@ describeWithDOM('render', () => {
       });
 
       const getWrapper = (options) => render(<NumberComponent />, options);
-      if (is('>= 16')) {
-        expect(getWrapper).to.not.throw();
+      expect(getWrapper).to.not.throw();
 
-        const wrapper = getWrapper();
-        expect(wrapper.text()).to.equal('42');
-        expect(wrapper.html()).to.equal('42');
-        expect(String(wrapper)).to.equal('42');
-        expect(wrapper).to.have.lengthOf(1);
-      } else {
-        expect(getWrapper).to.throw();
-      }
+      const wrapper = getWrapper();
+      expect(wrapper.text()).to.equal('42');
+      expect(wrapper.html()).to.equal('42');
+      expect(String(wrapper)).to.equal('42');
+      expect(wrapper).to.have.lengthOf(1);
     });
   });
 
-  describeIf(is('> 16.6'), 'suspense fallback option', () => {
+  describe('suspense fallback option', () => {
     it('throws if options.suspenseFallback is specified', () => {
       class DynamicComponent extends React.Component {
         render() {

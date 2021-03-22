@@ -4,9 +4,6 @@ import sinon from 'sinon-sandbox';
 import {
   itIf,
 } from '../../_helpers';
-import {
-  is,
-} from '../../_helpers/version';
 
 import {
   useEffect,
@@ -98,7 +95,7 @@ export default function describeInvoke({
     });
 
     // TODO: enable when the shallow renderer fixes its bug
-    itIf(!isShallow && is('>= 16.8'), 'works without explicit `act` wrapper', () => {
+    itIf(!isShallow && true, 'works without explicit `act` wrapper', () => {
       function App() {
         const [counter, setCounter] = useState(0);
         const [result, setResult] = useState(0);

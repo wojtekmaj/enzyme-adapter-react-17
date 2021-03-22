@@ -3,10 +3,8 @@ import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 
 import {
-  describeIf,
   itIf,
 } from '../../_helpers';
-import { is } from '../../_helpers/version';
 
 export default function describeHasClass({
   Wrap,
@@ -59,7 +57,7 @@ export default function describeHasClass({
       });
     });
 
-    describeIf(is('> 0.13'), 'with stateless function components (SFCs)', () => {
+    describe('with stateless function components (SFCs)', () => {
       it('returns whether or not rendered node has a certain class', () => {
         const wrapper = WrapRendered(<FooSFC className="root" />);
 

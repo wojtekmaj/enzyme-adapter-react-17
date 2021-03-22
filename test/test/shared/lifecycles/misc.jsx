@@ -4,7 +4,6 @@ import { expect } from 'chai';
 import PropTypes from 'prop-types';
 
 import {
-  describeIf,
   itIf,
   argSpy,
   expectArgs,
@@ -13,7 +12,6 @@ import {
   PureComponent,
 } from '../../_helpers/react-compat';
 import {
-  is,
   BATCHING,
 } from '../../_helpers/version';
 
@@ -28,7 +26,7 @@ export default function describeMisc({
       spy = argSpy();
     });
 
-    describeIf(is('>= 16.3'), 'setProps calls `componentDidUpdate` when `getDerivedStateFromProps` is defined', () => {
+    describe('setProps calls `componentDidUpdate` when `getDerivedStateFromProps` is defined', () => {
       class DummyComp extends PureComponent {
         constructor(...args) {
           super(...args);
@@ -345,7 +343,7 @@ export default function describeMisc({
       ]);
     });
 
-    describeIf(is('>= 16.6'), 'getDerivedStateFromError and componentDidCatch combined', () => {
+    describe('getDerivedStateFromError and componentDidCatch combined', () => {
       const errorToThrow = new EvalError('threw an error!');
       // in React 16.0 - 16.2 and 16.9+, and some older nodes, the actual error thrown isn't reported.
       const reactError = new Error('An error was thrown inside one of your components, but React doesn\'t know what it was. This is likely due to browser flakiness. React does its best to preserve the "Pause on exceptions" behavior of the DevTools, which requires some DEV-mode only tricks. It\'s possible that these don\'t work in your browser. Try triggering the error in production mode, or switching to a modern browser. If you suspect that this is actually an issue with React, please file an issue.');
@@ -773,7 +771,7 @@ export default function describeMisc({
             'componentDidUpdate',
             { foo: 'bar' }, { foo: 'baz' },
             { foo: 'state' }, { foo: 'state' },
-            is('>= 16') ? undefined : { foo: 'context' },
+            undefined,
           ],
           [
             'componentWillReceiveProps',
@@ -797,7 +795,7 @@ export default function describeMisc({
             'componentDidUpdate',
             { foo: 'baz' }, { foo: 'bax' },
             { foo: 'state' }, { foo: 'state' },
-            is('>= 16') ? undefined : { foo: 'context' },
+            undefined,
           ],
         ]);
       });
@@ -1090,7 +1088,7 @@ export default function describeMisc({
             'componentDidUpdate',
             { foo: 'props' }, { foo: 'props' },
             { foo: 'bar' }, { foo: 'baz' },
-            is('>= 16') ? undefined : { foo: 'context' },
+            undefined,
           ],
         ]);
       });
@@ -1286,7 +1284,7 @@ export default function describeMisc({
             'componentDidUpdate',
             { foo: 'props' }, { foo: 'props' },
             { foo: 'state' }, { foo: 'state' },
-            is('>= 16') ? undefined : { foo: 'bar' },
+            undefined,
           ],
         ]);
       });

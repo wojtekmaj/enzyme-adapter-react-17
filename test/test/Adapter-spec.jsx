@@ -27,11 +27,9 @@ import {
   StrictMode,
   Suspense,
 } from './_helpers/react-compat';
-import { is } from './_helpers/version';
 import {
   itIf,
   describeWithDOM,
-  describeIf,
   isMemo,
 } from './_helpers';
 
@@ -197,7 +195,7 @@ describe('Adapter', () => {
       hydratedTreeMatchesUnhydrated(<Four />);
     });
 
-    itIf(is('>= 16'), 'works with ReactDOM.hydrate', () => {
+    it('works with ReactDOM.hydrate', () => {
       hydratedTreeMatchesUnhydrated(<One />, true);
       hydratedTreeMatchesUnhydrated(<Two />, true);
       hydratedTreeMatchesUnhydrated(<Three />, true);
@@ -242,7 +240,7 @@ describe('Adapter', () => {
           instance: null,
           rendered: [
             'hello',
-            is('>= 16') ? '4' : 4,
+            '4',
             'world',
           ],
         },
@@ -270,7 +268,7 @@ describe('Adapter', () => {
       }));
     });
 
-    itIf(is('>= 16'), 'renders react portals', () => {
+    it('renders react portals', () => {
       const document = jsdom.jsdom();
       const options = { mode: 'mount' };
       const renderer = adapter.createRenderer(options);
@@ -320,7 +318,7 @@ describe('Adapter', () => {
       }));
     });
 
-    itIf(is('>= 16'), 'shallow renders react portals', () => {
+    it('shallow renders react portals', () => {
       const options = { mode: 'shallow' };
       const renderer = adapter.createRenderer(options);
       const innerDiv = <div className="Foo">Hello World!</div>;
@@ -370,7 +368,7 @@ describe('Adapter', () => {
       }));
     });
 
-    itIf(is('> 0.13'), 'renders simple components returning host components', () => {
+    it('renders simple components returning host components', () => {
       const options = { mode: 'mount' };
       const renderer = adapter.createRenderer(options);
 
@@ -461,7 +459,7 @@ describe('Adapter', () => {
       }));
     });
 
-    itIf(is('> 0.13'), 'renders complicated trees of composites and hosts', () => {
+    it('renders complicated trees of composites and hosts', () => {
       // SFC returning host. no children props.
       const Qoo = () => <span className="Qoo">Hello World!</span>;
 
@@ -960,7 +958,7 @@ describe('Adapter', () => {
   });
 
   describe('determines valid element types', () => {
-    itIf(is('> 0.13'), 'supports stateless function components', () => {
+    it('supports stateless function components', () => {
       const SFC = () => null;
 
       expect(adapter.isValidElementType(SFC)).to.equal(true);
@@ -978,22 +976,22 @@ describe('Adapter', () => {
       expect(adapter.isValidElementType('div')).to.equal(true);
     });
 
-    itIf(is('>= 16'), 'supports Portals', () => {
+    it('supports Portals', () => {
       expect(adapter.isValidElementType(createPortal(<div />, { nodeType: 1 }))).to.equal(false);
     });
 
-    itIf(is('>= 16.3'), 'supports Context', () => {
+    it('supports Context', () => {
       const Context = createContext({ });
       expect(adapter.isValidElementType(Context.Consumer)).to.equal(true);
       expect(adapter.isValidElementType(Context.Provider)).to.equal(true);
     });
 
-    itIf(is('>= 16.3'), 'supports forward refs', () => {
+    it('supports forward refs', () => {
       expect(adapter.isValidElementType(forwardRef(() => null))).to.equal(true);
     });
   });
 
-  itIf(is('>0.13'), 'supports wrapping elements in a WrappingComponent', () => {
+  it('supports wrapping elements in a WrappingComponent', () => {
     class WrappingComponent extends React.Component {
       render() {
         return null;
@@ -1013,7 +1011,7 @@ describe('Adapter', () => {
   describe('provides node displayNames', () => {
     const getDisplayName = (el) => adapter.displayNameOfNode(adapter.elementToNode(el));
 
-    itIf(is('> 0.13'), 'supports stateless function components', () => {
+    it('supports stateless function components', () => {
       const SFC = () => null;
 
       expect(getDisplayName(<SFC />)).to.equal('SFC');
@@ -1036,21 +1034,21 @@ describe('Adapter', () => {
       expect(getDisplayName(<div />)).to.equal('div');
     });
 
-    itIf(is('>= 16.2'), 'supports Fragments', () => {
+    it('supports Fragments', () => {
       expect(getDisplayName(<Fragment />)).to.equal('Fragment');
     });
 
-    itIf(is('>= 16'), 'supports Portals', () => {
+    it('supports Portals', () => {
       expect(getDisplayName(createPortal(<div />, { nodeType: 1 }))).to.equal('Portal');
     });
 
-    itIf(is('>= 16.3'), 'supports Context', () => {
+    it('supports Context', () => {
       const Context = createContext({});
       expect(getDisplayName(<Context.Consumer />)).to.equal('ContextConsumer');
       expect(getDisplayName(<Context.Provider />)).to.equal('ContextProvider');
     });
 
-    itIf(is('>= 16.3'), 'supports forward refs', () => {
+    it('supports forward refs', () => {
       const ForwaredRef = forwardRef(() => null);
       // eslint-disable-next-line prefer-arrow-callback
       const NamedForwardedRef = forwardRef(function Named() { return null; });
@@ -1059,27 +1057,27 @@ describe('Adapter', () => {
       expect(getDisplayName(<NamedForwardedRef />)).to.equal('ForwardRef(Named)');
     });
 
-    itIf(is('>= 16.3'), 'supports StrictMode', () => {
+    it('supports StrictMode', () => {
       expect(getDisplayName(<StrictMode />)).to.equal('StrictMode');
     });
 
-    itIf(is('>= 16.3') && is('< 16.6'), 'supports AsyncMode', () => {
+    itIf(true && false, 'supports AsyncMode', () => {
       expect(getDisplayName(<AsyncMode />)).to.equal('AsyncMode');
     });
 
-    itIf(is('>= 16.4'), 'supports Profiler', () => {
+    it('supports Profiler', () => {
       expect(getDisplayName(<Profiler />)).to.equal('Profiler');
     });
 
-    itIf((is('>= 16.6') && is('<16.9')), 'supports ConcurrentMode', () => {
+    itIf((true && false), 'supports ConcurrentMode', () => {
       expect(getDisplayName(<ConcurrentMode />)).to.equal('ConcurrentMode');
     });
 
-    itIf(is('>= 16.6'), 'supports Suspense', () => {
+    it('supports Suspense', () => {
       expect(getDisplayName(<Suspense />)).to.equal('Suspense');
     });
 
-    itIf(is('>= 16.6'), 'supports lazy', () => {
+    it('supports lazy', () => {
       class DynamicComponent extends React.Component {
         render() {
           return <div>DynamicComponent</div>;
@@ -1090,7 +1088,7 @@ describe('Adapter', () => {
     });
   });
 
-  describeIf(is('>= 16.2'), 'determines if node isFragment', () => {
+  describe('determines if node isFragment', () => {
     it('correctly identifies Fragment', () => {
       expect(adapter.isFragment(<Fragment />)).to.equal(true);
     });
@@ -1114,7 +1112,7 @@ describe('Adapter', () => {
     });
   });
 
-  describeIf(is('>= 16'), 'checkPropTypes', () => {
+  describe('checkPropTypes', () => {
     let renderer;
 
     class Root extends React.Component {
@@ -1193,12 +1191,12 @@ Warning: Failed Adapter-spec type: Invalid Adapter-spec \`foo\` of type \`string
       expect(adapter.isCustomComponent(undefined)).to.equal(false);
     });
 
-    itIf(is('>=16.3'), 'returns true for forward refs', () => {
+    it('returns true for forward refs', () => {
       expect(adapter.isCustomComponent(forwardRef(() => null))).to.equal(true);
     });
   });
 
-  describeIf(is('>= 16.3'), 'isContextConsumer(type)', () => {
+  describe('isContextConsumer(type)', () => {
     it('returns true for createContext() Consumers', () => {
       expect(adapter.isContextConsumer(createContext().Consumer)).to.equal(true);
     });
@@ -1214,7 +1212,7 @@ Warning: Failed Adapter-spec type: Invalid Adapter-spec \`foo\` of type \`string
     });
   });
 
-  describeIf(is('>= 16.3'), 'getProviderFromConsumer(Consumer)', () => {
+  describe('getProviderFromConsumer(Consumer)', () => {
     it('gets a createContext() Provider from a Consumer', () => {
       const Context = createContext();
 
@@ -1246,7 +1244,7 @@ Warning: Failed Adapter-spec type: Invalid Adapter-spec \`foo\` of type \`string
       expect(adapter.matchesElementType({ type: {} }, sentinel)).to.equal(false);
     });
 
-    describeIf(is('>= 16.6'), 'memoized components', () => {
+    describe('memoized components', () => {
       const matchingType = {};
       const node = { type: matchingType };
       const memoNode = {

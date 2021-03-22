@@ -2,10 +2,8 @@ import React from 'react';
 import { expect } from 'chai';
 
 import {
-  describeIf,
   itIf,
 } from '../../_helpers';
-import { is } from '../../_helpers/version';
 
 import {
   createPortal,
@@ -52,7 +50,7 @@ export default function describeState({
       expect(() => wrapper.state()).to.throw(Error, `${WrapperName}::state() can only be called on class components`);
     });
 
-    itIf(is('>= 16'), 'throws on Portals', () => {
+    it('throws on Portals', () => {
       const containerDiv = makeDOMElement();
       const portal = createPortal(
         <div />,
@@ -63,7 +61,7 @@ export default function describeState({
       expect(() => wrapper.state()).to.throw(Error, `${WrapperName}::state() can only be called on class components`);
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       it('throws on SFCs', () => {
         function FooSFC() {
           return <div />;
@@ -126,7 +124,7 @@ export default function describeState({
         expect(child.state()).to.eql({ state: 'a' });
       });
 
-      describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+      describe('stateless function components (SFCs)', () => {
         function StatelessParent(props) {
           return <Child {...props} />;
         }

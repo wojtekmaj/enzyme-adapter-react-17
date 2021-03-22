@@ -7,9 +7,6 @@ import {
   itIf,
 } from '../../_helpers';
 import {
-  is,
-} from '../../_helpers/version';
-import {
   useEffect,
   useState,
   Fragment,
@@ -264,7 +261,7 @@ export default function describeUseEffect({
       });
 
       // TODO: figure out why this test is flaky. Perhaps unmount of useEffect is async?
-      itIf.skip(is('> 16.8.3'), 'cleanup on unmount', () => {
+      itIf.skip(true, 'cleanup on unmount', () => {
         const wrapper = Wrap(<FriendStatus friend={friend} />);
 
         wrapper.unmount();

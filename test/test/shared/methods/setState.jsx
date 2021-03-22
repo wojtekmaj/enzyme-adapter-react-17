@@ -6,7 +6,6 @@ import wrap from 'mocha-wrap';
 import getAdapter from 'enzyme/build/getAdapter';
 
 import {
-  describeIf,
   itIf,
 } from '../../_helpers';
 import { is } from '../../_helpers/version';
@@ -128,15 +127,15 @@ export default function describeSetState({
       expect(callback).to.have.property('callCount', 1);
 
       wrapper.setState(() => null, callback);
-      expect(spy).to.have.property('callCount', is('>= 16') ? 1 : 2);
+      expect(spy).to.have.property('callCount', 1);
       expect(callback).to.have.property('callCount', 2);
 
       wrapper.setState(() => undefined, callback);
-      expect(spy).to.have.property('callCount', is('>= 16') ? 1 : 3);
+      expect(spy).to.have.property('callCount', 1);
       expect(callback).to.have.property('callCount', 3);
     });
 
-    itIf(is('>= 16'), 'prevents an infinite loop if nextState is null or undefined from setState in CDU', () => {
+    it('prevents an infinite loop if nextState is null or undefined from setState in CDU', () => {
       let payload;
       const stub = sinon.stub(HasIDState.prototype, 'componentDidUpdate')
         .callsFake(function componentDidUpdate() { this.setState(() => payload); });
@@ -233,7 +232,7 @@ export default function describeSetState({
       });
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       it('throws when trying to access state', () => {
         const Foo = () => (
           <div>abc</div>
@@ -409,7 +408,7 @@ export default function describeSetState({
         });
       });
 
-      describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+      describe('stateless function components (SFCs)', () => {
         function SFC(props) {
           return <Parent {...props} />;
         }

@@ -24,8 +24,7 @@ import {
 import wrap from 'mocha-wrap';
 
 import './_helpers/setupAdapters';
-import { describeIf, describeWithDOM } from './_helpers';
-import { is } from './_helpers/version';
+import { describeWithDOM } from './_helpers';
 
 describe('enzyme-adapter-utils', () => {
   describe('ensureKeyOrUndefined', () => {
@@ -58,7 +57,7 @@ describe('enzyme-adapter-utils', () => {
         expect(displayNameOfNode(<Foo />)).to.equal('CustomWrapper');
       });
 
-      describeIf(is('> 0.13'), 'stateless function components', () => {
+      describe('stateless function components', () => {
         it('returns the displayName', () => {
           const Foo = () => <div />;
           Foo.displayName = 'CustomWrapper';
@@ -67,7 +66,7 @@ describe('enzyme-adapter-utils', () => {
         });
       });
 
-      describeIf(is('>= 16.6'), 'stateless memoized function components', () => {
+      describe('stateless memoized function components', () => {
         it('returns the displayName', () => {
           const Foo = Object.assign(React.memo(() => <div />), { displayName: 'Memoized(CustomWrapper)' });
 
@@ -93,7 +92,7 @@ describe('enzyme-adapter-utils', () => {
         expect(displayNameOfNode(<Foo />)).to.equal('');
       });
 
-      describeIf(is('> 0.13'), 'stateless function components', () => {
+      describe('stateless function components', () => {
         it('returns the name', () => {
           const Foo = () => <div />;
 
@@ -215,7 +214,7 @@ describe('enzyme-adapter-utils', () => {
 
   describe('elementToTree', () => {
     class Target extends React.Component { render() { return null; } }
-    const classNodeType = is('< 0.14') ? 'function' : 'class';
+    const classNodeType = 'class';
 
     it('produces a tree', () => {
       const target = elementToTree(<Target a="1"><div /></Target>);
@@ -564,7 +563,7 @@ describe('enzyme-adapter-utils', () => {
       { type: Foo },
     ];
     function Bar() { return null; }
-    const hasSFCs = is('> 0.14');
+    const hasSFCs = true;
     if (hasSFCs) {
       hierarchy.push({ type: Bar });
     }

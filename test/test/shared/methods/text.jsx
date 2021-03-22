@@ -4,10 +4,8 @@ import { expect } from 'chai';
 import { render } from 'enzyme';
 
 import {
-  describeIf,
   itIf,
 } from '../../_helpers';
-import { is } from '../../_helpers/version';
 
 import {
   Fragment,
@@ -131,7 +129,7 @@ export default function describeText({
       ]);
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       it('handles nodes with mapped children', () => {
         const Foo = ({ items }) => (
           <div>
@@ -199,7 +197,7 @@ export default function describeText({
       });
     });
 
-    describeIf(is('> 16.2'), 'fragments', () => {
+    describe('fragments', () => {
       class FragmentClassExample extends React.Component {
         render() {
           return (
@@ -261,7 +259,7 @@ export default function describeText({
       });
     });
 
-    describeIf(is('> 16.6'), 'React.memo', () => {
+    describe('React.memo', () => {
       class Dumb extends React.Component {
         render() {
           const { number } = this.props;

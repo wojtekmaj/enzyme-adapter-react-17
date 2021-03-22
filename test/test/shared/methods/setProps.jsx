@@ -8,10 +8,8 @@ import {
 } from 'enzyme/build/Utils';
 
 import {
-  describeIf,
   itIf,
 } from '../../_helpers';
-import { is } from '../../_helpers/version';
 
 export default function describeSetProps({
   Wrap,
@@ -136,7 +134,7 @@ export default function describeSetProps({
         });
       });
 
-      itIf(is('> 0.13'), 'merges, not replaces, props on SFCs', () => {
+      it('merges, not replaces, props on SFCs', () => {
         const wrapper = Wrap(<FooSFC id="foo" foo="bar" />);
         const rendered = () => (isShallow ? wrapper : wrapper.children());
 
@@ -158,12 +156,6 @@ export default function describeSetProps({
           className: 'foo',
           children: 'bar',
         });
-        if (is('< 16')) {
-          expect(wrapper.instance().props).to.eql({
-            id: 'foo',
-            foo: 'bar',
-          });
-        }
 
         wrapper.setProps({ id: 'bar' });
 
@@ -185,12 +177,6 @@ export default function describeSetProps({
           className: 'bar',
           children: 'bar',
         });
-        if (is('< 16')) {
-          expect(wrapper.instance().props).to.eql({
-            id: 'bar',
-            foo: 'bar',
-          });
-        }
       });
 
       it('merges, not replaces, props when no rerender is needed', () => {
@@ -290,10 +276,8 @@ export default function describeSetProps({
       expect(cWRP).to.have.property('callCount', 1);
       expect(cWRP.calledWith(nextProps, context)).to.equal(true);
 
-      if (is('>= 16.3')) {
-        expect(U_cWRP).to.have.property('callCount', 1);
-        expect(U_cWRP.calledWith(nextProps, context)).to.equal(true);
-      }
+      expect(U_cWRP).to.have.property('callCount', 1);
+      expect(U_cWRP.calledWith(nextProps, context)).to.equal(true);
     });
 
     it('merges newProps with oldProps', () => {
@@ -520,7 +504,7 @@ export default function describeSetProps({
       });
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       it('sets props for a component multiple times', () => {
         const wrapper = Wrap(<FooSFC id="foo" />);
         expect(wrapper.find('.foo')).to.have.lengthOf(1);

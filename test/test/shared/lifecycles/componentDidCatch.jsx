@@ -2,7 +2,6 @@ import React from 'react';
 import sinon from 'sinon-sandbox';
 import { expect } from 'chai';
 
-import { is } from '../../_helpers/version';
 import {
   describeIf,
   itIf,
@@ -15,7 +14,7 @@ export default function describeCDC({
   Wrap,
   isShallow,
 }) {
-  describeIf(is('>= 16'), 'componentDidCatch', () => {
+  describe('componentDidCatch', () => {
     describe('errors inside an error boundary', () => {
       const errorToThrow = new EvalError('threw an error!');
       // in React 16.0 - 16.2 and 16.9+, and some older nodes, the actual error thrown isn't reported.
@@ -25,7 +24,7 @@ export default function describeCDC({
           || error.message === reactError.message
       );
 
-      const hasFragments = is('>= 16.2');
+      const hasFragments = true;
       const MaybeFragment = hasFragments ? Fragment : 'main';
 
       function Thrower({ throws }) {

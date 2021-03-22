@@ -2,10 +2,8 @@ import React from 'react';
 import { expect } from 'chai';
 
 import {
-  describeIf,
   itIf,
 } from '../../_helpers';
-import { is } from '../../_helpers/version';
 
 export default function describeProp({
   Wrap,
@@ -67,7 +65,7 @@ export default function describeProp({
       expect(wrapper.prop('bar')).to.equal(undefined);
     });
 
-    describeIf(is('> 0.13'), 'stateless function components (SFCs)', () => {
+    describe('stateless function components (SFCs)', () => {
       const FooSFC = ({ bar, foo }) => (
         <div className={bar} id={foo} />
       );
