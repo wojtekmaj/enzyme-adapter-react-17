@@ -25,7 +25,7 @@ const tests = [
 tests.forEach(({ describeMethod, name, renderMethod }) => {
   describeMethod(`selectors: ${name}`, () => {
     let expectAttributeMatch;
-    beforeEach(() => { // eslint-disable-line mocha/no-top-level-hooks
+    beforeEach(() => {
       expectAttributeMatch = (element, selector, expected) => {
         const wrapper = renderMethod(element);
         expect(wrapper.is(selector)).to.equal(expected);

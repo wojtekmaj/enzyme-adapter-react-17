@@ -13,7 +13,7 @@ export default function describeGDSFP({
   describeIf(is('>= 16.3'), 'getDerivedStateFromProps()', () => {
     let spy;
 
-    beforeEach(() => { // eslint-disable-line mocha/no-top-level-hooks
+    beforeEach(() => {
       spy = sinon.spy();
     });
 
