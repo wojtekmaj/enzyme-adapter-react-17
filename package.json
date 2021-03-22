@@ -4,13 +4,15 @@
   "description": "JavaScript Testing utilities for React",
   "homepage": "https://enzymejs.github.io/enzyme/",
   "main": "build",
+  "workspaces": [
+    "test"
+  ],
   "scripts": {
     "build": "babel --source-maps=both src -d build",
     "clean": "rimraf build",
     "lint": "eslint --ext js,jsx .",
     "prepack": "yarn clean && yarn build",
-    "test": "yarn lint",
-    "watch": "yarn build -w"
+    "test": "yarn lint"
   },
   "keywords": [
     "javascript",
