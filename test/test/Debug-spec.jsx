@@ -19,7 +19,6 @@ import {
   forwardRef,
 } from './_helpers/react-compat';
 import {
-  describeWithDOM,
   describeIf,
   itIf,
 } from './_helpers';
@@ -278,7 +277,7 @@ describe('debug', () => {
     });
   });
 
-  describeWithDOM('debugInst(inst)', () => {
+  describe('debugInst(inst)', () => {
     it('renders basic debug of mounted components', () => {
       class Foo extends React.Component {
         render() {
@@ -735,7 +734,7 @@ describe('debug', () => {
     });
   });
 
-  describeWithDOM('debug React wrapper', () => {
+  describe('debug React wrapper', () => {
     it('options.ignoreProps causes props to be omitted', () => {
       class Foo extends React.Component {
         render() {
@@ -879,7 +878,7 @@ describe('debug', () => {
       ParentOfNamed = () => <NamedComponent />;
     });
 
-    describeWithDOM('', () => {
+    describe('', () => {
       it('works with a `mount` wrapper', () => {
         const wrapper = mount(<Parent foo="hello" />);
         expect(wrapper.debug()).to.equal((

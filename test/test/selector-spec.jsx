@@ -7,13 +7,16 @@ import {
 } from 'enzyme';
 
 import './_helpers/setupAdapters';
-import { describeWithDOM, describeIf, itIf } from './_helpers';
+import {
+  describeIf,
+  itIf,
+} from './_helpers';
 
 const tests = [
   {
     name: 'mount',
     renderMethod: mount,
-    describeMethod: describeWithDOM,
+    describeMethod: describe,
   },
   {
     name: 'shallow',

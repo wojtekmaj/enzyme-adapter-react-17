@@ -1,5 +1,3 @@
-/* globals jsdom */
-
 import React from 'react';
 import { Memo } from 'react-is';
 import { compareNodeTypeOf } from 'enzyme-adapter-utils';
@@ -93,44 +91,6 @@ export function itWithData(data, message, factory) {
     it(`${message} ${testCase.message}`, () => factory(testCase));
   });
 }
-
-function only(title, fn) {
-  describe('(uses jsdom)', () => {
-    if (typeof jsdom === 'function') {
-      jsdom();
-      describe.only(title, fn);
-    } else {
-      // if jsdom isn't available, skip every test in this describe context
-      describe.skip(title, fn);
-    }
-  });
-}
-
-function skip(title, fn) {
-  describe('(uses jsdom)', () => {
-    if (typeof jsdom === 'function') {
-      jsdom();
-      describe.skip(title, fn);
-    } else {
-      // if jsdom isn't available, skip every test in this describe context
-      describe.skip(title, fn);
-    }
-  });
-}
-
-export function describeWithDOM(title, fn) {
-  describe('(uses jsdom)', () => {
-    if (global.document) {
-      describe(title, fn);
-    } else {
-      // if jsdom isn't available, skip every test in this describe context
-      describe.skip(title, fn);
-    }
-  });
-}
-
-describeWithDOM.only = only;
-describeWithDOM.skip = skip;
 
 /**
  * React component used for testing.

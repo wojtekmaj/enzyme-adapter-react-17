@@ -29,7 +29,6 @@ import {
   Suspense,
 } from './_helpers/react-compat';
 import {
-  describeWithDOM,
   itIf,
 } from './_helpers';
 import getLoadedLazyComponent from './_helpers/getLoadedLazyComponent';
@@ -37,7 +36,7 @@ import describeMethods from './_helpers/describeMethods';
 import describeLifecycles from './_helpers/describeLifecycles';
 import describeHooks from './_helpers/describeHooks';
 
-describeWithDOM('mount', () => {
+describe('mount', () => {
   describe('top level entry points', () => {
     expect(mountEntry).to.equal(mount);
     expect(ReactWrapperEntry).to.equal(ReactWrapper);
@@ -99,7 +98,7 @@ describeWithDOM('mount', () => {
 </div>`);
     });
 
-    describeWithDOM('refs', () => {
+    describe('refs', () => {
       it('calls ref', () => {
         const spy = sinon.spy();
         mount(<div ref={spy} />);

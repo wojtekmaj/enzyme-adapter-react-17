@@ -6,7 +6,6 @@ import getData from 'html-element-map/getData';
 import getAdapter from 'enzyme/build/getAdapter';
 
 import {
-  describeWithDOM,
   itIf,
 } from '../../_helpers';
 
@@ -824,7 +823,7 @@ export default function describeFind({
       });
     });
 
-    describeWithDOM('find DOM elements by constructor', () => {
+    describe('find DOM elements by constructor', () => {
       // in React 0.13 and 0.14, these HTML tags get moved around by the DOM, and React fails
       // they're tested in `shallow`, and in React 15+, so we can skip them here.
       const tagsWithRenderError = new Set([

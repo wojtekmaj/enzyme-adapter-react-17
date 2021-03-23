@@ -6,10 +6,9 @@ import renderEntry from 'enzyme/render';
 import { fakeDynamicImport } from 'enzyme-adapter-utils';
 
 import './_helpers/setupAdapters';
-import { describeWithDOM } from './_helpers';
 import { createClass, lazy } from './_helpers/react-compat';
 
-describeWithDOM('render', () => {
+describe('render', () => {
   describe('top level entry points', () => {
     expect(renderEntry).to.equal(render);
   });

@@ -24,7 +24,6 @@ import {
 import wrap from 'mocha-wrap';
 
 import './_helpers/setupAdapters';
-import { describeWithDOM } from './_helpers';
 
 describe('enzyme-adapter-utils', () => {
   describe('ensureKeyOrUndefined', () => {
@@ -395,7 +394,7 @@ describe('enzyme-adapter-utils', () => {
     });
   });
 
-  describeWithDOM('getWrappingComponentMountRenderer', () => {
+  describe('getWrappingComponentMountRenderer', () => {
     let instance;
     let renderer;
     let tree;
@@ -474,7 +473,7 @@ describe('enzyme-adapter-utils', () => {
   });
 
   describe('assertDomAvailable', () => {
-    describeWithDOM('with DOM', () => {
+    describe('with DOM', () => {
       it('throws', () => {
         expect(global).to.have.property('document');
         expect(global.document).to.have.property('createElement');

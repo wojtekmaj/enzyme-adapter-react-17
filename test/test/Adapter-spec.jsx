@@ -29,7 +29,6 @@ import {
 } from './_helpers/react-compat';
 import {
   itIf,
-  describeWithDOM,
   isMemo,
 } from './_helpers';
 
@@ -125,7 +124,7 @@ describe('Adapter', () => {
     });
   });
 
-  describeWithDOM('mounted render', () => {
+  describe('mounted render', () => {
     function hydratedTreeMatchesUnhydrated(element, hydrate = false) {
       const markup = renderToString(element);
       const dom = jsdom.jsdom(`<div id="root">${markup}</div>`);
@@ -690,7 +689,7 @@ describe('Adapter', () => {
     });
   });
 
-  describeWithDOM('mount renderer', () => {
+  describe('mount renderer', () => {
     it('render node with updated props', () => {
       class Counter extends React.Component {
         constructor(props) {
