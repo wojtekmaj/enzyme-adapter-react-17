@@ -1,1 +1,3 @@
--require ./packages/enzyme/withDom.js ./packages/enzyme-test-suite/build/_helpers/setupAdapters.js ./packages/enzyme-test-suite/build/_helpers/beforeEach.js
+--file ./build/_helpers/withDom.js
+--file ./build/_helpers/setupAdapters.js
+--file ./build/_helpers/beforeEach.js
