@@ -10,74 +10,74 @@ import { expect } from 'chai';
  * Simple wrapper around mocha describe which allows a boolean to be passed in first which
  * determines whether or not the test will be run
  */
-export function describeIf(test, a, b) {
+export function describeIf(test, title, fn) {
   if (typeof test !== 'boolean') {
     throw new TypeError(`a boolean is required, you passed a ${typeof test}`);
   }
 
   if (test) {
-    describe(a, b);
+    describe(title, fn);
   } else {
-    describe.skip(a, b);
+    describe.skip(title, fn);
   }
 }
 
-describeIf.only = (test, a, b) => {
+describeIf.only = (test, title, fn) => {
   if (typeof test !== 'boolean') {
     throw new TypeError(`a boolean is required, you passed a ${typeof test}`);
   }
 
   if (test) {
-    describe.only(a, b);
+    describe.only(title, fn);
   } else {
     describe.only('only:', () => {
-      describe.skip(a, b);
+      describe.skip(title, fn);
     });
   }
 };
 
-describeIf.skip = (test, a, b) => {
+describeIf.skip = (test, title, fn) => {
   if (typeof test !== 'boolean') {
     throw new TypeError(`a boolean is required, you passed a ${typeof test}`);
   }
 
-  describeIf(false, a, b);
+  describeIf(false, title, fn);
 };
 
 /**
  * Simple wrapper around mocha it which allows a boolean to be passed in first which
  * determines whether or not the test will be run
  */
-export function itIf(test, a, b) {
+export function itIf(test, title, fn) {
   if (typeof test !== 'boolean') {
     throw new TypeError(`a boolean is required, you passed a ${typeof test}`);
   }
 
   if (test) {
-    it(a, b);
+    it(title, fn);
   } else {
-    it.skip(a, b);
+    it.skip(title, fn);
   }
 }
 
-itIf.only = (test, a, b) => {
+itIf.only = (test, title, fn) => {
   if (typeof test !== 'boolean') {
     throw new TypeError(`a boolean is required, you passed a ${typeof test}`);
   }
 
   if (test) {
-    it.only(a, b);
+    it.only(title, fn);
   } else {
-    it.skip(a, b);
+    it.skip(title, fn);
   }
 };
 
-itIf.skip = (test, a, b) => {
+itIf.skip = (test, title, fn) => {
   if (typeof test !== 'boolean') {
     throw new TypeError(`a boolean is required, you passed a ${typeof test}`);
   }
 
-  itIf(false, a, b);
+  itIf(false, title, fn);
 };
 
 /**
@@ -94,37 +94,37 @@ export function itWithData(data, message, factory) {
   });
 }
 
-function only(a, b) {
+function only(title, fn) {
   describe('(uses jsdom)', () => {
     if (typeof jsdom === 'function') {
       jsdom();
-      describe.only(a, b);
+      describe.only(title, fn);
     } else {
       // if jsdom isn't available, skip every test in this describe context
-      describe.skip(a, b);
+      describe.skip(title, fn);
     }
   });
 }
 
-function skip(a, b) {
+function skip(title, fn) {
   describe('(uses jsdom)', () => {
     if (typeof jsdom === 'function') {
       jsdom();
-      describe.skip(a, b);
+      describe.skip(title, fn);
     } else {
       // if jsdom isn't available, skip every test in this describe context
-      describe.skip(a, b);
+      describe.skip(title, fn);
     }
   });
 }
 
-export function describeWithDOM(a, b) {
+export function describeWithDOM(title, fn) {
   describe('(uses jsdom)', () => {
     if (global.document) {
-      describe(a, b);
+      describe(title, fn);
     } else {
       // if jsdom isn't available, skip every test in this describe context
-      describe.skip(a, b);
+      describe.skip(title, fn);
     }
   });
 }
