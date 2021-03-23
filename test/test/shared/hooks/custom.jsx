@@ -17,7 +17,7 @@ export default function describeCustomHooks({
   isShallow,
 }) {
   describeIf(hasHooks, 'hooks: custom', () => {
-    describe('custom hook : useCounter', () => {
+    describe('custom hook: useCounter', () => {
       function useCounter({ initialCount = 0, step = 1 } = {}) {
         const [count, setCount] = useState(initialCount);
         const increment = () => setCount((c) => c + step);
