@@ -22,7 +22,7 @@ export default function describeGetWrappingComponent({
     }
   }
 
-  describe('> 0.13: .getWrappingComponent()', () => {
+  describe('.getWrappingComponent()', () => {
     class TestProvider extends React.Component {
       getChildContext() {
         const { value, renderMore, renderStateTester } = this.props;
