@@ -10,7 +10,7 @@ import {
 } from 'react-is';
 import PropTypes from 'prop-types';
 import wrap from 'mocha-wrap';
-import { fakeDynamicImport, wrapWithWrappingComponent, RootFinder } from 'enzyme-adapter-utils';
+import { fakeDynamicImport, wrapWithWrappingComponent, RootFinder } from '@wojtekmaj/enzyme-adapter-utils';
 
 import './_helpers/setupAdapters';
 import Adapter from './_helpers/adapter';

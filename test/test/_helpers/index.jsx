@@ -1,6 +1,6 @@
 import React from 'react';
 import { Memo } from 'react-is';
-import { compareNodeTypeOf } from 'enzyme-adapter-utils';
+import { compareNodeTypeOf } from '@wojtekmaj/enzyme-adapter-utils';
 import sinon from 'sinon-sandbox';
 import { expect } from 'chai';
 

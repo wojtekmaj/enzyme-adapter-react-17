@@ -24,7 +24,7 @@ import {
   flatten,
   mapNativeEventNames,
   propFromEvent,
-} from 'enzyme-adapter-utils';
+} from '@wojtekmaj/enzyme-adapter-utils';
 import { get, reset, merge as configure } from 'enzyme/build/configuration';
 
 import './_helpers/setupAdapters';

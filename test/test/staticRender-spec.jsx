@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { expect } from 'chai';
 import { render } from 'enzyme';
 import renderEntry from 'enzyme/render';
-import { fakeDynamicImport } from 'enzyme-adapter-utils';
+import { fakeDynamicImport } from '@wojtekmaj/enzyme-adapter-utils';
 
 import './_helpers/setupAdapters';
 import { createClass, lazy } from './_helpers/react-compat';

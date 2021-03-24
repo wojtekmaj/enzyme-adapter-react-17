@@ -20,12 +20,12 @@ import {
   simulateError,
   spyMethod,
   spyProperty,
-} from 'enzyme-adapter-utils';
+} from '@wojtekmaj/enzyme-adapter-utils';
 import wrap from 'mocha-wrap';
 
 import './_helpers/setupAdapters';
 
-describe('enzyme-adapter-utils', () => {
+describe('@wojtekmaj/enzyme-adapter-utils', () => {
   describe('ensureKeyOrUndefined', () => {
     it('returns the key if truthy', () => {
       [true, 42, 'foo', [], {}, () => {}].forEach((truthy) => {
