@@ -1,4 +1,4 @@
-/* eslint no-use-before-define: off */
+/* eslint-disable no-use-before-define */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
@@ -600,11 +600,11 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
     };
 
     return {
+      // eslint-disable-next-line consistent-return
       render(el, unmaskedContext, {
         providerValues = new Map(),
       } = {}) {
         cachedNode = el;
-        /* eslint consistent-return: 0 */
         if (typeof el.type === 'string') {
           isDOM = true;
         } else if (isContextProvider(el)) {
