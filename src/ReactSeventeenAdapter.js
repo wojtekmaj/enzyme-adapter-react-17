@@ -52,7 +52,7 @@ import {
   getWrappingComponentMountRenderer,
   compareNodeTypeOf,
   spyMethod,
-} from 'enzyme-adapter-utils';
+} from '@wojtekmaj/enzyme-adapter-utils';
 import findCurrentFiberUsingSlowPath from './findCurrentFiberUsingSlowPath';
 import detectFiberTags from './detectFiberTags';
 

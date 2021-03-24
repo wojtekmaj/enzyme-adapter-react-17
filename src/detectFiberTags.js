@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { fakeDynamicImport } from 'enzyme-adapter-utils';
+import { fakeDynamicImport } from '@wojtekmaj/enzyme-adapter-utils';
 
 function getFiber(element) {
   const container = global.document.createElement('div');
