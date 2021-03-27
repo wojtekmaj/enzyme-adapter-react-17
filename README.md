@@ -1,3 +1,5 @@
+[![npm](https://img.shields.io/npm/v/@wojtekmaj/enzyme-adapter-react-17.svg)](https://www.npmjs.com/package/@wojtekmaj/enzyme-adapter-react-17) ![downloads](https://img.shields.io/npm/dt/@wojtekmaj/enzyme-adapter-react-17.svg) [![CI](https://github.com/wojtekmaj/enzyme-adapter-react-17/workflows/CI/badge.svg)](https://github.com/wojtekmaj/enzyme-adapter-react-17/actions) ![dependencies](https://img.shields.io/david/wojtekmaj/enzyme-adapter-react-17.svg) ![dev dependencies](https://img.shields.io/david/dev/wojtekmaj/enzyme-adapter-react-17.svg)
+
 # @wojtekmaj/enzyme-adapter-react-17
 
 Unofficial adapter for React 17 for [Enzyme](https://enzymejs.github.io/enzyme/).
