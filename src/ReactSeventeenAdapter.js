@@ -357,7 +357,11 @@ function getEmptyStateValue() {
 
 function wrapAct(fn) {
   let returnVal;
-  TestUtils.act(() => { returnVal = fn(); });
+  if (process.env.NODE_ENV === 'production') {
+    returnVal = fn();
+  } else {
+    TestUtils.act(() => { returnVal = fn(); });
+  }
   return returnVal;
 }
 
