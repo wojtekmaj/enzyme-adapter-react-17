@@ -1406,7 +1406,7 @@ __metadata:
     "@babel/cli": ^7.12.0
     "@babel/core": ^7.12.0
     "@babel/runtime": ^7.12.0
-    "@wojtekmaj/enzyme-adapter-utils": ^0.1.0
+    "@wojtekmaj/enzyme-adapter-utils": ^0.1.1
     babel-plugin-transform-replace-object-assign: ^2.0.0
     babel-preset-airbnb: ^4.5.0
     enzyme: ^3.0.0
@@ -1429,9 +1429,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@wojtekmaj/enzyme-adapter-utils@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@wojtekmaj/enzyme-adapter-utils@npm:0.1.0"
+"@wojtekmaj/enzyme-adapter-utils@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@wojtekmaj/enzyme-adapter-utils@npm:0.1.1"
   dependencies:
     function.prototype.name: ^1.1.0
     has: ^1.0.0
@@ -1440,7 +1440,7 @@ __metadata:
     prop-types: ^15.7.0
   peerDependencies:
     react: ^17.0.0-0
-  checksum: adeda98a41e93a9197938ed7c112cfcb5b50817420e93591f0913e1f6d06d2907d4b36d7c3e3abfa086cd7d0e79412b1a48cf040bd45e586674af8a855e2d87b
+  checksum: 89de687d46d10d1994d7b3916281808b649648532553def2ae123e657aa3e4c9bd13021eb2137b21aa1ab4b58ffde746c89a0c05260f1d7ad57207a87ae08ce1
   languageName: node
   linkType: hard
 
