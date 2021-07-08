@@ -450,7 +450,9 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
         });
       },
       unmount() {
-        ReactDOM.unmountComponentAtNode(domNode);
+        wrapAct(() => {
+          ReactDOM.unmountComponentAtNode(domNode);
+        });
         instance = null;
       },
       getNode() {
