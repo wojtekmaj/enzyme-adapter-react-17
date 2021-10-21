@@ -11,7 +11,8 @@
     "build": "babel --source-maps=both src -d build",
     "clean": "rimraf build",
     "lint": "eslint src/ --ext .jsx,.js",
-    "prepack": "yarn clean && yarn build",
+    "postpack": "yarn restore-workspaces",
+    "prepack": "yarn clean && yarn build && yarn remove-workspaces",
     "remove-workspaces": "node remove_workspaces.js",
     "restore-workspaces": "node restore_workspaces.js",
     "test": "yarn lint"
