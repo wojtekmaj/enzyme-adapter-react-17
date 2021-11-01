@@ -12,8 +12,6 @@
     "clean": "rimraf build",
     "lint": "eslint src/ --ext .jsx,.js",
     "prepack": "yarn clean && yarn build",
-    "remove-workspaces": "node remove_workspaces.js",
-    "restore-workspaces": "node restore_workspaces.js",
     "test": "yarn lint"
   },
   "keywords": [
