@@ -79,5 +79,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/wojtekmaj/enzyme-adapter-react-17.git"
-  }
+  },
+  "packageManager": "yarn@3.1.0"
 }
