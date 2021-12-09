@@ -1429,7 +1429,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@wojtekmaj/enzyme-adapter-react-17@portal:../::locator=enzyme-test-suite%40workspace%3Atest"
   dependencies:
-    "@wojtekmaj/enzyme-adapter-utils": ^0.1.1
+    "@wojtekmaj/enzyme-adapter-utils": ^0.1.2
     enzyme-shallow-equal: ^1.0.0
     has: ^1.0.0
     prop-types: ^15.7.0
@@ -1449,7 +1449,7 @@ __metadata:
     "@babel/cli": ^7.15.0
     "@babel/core": ^7.15.0
     "@babel/runtime": ^7.15.0
-    "@wojtekmaj/enzyme-adapter-utils": ^0.1.1
+    "@wojtekmaj/enzyme-adapter-utils": ^0.1.2
     babel-preset-airbnb: ^4.5.0
     enzyme: ^3.0.0
     enzyme-shallow-equal: ^1.0.0
@@ -1469,18 +1469,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@wojtekmaj/enzyme-adapter-utils@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "@wojtekmaj/enzyme-adapter-utils@npm:0.1.1"
+"@wojtekmaj/enzyme-adapter-utils@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "@wojtekmaj/enzyme-adapter-utils@npm:0.1.2"
   dependencies:
     function.prototype.name: ^1.1.0
     has: ^1.0.0
-    object.assign: ^4.1.0
     object.fromentries: ^2.0.0
     prop-types: ^15.7.0
   peerDependencies:
     react: ^17.0.0-0
-  checksum: dc3dd0c2da0a0d0ab065f542fa5892f00026eec7eca34c0e673760ce0a35f19893fae64f648f3bb7121b9c47752d20a32fa0ca814d5e9300d3cdc14d899f535f
+  checksum: 4b2f5ff155c600137342c0ee19512b27d469fef98c20fee85785014e71d21b75cab48f93c8004548bd86410395e7577265acfa873e7a2d863c73291734c6d652
   languageName: node
   linkType: hard
 
@@ -2498,7 +2497,7 @@ __metadata:
     "@babel/cli": ^7.15.0
     "@babel/core": ^7.15.0
     "@wojtekmaj/enzyme-adapter-react-17": "portal:../"
-    "@wojtekmaj/enzyme-adapter-utils": ^0.1.1
+    "@wojtekmaj/enzyme-adapter-utils": ^0.1.2
     chai: ^4.3.4
     create-react-class: ^15.7.0
     enzyme: ^3.11.0
