@@ -223,7 +223,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-module-imports@npm:^7.0.0, @babel/helper-module-imports@npm:^7.10.4, @babel/helper-module-imports@npm:^7.15.4":
+"@babel/helper-module-imports@npm:^7.10.4, @babel/helper-module-imports@npm:^7.15.4":
   version: 7.15.4
   resolution: "@babel/helper-module-imports@npm:7.15.4"
   dependencies:
@@ -1452,7 +1452,6 @@ __metadata:
     "@babel/core": ^7.15.0
     "@babel/runtime": ^7.15.0
     "@wojtekmaj/enzyme-adapter-utils": ^0.1.1
-    babel-plugin-transform-replace-object-assign: ^2.0.0
     babel-preset-airbnb: ^4.5.0
     enzyme: ^3.0.0
     enzyme-shallow-equal: ^1.0.0
@@ -1823,17 +1822,6 @@ __metadata:
   version: 0.4.24
   resolution: "babel-plugin-transform-react-remove-prop-types@npm:0.4.24"
   checksum: 54afe56d67f0d118c9da23996f39948e502a152b3f582eb6e8f163fcb76c2c1ea4e0cdd4f9fac5c0ef050eab4fe0a950b0b74aae6237bcc0d31d8fc4cc808d1a
-  languageName: node
-  linkType: hard
-
-"babel-plugin-transform-replace-object-assign@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "babel-plugin-transform-replace-object-assign@npm:2.0.0"
-  dependencies:
-    "@babel/helper-module-imports": ^7.0.0
-  peerDependencies:
-    "@babel/core": ^7.0.0
-  checksum: e5abde5b91925a6d19edd21b336fea94b196654fdbabf7b04f738f599f76024c1cfc9c90e9159c7293f138034b9e135f0f4bfe701a058ac9e513d422c68ddb0d
   languageName: node
   linkType: hard
 
