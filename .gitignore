@@ -1,5 +1,10 @@
+.DS_Store
+.idea
+.vscode
 .yarn/*
 !.yarn/releases
 !.yarn/plugins
 build
 node_modules
+npm-debug.log
+yarn-error.log
