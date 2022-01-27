@@ -1,10 +1,20 @@
-.DS_Store
+# Cache and IDE-related files
+.cache
 .idea
 .vscode
-.yarn/*
-!.yarn/releases
-!.yarn/plugins
-build
-node_modules
-npm-debug.log
+
+# Yarn-related files
+**/.yarn/*
+!**/.yarn/releases
+!**/.yarn/plugins
+!**/.yarn/sdks
 yarn-error.log
+
+# Project-generated directories
+build
+coverage
+node_modules
+
+# Other
+**/.DS_Store
+**/.env
