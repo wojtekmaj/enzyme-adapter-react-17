@@ -5,19 +5,13 @@ import wrap from 'mocha-wrap';
 
 import getAdapter from 'enzyme/build/getAdapter';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 import { is } from '../../_helpers/version';
 
 // some React versions pass undefined as an argument of setState callback.
 const CALLING_SETSTATE_CALLBACK_WITH_UNDEFINED = is('^15.5');
 
-export default function describeSetState({
-  Wrap,
-  WrapperName,
-  isShallow,
-}) {
+export default function describeSetState({ Wrap, WrapperName, isShallow }) {
   describe('.setState(newState[, callback])', () => {
     class HasIDState extends React.Component {
       constructor(props) {
@@ -33,9 +27,7 @@ export default function describeSetState({
 
       render() {
         const { id } = this.state;
-        return (
-          <div className={id} />
-        );
+        return <div className={id} />;
       }
     }
 
@@ -100,7 +92,11 @@ export default function describeSetState({
     });
 
     wrap()
-      .withOverride(() => getAdapter(), 'invokeSetStateCallback', () => {})
+      .withOverride(
+        () => getAdapter(),
+        'invokeSetStateCallback',
+        () => {},
+      )
       .describe('adapter lacks `invokeSetStateCallback`', () => {
         it('calls the callback when setState has completed', () => {
           const wrapper = Wrap(<HasIDState />);
@@ -137,8 +133,11 @@ export default function describeSetState({
 
     it('prevents an infinite loop if nextState is null or undefined from setState in CDU', () => {
       let payload;
-      const stub = sinon.stub(HasIDState.prototype, 'componentDidUpdate')
-        .callsFake(function componentDidUpdate() { this.setState(() => payload); });
+      const stub = sinon
+        .stub(HasIDState.prototype, 'componentDidUpdate')
+        .callsFake(function componentDidUpdate() {
+          this.setState(() => payload);
+        });
 
       const wrapper = Wrap(<HasIDState />);
 
@@ -165,7 +164,7 @@ export default function describeSetState({
 
           render() {
             const { a } = this.state;
-            return (<div>{a}</div>);
+            return <div>{a}</div>;
           }
         }
         const spy = sinon.spy(A.prototype, 'componentWillReceiveProps');
@@ -201,11 +200,7 @@ export default function describeSetState({
 
           render() {
             const { a, b } = this.state;
-            return (
-              <div>
-                {a + b}
-              </div>
-            );
+            return <div>{a + b}</div>;
           }
         }
         const spy = sinon.spy(B.prototype, 'componentWillReceiveProps');
@@ -222,8 +217,12 @@ export default function describeSetState({
         expect(wrapper.state('a')).to.equal(1);
 
         return Promise.all([
-          new Promise((resolve) => { wrapper.setState({ b: 5 }, resolve); }),
-          new Promise((resolve) => { wrapper.setState({ a: 10 }, resolve); }),
+          new Promise((resolve) => {
+            wrapper.setState({ b: 5 }, resolve);
+          }),
+          new Promise((resolve) => {
+            wrapper.setState({ a: 10 }, resolve);
+          }),
         ]).then(() => {
           expect(spy).to.have.property('callCount', 1);
           expect(wrapper.state('b')).to.equal(5);
@@ -234,9 +233,7 @@ export default function describeSetState({
 
     describe('stateless function components (SFCs)', () => {
       it('throws when trying to access state', () => {
-        const Foo = () => (
-          <div>abc</div>
-        );
+        const Foo = () => <div>abc</div>;
 
         const wrapper = Wrap(<Foo />);
 
@@ -247,9 +244,7 @@ export default function describeSetState({
       });
 
       it('throws when trying to set state', () => {
-        const Foo = () => (
-          <div>abc</div>
-        );
+        const Foo = () => <div>abc</div>;
 
         const wrapper = Wrap(<Foo />);
 

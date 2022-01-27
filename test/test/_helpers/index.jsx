@@ -135,11 +135,7 @@ export function argSpy() {
 
 export function expectArgs(spy, counter, args) {
   spy(counter);
-  expect(spy.args).to.deep.equal([
-    [counter],
-    ...args,
-    [counter],
-  ]);
+  expect(spy.args).to.deep.equal([[counter], ...args, [counter]]);
   spy.resetHistory();
   spy(counter + 1);
 }

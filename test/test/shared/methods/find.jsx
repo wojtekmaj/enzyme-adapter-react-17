@@ -5,17 +5,9 @@ import getData from 'html-element-map/getData';
 
 import getAdapter from 'enzyme/build/getAdapter';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 
-import {
-  createPortal,
-  Fragment,
-  forwardRef,
-  memo,
-  useState,
-} from '../../_helpers/react-compat';
+import { createPortal, Fragment, forwardRef, memo, useState } from '../../_helpers/react-compat';
 
 export default function describeFind({
   Wrap,
@@ -27,49 +19,55 @@ export default function describeFind({
 }) {
   describe('.find(selector)', () => {
     it('matches the root DOM element', () => {
-      const wrapper = Wrap(<div id="ttt" className="ttt">hello</div>);
+      const wrapper = Wrap(
+        <div id="ttt" className="ttt">
+          hello
+        </div>,
+      );
       expect(wrapper.find('#ttt')).to.have.lengthOf(1);
       expect(wrapper.find('.ttt')).to.have.lengthOf(1);
     });
 
     it('finds an element based on a class name', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <input className="foo" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('.foo').type()).to.equal('input');
     });
 
     it('finds an SVG element based on a class name', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <svg className="foo" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('.foo').type()).to.equal('svg');
     });
 
     it('finds an element that has dot in attribute', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div data-baz="foo.bar" />
-        </div>
-      ));
+        </div>,
+      );
 
       const elements = wrapper.find('[data-baz="foo.bar"]');
       expect(elements).to.have.lengthOf(1);
     });
 
     it('finds an element based on a tag name', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <input className="foo" />
-          <button type="button" className="bar">Button</button>
+          <button type="button" className="bar">
+            Button
+          </button>
           <textarea className="magic" />
           <select className="reality" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('input').props()).to.eql({ className: 'foo' });
       expect(wrapper.find('button').props()).to.eql({
         className: 'bar',
@@ -81,61 +79,61 @@ export default function describeFind({
     });
 
     it('finds an element based on a tag name and class name', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <input className="foo" />
           <div className="foo" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('input.foo')).to.have.lengthOf(1);
     });
 
     it('finds an element based on a tag name and id', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <input id="foo" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('input#foo')).to.have.lengthOf(1);
     });
 
     it('finds an element based on a tag name, id, and class name', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <input id="foo" className="bar" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('input#foo.bar')).to.have.lengthOf(1);
     });
 
     it('finds an element that with class and attribute', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div data-baz="bar" className="classBar" />
-        </div>
-      ));
+        </div>,
+      );
 
       const elements = wrapper.find('.classBar[data-baz="bar"]');
       expect(elements).to.have.lengthOf(1);
     });
 
     it('finds an element that with multiple classes and one attribute', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div data-baz="bar" className="classBar classFoo" />
-        </div>
-      ));
+        </div>,
+      );
 
       const elements = wrapper.find('.classBar.classFoo[data-baz="bar"]');
       expect(elements).to.have.lengthOf(1);
     });
 
     it('finds an element that with class and class with hyphen', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div data-baz="bar" className="classBar class-Foo" />
-        </div>
-      ));
+        </div>,
+      );
 
       const elements = wrapper.find('.classBar.class-Foo');
       expect(elements).to.have.lengthOf(1);
@@ -143,27 +141,35 @@ export default function describeFind({
 
     it('finds a component based on a constructor', () => {
       class Foo extends React.Component {
-        render() { return <div />; }
+        render() {
+          return <div />;
+        }
       }
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <Foo className="foo" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find(Foo).type()).to.equal(Foo);
     });
 
     wrap()
-      .withOverride(() => getAdapter(), 'isValidElementType', () => () => false)
+      .withOverride(
+        () => getAdapter(),
+        'isValidElementType',
+        () => () => false,
+      )
       .it('throws when an adapter’s `isValidElementType` lies', () => {
         class Foo extends React.Component {
-          render() { return <div />; }
+          render() {
+            return <div />;
+          }
         }
-        const wrapper = Wrap((
+        const wrapper = Wrap(
           <div>
             <Foo className="foo" />
-          </div>
-        ));
+          </div>,
+        );
 
         expect(() => wrapper.find(Foo)).to.throw(
           TypeError,
@@ -172,64 +178,74 @@ export default function describeFind({
       });
 
     wrap()
-      .withOverride(() => getAdapter(), 'isValidElementType', () => {})
+      .withOverride(
+        () => getAdapter(),
+        'isValidElementType',
+        () => {},
+      )
       .it('works when an adapter’s `isValidElementType` does not exist', () => {
         class Foo extends React.Component {
-          render() { return <div />; }
+          render() {
+            return <div />;
+          }
         }
-        const wrapper = Wrap((
+        const wrapper = Wrap(
           <div>
             <Foo className="foo" />
-          </div>
-        ));
+          </div>,
+        );
 
         expect(wrapper.find(Foo)).to.have.lengthOf(1);
       });
 
     it('finds a component based on a component function name', () => {
       class Foo extends React.Component {
-        render() { return <div />; }
+        render() {
+          return <div />;
+        }
       }
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <Foo className="foo" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('Foo').type()).to.equal(Foo);
     });
 
     it('finds a component based on a component displayName', () => {
       class Foo extends React.Component {
-        render() { return <div />; }
+        render() {
+          return <div />;
+        }
       }
       Foo.displayName = 'Bar';
 
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <Foo className="foo" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('Bar').type()).to.equal(Foo);
     });
 
     it('finds multiple elements based on a class name', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <input className="foo" />
           <button type="button" className="foo" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('.foo')).to.have.lengthOf(2);
     });
 
     it('finds multiple elements based on a tag name', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <input className="foo" />
           <input />
           <button type="button" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('input')).to.have.lengthOf(2);
       expect(wrapper.find('button')).to.have.lengthOf(1);
     });
@@ -246,25 +262,25 @@ export default function describeFind({
         }
       }
 
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <Foo className="foo" />
           <Foo />
           <Bar />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find(Foo)).to.have.lengthOf(2);
       expect(wrapper.find(Bar)).to.have.lengthOf(1);
     });
 
     it('finds multiple elements based on a string prop', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <span title="foo" />
           <span htmlFor="foo" />
           <div htmlFor="bar" />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('[htmlFor="foo"]')).to.have.lengthOf(1);
       expect(wrapper.find('[htmlFor]')).to.have.lengthOf(2);
@@ -274,19 +290,21 @@ export default function describeFind({
 
     it('finds multiple elements with multiple matching react props', () => {
       function noop() {}
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <span htmlFor="foo" onChange={noop} preserveAspectRatio="xMaxYMax" />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('span[htmlFor="foo"][onChange]')).to.have.lengthOf(1);
-      expect(wrapper.find('span[htmlFor="foo"][preserveAspectRatio="xMaxYMax"]')).to.have.lengthOf(1);
+      expect(wrapper.find('span[htmlFor="foo"][preserveAspectRatio="xMaxYMax"]')).to.have.lengthOf(
+        1,
+      );
       expect(wrapper.find('[htmlFor][preserveAspectRatio]')).to.have.lengthOf(1);
     });
 
     it('works on non-single nodes', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div className="a">
           <div className="b">
             <div className="c">Text</div>
@@ -298,8 +316,8 @@ export default function describeFind({
             <div className="c">Text</div>
             <div className="c">Text</div>
           </div>
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('.a')).to.have.lengthOf(1);
       expect(wrapper.find('.b')).to.have.lengthOf(2);
       expect(wrapper.find('.b').find('.c')).to.have.lengthOf(6);
@@ -308,7 +326,7 @@ export default function describeFind({
     it('works with an adjacent sibling selector', () => {
       const a = 'some';
       const b = 'text';
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="row">
             {a}
@@ -318,20 +336,20 @@ export default function describeFind({
             {a}
             {b}
           </div>
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('.row')).to.have.lengthOf(2);
       expect(wrapper.find('.row + .row')).to.have.lengthOf(1);
     });
 
     it('throws for non-numeric attribute values without quotes', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <input type="text" />
           <input type="hidden" />
           <input type="text" />
-        </div>
-      ));
+        </div>,
+      );
       expect(() => wrapper.find('[type=text]')).to.throw(
         Error,
         'Failed to parse selector: [type=text]',
@@ -347,11 +365,11 @@ export default function describeFind({
     });
 
     it('errors sensibly if any of the search props are undefined', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <input type={undefined} />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(() => wrapper.find({ type: undefined })).to.throw(
         TypeError,
@@ -360,22 +378,22 @@ export default function describeFind({
     });
 
     it('does not find property when undefined', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <span data-foo={undefined} />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('[data-foo]')).to.have.lengthOf(0);
     });
 
     it('compounds tag and prop selector', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <span preserveAspectRatio="xMaxYMax" />
           <span htmlFor="foo" />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('span[preserveAspectRatio="xMaxYMax"]')).to.have.lengthOf(1);
       expect(wrapper.find('span[preserveAspectRatio]')).to.have.lengthOf(1);
@@ -385,14 +403,14 @@ export default function describeFind({
     });
 
     it('supports data prop selectors', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <span data-foo="bar" />
           <span data-foo-123="bar2" />
           <span data-123-foo="bar3" />
           <span data-foo_bar="bar4" />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('[data-foo="bar"]')).to.have.lengthOf(1);
       expect(wrapper.find('[data-foo]')).to.have.lengthOf(1);
@@ -408,7 +426,7 @@ export default function describeFind({
     });
 
     it('supports boolean and numeric values for matching props', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <span value={1} />
           <a value={false} />
@@ -416,8 +434,8 @@ export default function describeFind({
           <span value="true" />
           <a value="1" />
           <a value="2" />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('span[value=1]')).to.have.lengthOf(1);
       expect(wrapper.find('span[value=2]')).to.have.lengthOf(0);
@@ -447,7 +465,7 @@ export default function describeFind({
     });
 
     it('supports object property selectors', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <input type="text" data-test="ref" className="foo" />
           <input type="text" data-test="ref" />
@@ -456,8 +474,8 @@ export default function describeFind({
           <div data-test="ref" data-prop={123} />
           <input type="text" data-test="ref" data-prop={false} />
           <a data-test="ref" data-prop />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find({ a: 1 })).to.have.lengthOf(0);
       expect(wrapper.find({ 'data-test': 'ref' })).to.have.lengthOf(7);
       expect(wrapper.find({ className: 'foo' })).to.have.lengthOf(1);
@@ -469,33 +487,35 @@ export default function describeFind({
 
     it('supports complex and nested object property selectors', () => {
       const testFunction = () => ({});
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <span data-more={[{ id: 1 }]} data-test="ref" data-prop onChange={testFunction} />
           <a data-more={[{ id: 1 }]} data-test="ref" />
           <div data-more={{ item: { id: 1 } }} data-test="ref" />
           <input data-more={{ height: 20 }} data-test="ref" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find({ 'data-test': 'ref' })).to.have.lengthOf(4);
       expect(wrapper.find({ 'data-more': { a: 1 } })).to.have.lengthOf(0);
       expect(wrapper.find({ 'data-more': [{ id: 1 }] })).to.have.lengthOf(2);
       expect(wrapper.find({ 'data-more': { item: { id: 1 } } })).to.have.lengthOf(1);
       expect(wrapper.find({ 'data-more': { height: 20 } })).to.have.lengthOf(1);
-      expect(wrapper.find({
-        'data-more': [{ id: 1 }],
-        'data-test': 'ref',
-        'data-prop': true,
-        onChange: testFunction,
-      })).to.have.lengthOf(1);
+      expect(
+        wrapper.find({
+          'data-more': [{ id: 1 }],
+          'data-test': 'ref',
+          'data-prop': true,
+          onChange: testFunction,
+        }),
+      ).to.have.lengthOf(1);
     });
 
     it('throws when given empty object, null, or an array', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <input className="foo" type="text" />
-        </div>
-      ));
+        </div>,
+      );
       expect(() => wrapper.find({})).to.throw(
         TypeError,
         'Enzyme::Selector does not support an array, null, or empty object as a selector',
@@ -511,12 +531,12 @@ export default function describeFind({
     });
 
     it('queries attributes with spaces in their values', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <h1 data-foo="foo bar">Hello</h1>
           <h1 data-foo="bar baz quz">World</h1>
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('[data-foo]')).to.have.lengthOf(2);
       expect(wrapper.find('[data-foo="foo bar"]')).to.have.lengthOf(1);
       expect(wrapper.find('[data-foo="bar baz quz"]')).to.have.lengthOf(1);
@@ -527,58 +547,54 @@ export default function describeFind({
 
     describe('stateless function components (SFCs)', () => {
       it('finds a component based on a constructor', () => {
-        const Foo = () => (<div />);
+        const Foo = () => <div />;
 
-        const wrapper = Wrap((
+        const wrapper = Wrap(
           <div>
             <Foo className="foo" />
-          </div>
-        ));
+          </div>,
+        );
         expect(wrapper.find(Foo).type()).to.equal(Foo);
       });
 
       it('finds a component based on a function name', () => {
-        const Foo = () => (<div />);
+        const Foo = () => <div />;
 
-        const wrapper = Wrap((
+        const wrapper = Wrap(
           <div>
             <Foo className="foo" />
-          </div>
-        ));
+          </div>,
+        );
         expect(wrapper.find('Foo').type()).to.equal(Foo);
       });
 
       it('finds a component based on a displayName', () => {
-        const Foo = () => (<div />);
+        const Foo = () => <div />;
         Foo.displayName = 'Bar';
 
-        const wrapper = Wrap((
+        const wrapper = Wrap(
           <div>
             <Foo className="foo" />
-          </div>
-        ));
+          </div>,
+        );
         expect(wrapper.find('Bar').type()).to.equal(Foo);
       });
 
-      itIf(!isShallow, 'finds a stateless component based on a component displayName if rendered by function', () => {
-        const Foo = () => <div />;
-        const renderStatelessComponent = () => <Foo className="foo" />;
-        const wrapper = Wrap((
-          <div>
-            {renderStatelessComponent()}
-          </div>
-        ));
-        expect(wrapper.find('Foo').type()).to.equal(Foo);
-      });
+      itIf(
+        !isShallow,
+        'finds a stateless component based on a component displayName if rendered by function',
+        () => {
+          const Foo = () => <div />;
+          const renderStatelessComponent = () => <Foo className="foo" />;
+          const wrapper = Wrap(<div>{renderStatelessComponent()}</div>);
+          expect(wrapper.find('Foo').type()).to.equal(Foo);
+        },
+      );
 
       it('does not find key via property selector', () => {
         const arrayOfComponents = [<div key="1" />, <div key="2" />];
 
-        const Foo = () => (
-          <div>
-            {arrayOfComponents}
-          </div>
-        );
+        const Foo = () => <div>{arrayOfComponents}</div>;
 
         const wrapper = WrapRendered(<Foo />);
 
@@ -590,12 +606,14 @@ export default function describeFind({
     describe('works with attribute selectors containing #', () => {
       let wrapper;
       beforeEach(() => {
-        wrapper = Wrap((
+        wrapper = Wrap(
           <div>
-            <a id="test" href="/page">Hello</a>
+            <a id="test" href="/page">
+              Hello
+            </a>
             <a href="/page#anchor">World</a>
-          </div>
-        ));
+          </div>,
+        );
       });
 
       it('works with an ID', () => {
@@ -697,12 +715,7 @@ export default function describeFind({
       it('finds portals by name', () => {
         const containerDiv = makeDOMElement();
         const Foo = () => (
-          <div>
-            {createPortal(
-              <div className="in-portal">InPortal</div>,
-              containerDiv,
-            )}
-          </div>
+          <div>{createPortal(<div className="in-portal">InPortal</div>, containerDiv)}</div>
         );
 
         const wrapper = Wrap(<Foo />);
@@ -722,12 +735,12 @@ export default function describeFind({
               return createPortal(children, containerDiv);
             }
           };
-          wrapper = Wrap((
+          wrapper = Wrap(
             <FooPortal>
               <h1>Successful Portal!</h1>
               <span />
-            </FooPortal>
-          ));
+            </FooPortal>,
+          );
         });
 
         it('finds elements', () => {
@@ -848,30 +861,33 @@ export default function describeFind({
 
       const { elements, all } = getData();
 
-      elements.filter(({ constructor: C }) => C && C !== all).forEach(({
-        tag: Tag,
-        constructorName: name,
-      }) => {
-        class Foo extends React.Component {
-          render() {
-            return <Tag />;
+      elements
+        .filter(({ constructor: C }) => C && C !== all)
+        .forEach(({ tag: Tag, constructorName: name }) => {
+          class Foo extends React.Component {
+            render() {
+              return <Tag />;
+            }
           }
-        }
 
-        itIf(!hasRenderError(Tag), `${Tag}: found with \`${name}\``, () => {
-          const wrapper = WrapRendered(<Foo />);
+          itIf(!hasRenderError(Tag), `${Tag}: found with \`${name}\``, () => {
+            const wrapper = WrapRendered(<Foo />);
 
-          expect(wrapper.type()).to.equal(Tag);
-          expect(wrapper.is(Tag)).to.equal(true);
-          expect(wrapper.filter(Tag)).to.have.lengthOf(1);
+            expect(wrapper.type()).to.equal(Tag);
+            expect(wrapper.is(Tag)).to.equal(true);
+            expect(wrapper.filter(Tag)).to.have.lengthOf(1);
+          });
         });
-      });
     });
 
     describe('React.memo', () => {
       it('works with an SFC', () => {
         function InnerComp({ message }) {
-          return <div><span>{message}</span></div>;
+          return (
+            <div>
+              <span>{message}</span>
+            </div>
+          );
         }
         const InnerMemo = memo(InnerComp);
         const InnerFoo = ({ foo }) => (
@@ -933,7 +949,11 @@ export default function describeFind({
       it('works with a class component', () => {
         class InnerComp extends React.Component {
           render() {
-            return <div><span>Hello</span></div>;
+            return (
+              <div>
+                <span>Hello</span>
+              </div>
+            );
           }
         }
 

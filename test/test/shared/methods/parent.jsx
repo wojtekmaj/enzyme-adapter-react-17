@@ -1,34 +1,27 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 
-import {
-  createClass,
-} from '../../_helpers/react-compat';
+import { createClass } from '../../_helpers/react-compat';
 
-export default function describeParent({
-  Wrap,
-  isShallow,
-}) {
+export default function describeParent({ Wrap, isShallow }) {
   describe('.parent()', () => {
     it('returns only the immediate parent of the node', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div className="bax">
           <div className="foo">
             <div className="bar">
               <div className="baz" />
             </div>
           </div>
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('.baz').parent().hasClass('bar')).to.equal(true);
     });
 
     it('works when the sibling node has children', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div className="bax">
           <div className="foo">
             <div className="bar">
@@ -38,14 +31,14 @@ export default function describeParent({
               </div>
             </div>
           </div>
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('.baz').parent().hasClass('bar')).to.equal(true);
     });
 
     it('works for multiple nodes', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="foo">
             <div className="baz" />
@@ -56,8 +49,8 @@ export default function describeParent({
           <div className="bax">
             <div className="baz" />
           </div>
-        </div>
-      ));
+        </div>,
+      );
 
       const parents = wrapper.find('.baz').parent();
       expect(parents).to.have.lengthOf(3);

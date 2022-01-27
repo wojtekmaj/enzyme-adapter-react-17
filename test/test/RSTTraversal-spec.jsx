@@ -48,7 +48,9 @@ describe('RSTTraversal', () => {
     });
 
     it('fails if searching for a missing classname with a RegExp', () => {
-      const node = $(<div className="ComponentName-classname-123 ComponentName-otherclassname-23" />);
+      const node = $(
+        <div className="ComponentName-classname-123 ComponentName-otherclassname-23" />,
+      );
       expect(hasClassName(node, /(ComponentName)-(other)-(\d+)/)).to.equal(false);
     });
   });
@@ -63,54 +65,47 @@ describe('RSTTraversal', () => {
 
     it('handles a single child', () => {
       const spy = sinon.spy();
-      const node = $((
+      const node = $(
         <div>
           <div />
-        </div>
-      ));
+        </div>,
+      );
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 2);
     });
 
     it('handles several children', () => {
       const spy = sinon.spy();
-      const node = $((
+      const node = $(
         <div>
           <div />
           <div />
-        </div>
-      ));
+        </div>,
+      );
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 3);
     });
 
     it('handles multiple hierarchies', () => {
       const spy = sinon.spy();
-      const node = $((
+      const node = $(
         <div>
           <div>
             <div />
             <div />
           </div>
-        </div>
-      ));
+        </div>,
+      );
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 4);
     });
 
     it('handles array children', () => {
       const spy = sinon.spy();
-      const twoDivArray = [
-        <div key="a" />,
-        <div key="b" />,
-      ];
+      const twoDivArray = [<div key="a" />, <div key="b" />];
       const divA = $(<div key="a" />);
       const divB = $(<div key="b" />);
-      const node = $((
-        <div>
-          {twoDivArray}
-        </div>
-      ));
+      const node = $(<div>{twoDivArray}</div>);
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 3);
       const nodes = spy.args.map((arg) => arg[0]);
@@ -119,24 +114,18 @@ describe('RSTTraversal', () => {
 
     it('handles array siblings', () => {
       const spy = sinon.spy();
-      const array1 = [
-        <div key="a" />,
-        <div key="b" />,
-      ];
-      const array2 = [
-        <div key="c" />,
-        <div key="d" />,
-      ];
+      const array1 = [<div key="a" />, <div key="b" />];
+      const array2 = [<div key="c" />, <div key="d" />];
       const divA = $(<div key="a" />);
       const divB = $(<div key="b" />);
       const divC = $(<div key="c" />);
       const divD = $(<div key="d" />);
-      const node = $((
+      const node = $(
         <div>
           {array1}
           {array2}
-        </div>
-      ));
+        </div>,
+      );
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 5);
       const nodes = spy.args.map((arg) => arg[0]);
@@ -145,17 +134,10 @@ describe('RSTTraversal', () => {
 
     it('handles Map children', () => {
       const spy = sinon.spy();
-      const twoDivMap = new Map([
-        [<div key="a" />],
-        [<div key="b" />],
-      ]);
+      const twoDivMap = new Map([[<div key="a" />], [<div key="b" />]]);
       const divA = $(<div key="a" />);
       const divB = $(<div key="b" />);
-      const node = $((
-        <div>
-          {twoDivMap}
-        </div>
-      ));
+      const node = $(<div>{twoDivMap}</div>);
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 3);
       const nodes = spy.args.map((arg) => arg[0]);
@@ -164,24 +146,18 @@ describe('RSTTraversal', () => {
 
     it('handles Map siblings', () => {
       const spy = sinon.spy();
-      const map1 = new Map([
-        [<div key="a" />],
-        [<div key="b" />],
-      ]);
-      const map2 = new Map([
-        [<div key="c" />],
-        [<div key="d" />],
-      ]);
+      const map1 = new Map([[<div key="a" />], [<div key="b" />]]);
+      const map2 = new Map([[<div key="c" />], [<div key="d" />]]);
       const divA = $(<div key="a" />);
       const divB = $(<div key="b" />);
       const divC = $(<div key="c" />);
       const divD = $(<div key="d" />);
-      const node = $((
+      const node = $(
         <div>
           {map1}
           {map2}
-        </div>
-      ));
+        </div>,
+      );
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 5);
       const nodes = spy.args.map((arg) => arg[0]);
@@ -190,17 +166,10 @@ describe('RSTTraversal', () => {
 
     it('handles Set children', () => {
       const spy = sinon.spy();
-      const twoDivSet = new Set([
-        <div key="a" />,
-        <div key="b" />,
-      ]);
+      const twoDivSet = new Set([<div key="a" />, <div key="b" />]);
       const divA = $(<div key="a" />);
       const divB = $(<div key="b" />);
-      const node = $((
-        <div>
-          {twoDivSet}
-        </div>
-      ));
+      const node = $(<div>{twoDivSet}</div>);
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 3);
       const nodes = spy.args.map((arg) => arg[0]);
@@ -209,24 +178,18 @@ describe('RSTTraversal', () => {
 
     it('handles Set siblings', () => {
       const spy = sinon.spy();
-      const set1 = new Set([
-        <div key="a" />,
-        <div key="b" />,
-      ]);
-      const set2 = new Set([
-        <div key="c" />,
-        <div key="d" />,
-      ]);
+      const set1 = new Set([<div key="a" />, <div key="b" />]);
+      const set2 = new Set([<div key="c" />, <div key="d" />]);
       const divA = $(<div key="a" />);
       const divB = $(<div key="b" />);
       const divC = $(<div key="c" />);
       const divD = $(<div key="d" />);
-      const node = $((
+      const node = $(
         <div>
           {set1}
           {set2}
-        </div>
-      ));
+        </div>,
+      );
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 5);
       const nodes = spy.args.map((arg) => arg[0]);
@@ -265,11 +228,7 @@ describe('RSTTraversal', () => {
 
         const divA = $(<div key="a" />);
         const divB = $(<div key="b" />);
-        const node = $((
-          <div>
-            {iterableChildren}
-          </div>
-        ));
+        const node = $(<div>{iterableChildren}</div>);
 
         treeForEach(node, spy);
         expect(spy).to.have.property('callCount', 3);
@@ -287,12 +246,12 @@ describe('RSTTraversal', () => {
         const divB = $(<div key="b" />);
         const divC = $(<div key="c" />);
         const divD = $(<div key="d" />);
-        const node = $((
+        const node = $(
           <div>
             {iterableChildren1}
             {iterableChildren2}
-          </div>
-        ));
+          </div>,
+        );
 
         treeForEach(node, spy);
         expect(spy).to.have.property('callCount', 5);
@@ -307,11 +266,7 @@ describe('RSTTraversal', () => {
 
         const divA = $(<div key="a" />);
         const divB = $(<div key="b" />);
-        const node = $((
-          <div>
-            {legacyIterableChildren}
-          </div>
-        ));
+        const node = $(<div>{legacyIterableChildren}</div>);
 
         treeForEach(node, spy);
         expect(spy).to.have.property('callCount', 3);
@@ -329,12 +284,12 @@ describe('RSTTraversal', () => {
         const divB = $(<div key="b" />);
         const divC = $(<div key="c" />);
         const divD = $(<div key="d" />);
-        const node = $((
+        const node = $(
           <div>
             {legacyIterableChildren1}
             {legacyIterableChildren2}
-          </div>
-        ));
+          </div>,
+        );
 
         treeForEach(node, spy);
         expect(spy).to.have.property('callCount', 5);
@@ -345,26 +300,26 @@ describe('RSTTraversal', () => {
 
     it('does not get trapped from empty strings', () => {
       const spy = sinon.spy();
-      const node = $((
+      const node = $(
         <div>
           <p />
           <p>Test</p>
-        </div>
-      ));
+        </div>,
+      );
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 4); // div, p, p, 'Test'
     });
 
     it('passes in the node', () => {
       const spy = sinon.spy();
-      const node = $((
+      const node = $(
         <div>
           <button type="button" />
           <nav>
             <input />
           </nav>
-        </div>
-      ));
+        </div>,
+      );
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 4);
       expect(spy.args[0][0]).to.have.property('type', 'div');
@@ -375,15 +330,15 @@ describe('RSTTraversal', () => {
   });
 
   describe('treeFilter', () => {
-    const tree = $((
+    const tree = $(
       <div>
         <button type="button" />
         <button type="button" />
         <nav>
           <input />
         </nav>
-      </div>
-    ));
+      </div>,
+    );
 
     it('returnsan empty array for falsy test', () => {
       expect(treeFilter(tree, () => false).length).to.equal(0);
@@ -408,15 +363,15 @@ describe('RSTTraversal', () => {
 
     it('returnstrees from the root node', () => {
       const node = <label htmlFor="foo" />;
-      const tree = $((
+      const tree = $(
         <div>
           <button type="button" />
           <nav>
             {node}
             <input id="foo" />
           </nav>
-        </div>
-      ));
+        </div>,
+      );
 
       const nodeInTree = tree.rendered[1].rendered[0];
       const result = pathToNode(nodeInTree, tree);
@@ -427,15 +382,17 @@ describe('RSTTraversal', () => {
 
     it('returnstrees from the root node except the sibling node', () => {
       const node = <label htmlFor="foo" />;
-      const tree = $((
+      const tree = $(
         <div>
           <button type="button" />
           <nav>
             {node}
-            <div><input id="foo" /></div>
+            <div>
+              <input id="foo" />
+            </div>
           </nav>
-        </div>
-      ));
+        </div>,
+      );
 
       const nodeInTree = tree.rendered[1].rendered[0];
       const result = pathToNode(nodeInTree, tree);
@@ -454,9 +411,7 @@ describe('RSTTraversal', () => {
     it('returnsdisplayName for functions that provides one', () => {
       class Subject extends React.Component {
         render() {
-          return (
-            <div />
-          );
+          return <div />;
         }
       }
       Subject.displayName = 'CustomSubject';
@@ -468,9 +423,7 @@ describe('RSTTraversal', () => {
     it('returnsfunction name if displayName is not provided', () => {
       class Subject extends React.Component {
         render() {
-          return (
-            <div />
-          );
+          return <div />;
         }
       }
       const node = $(<Subject />);

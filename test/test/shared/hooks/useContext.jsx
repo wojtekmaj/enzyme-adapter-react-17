@@ -1,22 +1,11 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  describeIf,
-  itIf,
-} from '../../_helpers';
+import { describeIf, itIf } from '../../_helpers';
 
-import {
-  useContext,
-  useState,
-  createContext,
-} from '../../_helpers/react-compat';
+import { useContext, useState, createContext } from '../../_helpers/react-compat';
 
-export default function describeUseContext({
-  hasHooks,
-  Wrap,
-  isShallow,
-}) {
+export default function describeUseContext({ hasHooks, Wrap, isShallow }) {
   describeIf(hasHooks, 'hooks: useContext', () => {
     describe('simple example', () => {
       const initialTitle = 'initialTitle';
@@ -24,11 +13,7 @@ export default function describeUseContext({
 
       function UiComponent() {
         const title = useContext(TitleContext);
-        return (
-          <div>
-            {title}
-          </div>
-        );
+        return <div>{title}</div>;
       }
 
       const customTitle = 'CustomTitle';
@@ -68,10 +53,10 @@ export default function describeUseContext({
 
         return (
           <div>
-            <button type="button" onClick={increment}>increment</button>
-            <span className="grandChildState">
-              {myContextVal.state}
-            </span>
+            <button type="button" onClick={increment}>
+              increment
+            </button>
+            <span className="grandChildState">{myContextVal.state}</span>
           </div>
         );
       }
@@ -107,13 +92,15 @@ export default function describeUseContext({
           const grandchild = getChild().find(MyGrandChild);
           return isShallow ? grandchild.dive() : grandchild;
         }
-        expect(getGrandChild().find('.grandChildState').debug()).to.equal(`<span className="grandChildState">
+        expect(getGrandChild().find('.grandChildState').debug()).to
+          .equal(`<span className="grandChildState">
   ${String(initialState)}
 </span>`);
 
         getGrandChild().find('button').props().onClick();
         wrapper.update();
-        expect(getGrandChild().find('.grandChildState').debug()).to.equal(`<span className="grandChildState">
+        expect(getGrandChild().find('.grandChildState').debug()).to
+          .equal(`<span className="grandChildState">
   ${String(initialState + 1)}
 </span>`);
       });

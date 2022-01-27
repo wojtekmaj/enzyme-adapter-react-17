@@ -1,10 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 
-export default function describeEquals({
-  Wrap,
-  WrapRendered,
-}) {
+export default function describeEquals({ Wrap, WrapRendered }) {
   describe('.equals(node)', () => {
     it('allows matches on the root node', () => {
       const a = <div className="foo" />;
@@ -16,35 +13,45 @@ export default function describeEquals({
     });
 
     it('does NOT allow matches on a nested node', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="foo" />
-        </div>
-      ));
+        </div>,
+      );
       const b = <div className="foo" />;
       expect(wrapper.equals(b)).to.equal(false);
     });
 
     it('matches composite components', () => {
       class Foo extends React.Component {
-        render() { return <div />; }
+        render() {
+          return <div />;
+        }
       }
-      const wrapper = Wrap((
+      const wrapper = Wrap(
+        <div>
+          <Foo />
+        </div>,
+      );
+      const b = (
         <div>
           <Foo />
         </div>
-      ));
-      const b = <div><Foo /></div>;
+      );
       expect(wrapper.equals(b)).to.equal(true);
     });
 
     it('does not expand `node` content', () => {
       class Bar extends React.Component {
-        render() { return <div />; }
+        render() {
+          return <div />;
+        }
       }
 
       class Foo extends React.Component {
-        render() { return <Bar />; }
+        render() {
+          return <Bar />;
+        }
       }
 
       const wrapper = WrapRendered(<Foo />);
@@ -54,27 +61,25 @@ export default function describeEquals({
 
     describe('stateless function components (SFCs)', () => {
       it('matches composite SFCs', () => {
-        const Foo = () => (
-          <div />
-        );
+        const Foo = () => <div />;
 
-        const wrapper = Wrap((
+        const wrapper = Wrap(
+          <div>
+            <Foo />
+          </div>,
+        );
+        const b = (
           <div>
             <Foo />
           </div>
-        ));
-        const b = <div><Foo /></div>;
+        );
         expect(wrapper.equals(b)).to.equal(true);
       });
 
       it('does not expand `node` content', () => {
-        const Bar = () => (
-          <div />
-        );
+        const Bar = () => <div />;
 
-        const Foo = () => (
-          <Bar />
-        );
+        const Foo = () => <Bar />;
 
         const wrapper = WrapRendered(<Foo />);
         expect(wrapper.equals(<Bar />)).to.equal(true);

@@ -4,23 +4,20 @@ import sinon from 'sinon-sandbox';
 
 import { getElementPropSelector, getWrapperPropSelector } from '../../_helpers/selectors';
 
-export default function describeReduceRight({
-  Wrap,
-  Wrapper,
-}) {
+export default function describeReduceRight({ Wrap, Wrapper }) {
   describe('.reduceRight(fn[, initialValue])', () => {
     it('has the right length', () => {
       expect(Wrapper.prototype.reduceRight).to.have.lengthOf(1);
     });
 
     it('calls a function with a wrapper for each node in the wrapper in reverse', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="foo bax" />
           <div className="foo bar" />
           <div className="foo baz" />
-        </div>
-      ));
+        </div>,
+      );
       const spy = sinon.spy((n) => n + 1);
 
       wrapper.find('.foo').reduceRight(spy, 0);
@@ -35,13 +32,13 @@ export default function describeReduceRight({
     });
 
     it('accumulates a value', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div id="bax" className="foo qoo" />
           <div id="bar" className="foo boo" />
           <div id="baz" className="foo hoo" />
-        </div>
-      ));
+        </div>,
+      );
       const result = wrapper.find('.foo').reduceRight((obj, n) => {
         obj[n.prop('id')] = n.prop('className');
         return obj;
@@ -55,17 +52,17 @@ export default function describeReduceRight({
     });
 
     it('allows the initialValue to be omitted', () => {
-      const one = (<div id="bax" className="foo qoo" />);
-      const two = (<div id="bar" className="foo boo" />);
-      const three = (<div id="baz" className="foo hoo" />);
-      const wrapper = Wrap((
+      const one = <div id="bax" className="foo qoo" />;
+      const two = <div id="bar" className="foo boo" />;
+      const three = <div id="baz" className="foo hoo" />;
+      const wrapper = Wrap(
         <div>
           {one}
           {two}
           {three}
-        </div>
-      ));
-      const counter = (<noscript id="counter" />);
+        </div>,
+      );
+      const counter = <noscript id="counter" />;
       const result = wrapper
         .find('.foo')
         .reduceRight((acc, n) => [].concat(acc, n, new Wrapper(counter)))

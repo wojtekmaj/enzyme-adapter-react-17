@@ -2,9 +2,7 @@ import React from 'react';
 import sinon from 'sinon-sandbox';
 import { expect } from 'chai';
 
-export default function describeCDM({
-  Wrap,
-}) {
+export default function describeCDM({ Wrap }) {
   describe('componentDidUpdate()', () => {
     it('does not call `componentDidMount` twice when a child component is created', () => {
       const spy = sinon.spy();
@@ -37,10 +35,7 @@ export default function describeCDM({
       }
 
       const wrapper = Wrap(<Foo />);
-      expect(spy.args).to.eql([
-        ['render'],
-        ['componentDidMount'],
-      ]);
+      expect(spy.args).to.eql([['render'], ['componentDidMount']]);
       spy.resetHistory();
 
       wrapper.find('button').prop('onClick')();

@@ -2,9 +2,7 @@ import React from 'react';
 import sinon from 'sinon-sandbox';
 import { expect } from 'chai';
 
-export default function describeCWU({
-  Wrap,
-}) {
+export default function describeCWU({ Wrap }) {
   describe('componentWillUnmount', () => {
     it('calls componentWillUnmount', () => {
       const spy = sinon.spy();
@@ -20,10 +18,7 @@ export default function describeCWU({
       }
       const wrapper = Wrap(<Foo />);
       wrapper.unmount();
-      expect(spy.args).to.deep.equal([
-        ['render'],
-        ['componentWillUnmount'],
-      ]);
+      expect(spy.args).to.deep.equal([['render'], ['componentWillUnmount']]);
     });
   });
 }

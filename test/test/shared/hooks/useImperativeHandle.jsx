@@ -2,21 +2,11 @@ import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 
-import {
-  describeIf,
-} from '../../_helpers';
+import { describeIf } from '../../_helpers';
 
-import {
-  useImperativeHandle,
-  useRef,
-  forwardRef,
-} from '../../_helpers/react-compat';
+import { useImperativeHandle, useRef, forwardRef } from '../../_helpers/react-compat';
 
-export default function describeUseImperativeHandle({
-  hasHooks,
-  Wrap,
-  isShallow,
-}) {
+export default function describeUseImperativeHandle({ hasHooks, Wrap, isShallow }) {
   describeIf(hasHooks, 'hooks: useImperativeHandle', () => {
     function Computer({ compute }, ref) {
       const computerRef = useRef({ compute });
@@ -38,7 +28,14 @@ export default function describeUseImperativeHandle({
       }
 
       render() {
-        return <FancyComputer ref={(ref) => { this.ref = ref; }} {...this.props} />;
+        return (
+          <FancyComputer
+            ref={(ref) => {
+              this.ref = ref;
+            }}
+            {...this.props}
+          />
+        );
       }
     }
 

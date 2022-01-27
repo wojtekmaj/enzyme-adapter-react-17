@@ -1,10 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 
-export default function describeGetNodes({
-  Wrap,
-  WrapperName,
-}) {
+export default function describeGetNodes({ Wrap, WrapperName }) {
   describe('.getNodes()', () => {
     it('throws', () => {
       const wrapper = Wrap(<div />);

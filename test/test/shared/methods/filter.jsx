@@ -1,12 +1,10 @@
 import React from 'react';
 import { expect } from 'chai';
 
-export default function describeFilter({
-  Wrap,
-}) {
+export default function describeFilter({ Wrap }) {
   describe('.filter(selector)', () => {
     it('returns a new wrapper of just the nodes that matched the selector', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="foo bar baz" />
           <div className="foo" />
@@ -16,8 +14,8 @@ export default function describeFilter({
           </div>
           <div className="baz" />
           <div className="foo bar" />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('.foo').filter('.bar')).to.have.lengthOf(3);
       expect(wrapper.find('.bar').filter('.foo')).to.have.lengthOf(3);
@@ -26,14 +24,14 @@ export default function describeFilter({
     });
 
     it('only looks in the current wrappers nodes, not their children', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="foo">
             <div className="bar" />
           </div>
           <div className="foo bar" />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('.foo').filter('.bar')).to.have.lengthOf(1);
     });

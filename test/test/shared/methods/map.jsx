@@ -2,19 +2,16 @@ import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 
-export default function describeMap({
-  Wrap,
-  Wrapper,
-}) {
+export default function describeMap({ Wrap, Wrapper }) {
   describe('.map(fn)', () => {
     it('calls a function with a wrapper for each node in the wrapper', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="foo bax" />
           <div className="foo bar" />
           <div className="foo baz" />
-        </div>
-      ));
+        </div>,
+      );
       const spy = sinon.spy();
 
       wrapper.find('.foo').map(spy);
@@ -32,20 +29,16 @@ export default function describeMap({
     });
 
     it('returns an array with the mapped values', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="foo bax" />
           <div className="foo bar" />
           <div className="foo baz" />
-        </div>
-      ));
+        </div>,
+      );
       const result = wrapper.find('.foo').map((w) => w.props().className);
 
-      expect(result).to.eql([
-        'foo bax',
-        'foo bar',
-        'foo baz',
-      ]);
+      expect(result).to.eql(['foo bax', 'foo bar', 'foo baz']);
     });
   });
 }

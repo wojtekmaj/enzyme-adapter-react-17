@@ -1,10 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 
-export default function describeDeprecatedInstanceProperties({
-  Wrap,
-  isShallow,
-}) {
+export default function describeDeprecatedInstanceProperties({ Wrap, isShallow }) {
   class Foo extends React.Component {
     render() {
       return (

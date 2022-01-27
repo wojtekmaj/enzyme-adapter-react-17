@@ -2,19 +2,16 @@ import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 
-export default function describeForEach({
-  Wrap,
-  Wrapper,
-}) {
+export default function describeForEach({ Wrap, Wrapper }) {
   describe('.forEach(fn)', () => {
     it('calls a function for each node in the wrapper', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="foo bax" />
           <div className="foo bar" />
           <div className="foo baz" />
-        </div>
-      ));
+        </div>,
+      );
       const spy = sinon.spy();
 
       wrapper.find('.foo').forEach(spy);

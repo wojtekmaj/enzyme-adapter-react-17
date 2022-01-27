@@ -1,14 +1,9 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 
-export default function describeRoot({
-  Wrap,
-  isMount,
-}) {
+export default function describeRoot({ Wrap, isMount }) {
   describe('.root()', () => {
     class Fixture extends React.Component {
       render() {

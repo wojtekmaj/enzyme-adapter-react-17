@@ -1,14 +1,9 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  createRef,
-} from '../../_helpers/react-compat';
+import { createRef } from '../../_helpers/react-compat';
 
-export default function describeGetElement({
-  Wrap,
-  isShallow,
-}) {
+export default function describeGetElement({ Wrap, isShallow }) {
   describe('.getElement()', () => {
     it('returns nodes with refs as well', () => {
       class Foo extends React.Component {
@@ -73,9 +68,7 @@ export default function describeGetElement({
         }
 
         render() {
-          return (
-            <div ref={this.setRef} className="foo" />
-          );
+          return <div ref={this.setRef} className="foo" />;
         }
       }
       const wrapper = Wrap(<Foo />);
@@ -90,9 +83,7 @@ export default function describeGetElement({
         }
 
         render() {
-          return (
-            <div ref={this.setRef} className="foo" />
-          );
+          return <div ref={this.setRef} className="foo" />;
         }
       }
       const wrapper = Wrap(<Foo />);

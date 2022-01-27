@@ -9,7 +9,8 @@ function findCurrentFiberUsingSlowPath(fiber) {
   // special cases and we'll deal with them.
   let a = fiber;
   let b = alternate;
-  while (true) { // eslint-disable-line
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
     const parentA = a.return;
     const parentB = parentA ? parentA.alternate : null;
     if (!parentA || !parentB) {
@@ -87,8 +88,10 @@ function findCurrentFiberUsingSlowPath(fiber) {
           child = child.sibling;
         }
         if (!didFindChild) {
-          throw new Error('Child was not found in either parent set. This indicates a bug '
-            + 'in React related to the return pointer. Please file an issue.');
+          throw new Error(
+            'Child was not found in either parent set. This indicates a bug ' +
+              'in React related to the return pointer. Please file an issue.',
+          );
         }
       }
     }

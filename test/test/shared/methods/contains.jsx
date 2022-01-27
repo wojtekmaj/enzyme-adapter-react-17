@@ -1,15 +1,9 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 
-export default function describeContains({
-  Wrap,
-  WrapperName,
-  isMount,
-}) {
+export default function describeContains({ Wrap, WrapperName, isMount }) {
   describe('.contains(node)', () => {
     it('allows matches on the root node', () => {
       const a = <div className="foo" />;
@@ -21,24 +15,26 @@ export default function describeContains({
     });
 
     it('allows matches on a nested node', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="foo" />
-        </div>
-      ));
+        </div>,
+      );
       const b = <div className="foo" />;
       expect(wrapper.contains(b)).to.equal(true);
     });
 
     it('matches composite components', () => {
       class Foo extends React.Component {
-        render() { return <div />; }
+        render() {
+          return <div />;
+        }
       }
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <Foo />
-        </div>
-      ));
+        </div>,
+      );
       const b = <Foo />;
       expect(wrapper.contains(b)).to.equal(true);
     });
@@ -59,14 +55,14 @@ export default function describeContains({
     });
 
     it('works with nested strings & numbers', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div>
             <div>{5}</div>
           </div>
           <div>foo</div>
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.contains('foo')).to.equal(true);
       expect(wrapper.contains(<div>foo</div>)).to.equal(true);
@@ -76,26 +72,17 @@ export default function describeContains({
     });
 
     it('does something with arrays of nodes', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <span>Hello</span>
           <div>Goodbye</div>
           <span>More</span>
-        </div>
-      ));
-      const fails = [
-        <span>wrong</span>,
-        <div>Goodbye</div>,
-      ];
+        </div>,
+      );
+      const fails = [<span>wrong</span>, <div>Goodbye</div>];
 
-      const passes1 = [
-        <span>Hello</span>,
-        <div>Goodbye</div>,
-      ];
-      const passes2 = [
-        <div>Goodbye</div>,
-        <span>More</span>,
-      ];
+      const passes1 = [<span>Hello</span>, <div>Goodbye</div>];
+      const passes2 = [<div>Goodbye</div>, <span>More</span>];
 
       expect(wrapper.contains(fails)).to.equal(false);
       expect(wrapper.contains(passes1)).to.equal(true);
@@ -122,11 +109,11 @@ export default function describeContains({
           return <div />;
         }
 
-        const wrapper = Wrap((
+        const wrapper = Wrap(
           <div>
             <Foo />
-          </div>
-        ));
+          </div>,
+        );
         const b = <Foo />;
         expect(wrapper.contains(b)).to.equal(true);
       });
@@ -136,11 +123,7 @@ export default function describeContains({
           return <div />;
         }
         const renderStatelessComponent = () => <Foo />;
-        const wrapper = Wrap((
-          <div>
-            {renderStatelessComponent()}
-          </div>
-        ));
+        const wrapper = Wrap(<div>{renderStatelessComponent()}</div>);
         const b = <Foo />;
         expect(wrapper.contains(b)).to.equal(true);
       });

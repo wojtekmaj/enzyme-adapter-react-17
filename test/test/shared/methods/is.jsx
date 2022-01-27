@@ -1,15 +1,9 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  memo,
-  forwardRef,
-} from '../../_helpers/react-compat';
+import { memo, forwardRef } from '../../_helpers/react-compat';
 
-export default function describeIs({
-  Wrap,
-  WrapRendered,
-}) {
+export default function describeIs({ Wrap, WrapRendered }) {
   describe('.is(selector)', () => {
     it('returns true when selector matches current element', () => {
       const wrapper = Wrap(<div className="foo bar baz" />);
@@ -60,26 +54,42 @@ export default function describeIs({
     }
 
     it('recognizes nonmemoized', () => {
-      const wrapper = WrapRendered(<RendersChildren><RendersDiv /></RendersChildren>);
+      const wrapper = WrapRendered(
+        <RendersChildren>
+          <RendersDiv />
+        </RendersChildren>,
+      );
       expect(wrapper.is(RendersDiv)).to.equal(true);
     });
 
     describe('forwardRef', () => {
       it('recognizes forwardRef', () => {
-        const wrapper = WrapRendered(<RendersChildren><ForwardRef /></RendersChildren>);
+        const wrapper = WrapRendered(
+          <RendersChildren>
+            <ForwardRef />
+          </RendersChildren>,
+        );
         expect(wrapper.is(ForwardRef)).to.equal(true);
       });
     });
 
     describe('React.memo', () => {
       it('recognizes memoized and inner', () => {
-        const wrapper = WrapRendered(<RendersChildren><Memoized /></RendersChildren>);
+        const wrapper = WrapRendered(
+          <RendersChildren>
+            <Memoized />
+          </RendersChildren>,
+        );
         expect(wrapper.is(Memoized)).to.equal(true);
         // expect(wrapper.is(RendersDiv)).to.equal(true);
       });
 
       it('recognizes memoized forwardRef and inner', () => {
-        const wrapper = WrapRendered(<RendersChildren><MemoForwardRef /></RendersChildren>);
+        const wrapper = WrapRendered(
+          <RendersChildren>
+            <MemoForwardRef />
+          </RendersChildren>,
+        );
         expect(wrapper.is(MemoForwardRef)).to.equal(true);
       });
     });

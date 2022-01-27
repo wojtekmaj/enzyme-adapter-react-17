@@ -2,20 +2,11 @@ import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 
-import {
-  describeIf,
-} from '../../_helpers';
+import { describeIf } from '../../_helpers';
 
-import {
-  useEffect,
-  useState,
-} from '../../_helpers/react-compat';
+import { useEffect, useState } from '../../_helpers/react-compat';
 
-export default function describeCustomHooks({
-  hasHooks,
-  Wrap,
-  isShallow,
-}) {
+export default function describeCustomHooks({ hasHooks, Wrap, isShallow }) {
   describeIf(hasHooks, 'hooks: custom', () => {
     describe('custom hook: useCounter', () => {
       function useCounter({ initialCount = 0, step = 1 } = {}) {
@@ -99,12 +90,9 @@ export default function describeCustomHooks({
       function ControlledInputWithEnhancedInput({ searchSomething }) {
         const search = useFormInput();
 
-        useEffect(
-          () => {
-            searchSomething(search.value);
-          },
-          [search.value],
-        );
+        useEffect(() => {
+          searchSomething(search.value);
+        }, [search.value]);
 
         return <Input {...search} />;
       }
@@ -112,12 +100,9 @@ export default function describeCustomHooks({
       function ControlledInputWithNativeInput({ searchSomething }) {
         const search = useFormInput();
 
-        useEffect(
-          () => {
-            searchSomething(search.value);
-          },
-          [search.value],
-        );
+        useEffect(() => {
+          searchSomething(search.value);
+        }, [search.value]);
 
         return <input {...search} />;
       }

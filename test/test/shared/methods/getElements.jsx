@@ -1,9 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 
-export default function describeGetElements({
-  Wrap,
-}) {
+export default function describeGetElements({ Wrap }) {
   describe('.getElements()', () => {
     it('returns the wrapped elements', () => {
       const one = <span />;

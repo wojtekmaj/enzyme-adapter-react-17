@@ -7,17 +7,9 @@ import { debugNodes } from 'enzyme/build/Debug';
 
 import { is } from '../../_helpers/version';
 
-import {
-  createClass,
-  memo,
-  useCallback,
-} from '../../_helpers/react-compat';
+import { createClass, memo, useCallback } from '../../_helpers/react-compat';
 
-export default function describeDebug({
-  Wrap,
-  WrapRendered,
-  isShallow,
-}) {
+export default function describeDebug({ Wrap, WrapRendered, isShallow }) {
   describe('.debug()', () => {
     context('passes through to the debugNodes function', () => {
       it('with wrapping an HTML element', () => {
@@ -30,7 +22,9 @@ export default function describeDebug({
       it('with wrapping a createClass component', () => {
         const Foo = createClass({
           displayName: 'Bar',
-          render() { return <div />; },
+          render() {
+            return <div />;
+          },
         });
         const wrapper = Wrap(<Foo />);
 
@@ -70,23 +64,31 @@ export default function describeDebug({
 
     describe('React.memo', () => {
       describe('display names', () => {
-        function SFC() { return null; }
-        function SFCwithDisplayName() { return null; }
+        function SFC() {
+          return null;
+        }
+        function SFCwithDisplayName() {
+          return null;
+        }
         SFCwithDisplayName.displayName = 'SFC!';
 
         const SFCMemo = memo && memo(SFC);
         const SFCwithDisplayNameMemo = memo && memo(SFCwithDisplayName);
 
-        const SFCMemoWithDisplayName = memo && Object.assign(memo(SFC), {
-          displayName: 'SFCMemoWithDisplayName!',
-        });
-        const SFCMemoWitDoubleDisplayName = memo && Object.assign(memo(SFCwithDisplayName), {
-          displayName: 'SFCMemoWitDoubleDisplayName!',
-        });
+        const SFCMemoWithDisplayName =
+          memo &&
+          Object.assign(memo(SFC), {
+            displayName: 'SFCMemoWithDisplayName!',
+          });
+        const SFCMemoWitDoubleDisplayName =
+          memo &&
+          Object.assign(memo(SFCwithDisplayName), {
+            displayName: 'SFCMemoWitDoubleDisplayName!',
+          });
 
         it('displays the expected display names', () => {
           expect(SFCMemoWithDisplayName).to.have.property('displayName');
-          const wrapper = Wrap((
+          const wrapper = Wrap(
             <div>
               <SFC />
               <SFCwithDisplayName />
@@ -94,8 +96,8 @@ export default function describeDebug({
               <SFCwithDisplayNameMemo />
               <SFCMemoWithDisplayName />
               <SFCMemoWitDoubleDisplayName />
-            </div>
-          ));
+            </div>,
+          );
           expect(wrapper.debug()).to.equal(`<div>
   <SFC />
   <SFC! />
@@ -111,11 +113,7 @@ export default function describeDebug({
         function Add({ a, b, c }) {
           return (
             <div>
-              {String(a)}
-              |
-              {String(b)}
-              |
-              {String(c)}
+              {String(a)}|{String(b)}|{String(c)}
             </div>
           );
         }
@@ -159,26 +157,31 @@ export default function describeDebug({
         });
 
         describe('full tree', () => {
-          function TransitionGroup({ children }) { return children; }
-          function CSSTransition({ children }) { return children; }
+          function TransitionGroup({ children }) {
+            return children;
+          }
+          function CSSTransition({ children }) {
+            return children;
+          }
           function Body({ imageToShow, switchImage }) {
-            const handlerClick = useCallback(
-              () => {
-                if (imageToShow === 1) {
-                  return switchImage(2);
-                }
+            const handlerClick = useCallback(() => {
+              if (imageToShow === 1) {
+                return switchImage(2);
+              }
 
-                return switchImage(1);
-              },
-              [imageToShow, switchImage],
-            );
+              return switchImage(1);
+            }, [imageToShow, switchImage]);
 
             return (
               <div className="styles.body">
                 <button type="button" onClick={handlerClick} className="buttonsStyles.button">
                   <TransitionGroup className="body.animWrap">
                     <CSSTransition classNames="mainImage" timeout={500} key={imageToShow}>
-                      <img className="bodyImg" src={`../assets/${imageToShow}.png`} alt="main_img" />
+                      <img
+                        className="bodyImg"
+                        src={`../assets/${imageToShow}.png`}
+                        alt="main_img"
+                      />
                     </CSSTransition>
                   </TransitionGroup>
                 </button>
@@ -228,26 +231,24 @@ export default function describeDebug({
           );
         }
 
-        const ComponentWithDefaultProps = React.memo && Object.assign(
-          React.memo(LazyC),
-          {
+        const ComponentWithDefaultProps =
+          React.memo &&
+          Object.assign(React.memo(LazyC), {
             defaultProps: {
               type: 'block',
             },
             propTypes: {
               type: PropTypes.oneOf(['block', 'inline']),
             },
-          },
-        );
+          });
 
-        const ComponentWithoutDefaultProps = React.memo && Object.assign(
-          React.memo(LazyC),
-          {
+        const ComponentWithoutDefaultProps =
+          React.memo &&
+          Object.assign(React.memo(LazyC), {
             propTypes: {
               type: PropTypes.oneOf(['block', 'inline']),
             },
-          },
-        );
+          });
 
         [ComponentWithDefaultProps, ComponentWithoutDefaultProps].forEach((C) => {
           const isWithout = C === ComponentWithoutDefaultProps;
@@ -256,40 +257,51 @@ export default function describeDebug({
           // see https://github.com/enzymejs/enzyme/issues/2471 for details
           const Name = isWithout || is('~16.6') ? 'Memo(LazyC)' : 'LazyC';
 
-          it(`produces the expected tree ${isWithout ? 'without' : 'with'} defaultProps, no prop provided`, () => {
+          it(`produces the expected tree ${
+            isWithout ? 'without' : 'with'
+          } defaultProps, no prop provided`, () => {
             const wrapper = Wrap(<C />);
 
-            expect(wrapper.debug()).to.equal(isShallow
-              ? `<Child>
-  ${isWithout
-    ? '<div />'
-    : `<div>
+            expect(wrapper.debug()).to.equal(
+              isShallow
+                ? `<Child>
+  ${
+    isWithout
+      ? '<div />'
+      : `<div>
     block
-  </div>`}
+  </div>`
+  }
 </Child>`
-              : `<${Name}${isWithout ? '' : ' type="block"'}>
+                : `<${Name}${isWithout ? '' : ' type="block"'}>
   <Child>
     <main>
-      ${isWithout
-    ? '<div />'
-    : `<div>
+      ${
+        isWithout
+          ? '<div />'
+          : `<div>
         block
-      </div>`}
+      </div>`
+      }
     </main>
   </Child>
-</${Name}>`);
+</${Name}>`,
+            );
           });
 
-          it(`produces the expected tree ${isWithout ? 'without' : 'with'} defaultProps, prop provided`, () => {
+          it(`produces the expected tree ${
+            isWithout ? 'without' : 'with'
+          } defaultProps, prop provided`, () => {
             const wrapper = Wrap(<C type="inline" />);
 
-            expect(wrapper.debug()).to.equal(isShallow
-              ? `<Child>
+            expect(wrapper.debug()).to.equal(
+              isShallow
+                ? `<Child>
   <div>
     inline
   </div>
 </Child>`
-              : `<${Name} type="inline">
+                : `<${Name} type="inline">
   <Child>
     <main>
       <div>
@@ -297,7 +309,8 @@ export default function describeDebug({
       </div>
     </main>
   </Child>
-</${Name}>`);
+</${Name}>`,
+            );
           });
         });
       });

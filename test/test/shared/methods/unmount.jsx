@@ -2,15 +2,9 @@ import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 
-export default function describeUnmount({
-  isShallow,
-  Wrap,
-  WrapRendered,
-}) {
+export default function describeUnmount({ isShallow, Wrap, WrapRendered }) {
   describe('.unmount()', () => {
     class WillUnmount extends React.Component {
       componentWillUnmount() {}
@@ -19,9 +13,7 @@ export default function describeUnmount({
         const { id } = this.props;
         return (
           <div className={id}>
-            <span>
-              {id}
-            </span>
+            <span>{id}</span>
           </div>
         );
       }

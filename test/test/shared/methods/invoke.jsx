@@ -1,20 +1,11 @@
 import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 
-import {
-  useEffect,
-  useState,
-} from '../../_helpers/react-compat';
+import { useEffect, useState } from '../../_helpers/react-compat';
 
-export default function describeInvoke({
-  Wrap,
-  WrapperName,
-  isShallow,
-}) {
+export default function describeInvoke({ Wrap, WrapperName, isShallow }) {
   describe('.invoke(propName)(..args)', () => {
     class CounterButton extends React.Component {
       constructor(props) {
@@ -99,25 +90,25 @@ export default function describeInvoke({
       function App() {
         const [counter, setCounter] = useState(0);
         const [result, setResult] = useState(0);
-        useEffect(
-          () => setResult(counter * 2),
-          [counter],
-        );
+        useEffect(() => setResult(counter * 2), [counter]);
         return (
-          <button type="button" onClick={() => setCounter((input) => input + 1)}>{result}</button>
+          <button type="button" onClick={() => setCounter((input) => input + 1)}>
+            {result}
+          </button>
         );
       }
       const wrapper = Wrap(<App />);
 
       const expected = ['0', '2', '4', '6'];
 
-      const actual = [wrapper.find('button').text()]
-        .concat(Array.from({ length: 3 }, () => {
+      const actual = [wrapper.find('button').text()].concat(
+        Array.from({ length: 3 }, () => {
           wrapper.find('button').invoke('onClick')();
           wrapper.update();
 
           return wrapper.find('button').text();
-        }));
+        }),
+      );
       expect(actual).to.eql(expected);
     });
   });

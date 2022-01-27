@@ -1,26 +1,19 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  delay,
-  itIf,
-} from '../../_helpers';
+import { delay, itIf } from '../../_helpers';
 import sloppyReturnThis from '../../_helpers/untranspiledSloppyReturnThis';
 
-export default function describeProps({
-  Wrap,
-  WrapRendered,
-  isMount,
-}) {
+export default function describeProps({ Wrap, WrapRendered, isMount }) {
   describe('.props()', () => {
     it('returns the props object', () => {
       const fn = () => ({});
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div id="fooId" className="bax" onClick={fn}>
           <div className="baz" />
           <div className="foo" />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.props().className).to.equal('bax');
       expect(wrapper.props().onClick).to.equal(fn);
@@ -29,12 +22,12 @@ export default function describeProps({
 
     it('is allowed to be used on an inner node', () => {
       const fn = () => ({});
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div className="bax">
           <div className="baz" onClick={fn} />
           <div className="foo" id="fooId" />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('.baz').props().onClick).to.equal(fn);
       expect(wrapper.find('.foo').props().id).to.equal('fooId');
@@ -43,9 +36,7 @@ export default function describeProps({
     class Foo extends React.Component {
       render() {
         const { bar, foo } = this.props;
-        return (
-          <div className={bar} id={foo} />
-        );
+        return <div className={bar} id={foo} />;
       }
     }
 
@@ -62,9 +53,7 @@ export default function describeProps({
     });
 
     describe('stateless function components (SFCs)', () => {
-      const FooSFC = ({ bar, foo }) => (
-        <div className={bar} id={foo} />
-      );
+      const FooSFC = ({ bar, foo }) => <div className={bar} id={foo} />;
 
       itIf(isMount, 'called on root should return props of root node', () => {
         const wrapper = Wrap(<FooSFC foo="hi" bar="bye" />);
@@ -78,11 +67,7 @@ export default function describeProps({
         expect(wrapper.props()).to.eql({ className: 'bye', id: 'hi' });
       });
 
-      const SloppyReceiver = sloppyReturnThis((
-        receiver,
-        props = { NO_PROPS: true },
-        context,
-      ) => (
+      const SloppyReceiver = sloppyReturnThis((receiver, props = { NO_PROPS: true }, context) => (
         <div
           data-is-global={receiver === global}
           data-is-undefined={typeof receiver === 'undefined'}
@@ -91,10 +76,7 @@ export default function describeProps({
         />
       ));
 
-      const StrictReceiver = function SFC(
-        props = { NO_PROPS: true },
-        context,
-      ) {
+      const StrictReceiver = function SFC(props = { NO_PROPS: true }, context) {
         return (
           <div
             data-is-global={this === global}
@@ -131,11 +113,14 @@ export default function describeProps({
         }
 
         handleClick() {
-          return delay(100).then(() => new Promise((resolve) => {
-            this.setState({ counter: 2 }, () => {
-              resolve();
-            });
-          }));
+          return delay(100).then(
+            () =>
+              new Promise((resolve) => {
+                this.setState({ counter: 2 }, () => {
+                  resolve();
+                });
+              }),
+          );
         }
 
         render() {

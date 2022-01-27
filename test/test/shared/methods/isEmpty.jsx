@@ -2,9 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 
-export default function describeLast({
-  Wrap,
-}) {
+export default function describeLast({ Wrap }) {
   describe('.isEmpty()', () => {
     let warningStub;
     let fooNode;
@@ -22,7 +20,9 @@ export default function describeLast({
 
     it('displays a deprecation warning', () => {
       fooNode.isEmpty();
-      expect(warningStub.calledWith('Enzyme::Deprecated method isEmpty() called, use exists() instead.')).to.equal(true);
+      expect(
+        warningStub.calledWith('Enzyme::Deprecated method isEmpty() called, use exists() instead.'),
+      ).to.equal(true);
     });
 
     it('calls exists() instead', () => {

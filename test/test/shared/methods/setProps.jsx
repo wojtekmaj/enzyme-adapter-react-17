@@ -3,19 +3,11 @@ import PropTypes from 'prop-types';
 import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 
-import {
-  sym,
-} from 'enzyme/build/Utils';
+import { sym } from 'enzyme/build/Utils';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 
-export default function describeSetProps({
-  Wrap,
-  WrapperName,
-  isShallow,
-}) {
+export default function describeSetProps({ Wrap, WrapperName, isShallow }) {
   describe('.setProps(newProps[, callback)', () => {
     class RendersNull extends React.Component {
       render() {
@@ -26,20 +18,12 @@ export default function describeSetProps({
     class Foo extends React.Component {
       render() {
         const { id, foo } = this.props;
-        return (
-          <div className={id}>
-            {foo}
-          </div>
-        );
+        return <div className={id}>{foo}</div>;
       }
     }
 
     function FooSFC({ id, foo }) {
-      return (
-        <div className={id}>
-          {foo}
-        </div>
-      );
+      return <div className={id}>{foo}</div>;
     }
 
     class RendersFoo extends React.Component {
@@ -187,11 +171,7 @@ export default function describeSetProps({
 
           render() {
             const { id, foo } = this.props;
-            return (
-              <div className={id}>
-                {foo}
-              </div>
-            );
+            return <div className={id}>{foo}</div>;
           }
         }
         const wrapper = Wrap(<FooNoUpdate id="foo" foo="bar" />);
@@ -245,23 +225,20 @@ export default function describeSetProps({
 
         componentWillReceiveProps() {}
 
-        UNSAFE_componentWillReceiveProps() {} // eslint-disable-line camelcase
+        UNSAFE_componentWillReceiveProps() {}
 
         render() {
           const { id } = this.props;
           const { stateValue: val } = this.state;
-          return (
-            <div className={id}>
-              {String(val)}
-            </div>
-          );
+          return <div className={id}>{String(val)}</div>;
         }
       }
       FooWithLifecycles.contextTypes = {
-        foo() { return null; },
+        foo() {
+          return null;
+        },
       };
       const cWRP = sinon.stub(FooWithLifecycles.prototype, 'componentWillReceiveProps');
-      // eslint-disable-next-line camelcase
       const U_cWRP = sinon.stub(FooWithLifecycles.prototype, 'UNSAFE_componentWillReceiveProps');
 
       const nextProps = { id: 'bar', foo: 'bla' };
@@ -283,16 +260,12 @@ export default function describeSetProps({
     it('merges newProps with oldProps', () => {
       class RendersBar extends React.Component {
         render() {
-          return (
-            <Bar {...this.props} />
-          );
+          return <Bar {...this.props} />;
         }
       }
       class Bar extends React.Component {
         render() {
-          return (
-            <div />
-          );
+          return <div />;
         }
       }
 
@@ -310,9 +283,7 @@ export default function describeSetProps({
       class HasContextX extends React.Component {
         render() {
           const { x } = this.context;
-          return (
-            <div>{x}</div>
-          );
+          return <div>{x}</div>;
         }
       }
       HasContextX.contextTypes = { x: PropTypes.string };
@@ -358,10 +329,7 @@ export default function describeSetProps({
 
       expect(cWRP).to.have.property('callCount', 1);
       const [args] = cWRP.args;
-      expect(args).to.eql([
-        { className: HasInitialState.defaultProps.className },
-        context,
-      ]);
+      expect(args).to.eql([{ className: HasInitialState.defaultProps.className }, context]);
     });
 
     it('throws if an exception occurs during render', () => {
@@ -370,11 +338,7 @@ export default function describeSetProps({
         render() {
           const { user } = this.props;
           try {
-            return (
-              <div>
-                {user.name.givenName}
-              </div>
-            );
+            return <div>{user.name.givenName}</div>;
           } catch (e) {
             error = e;
             throw e;
@@ -428,7 +392,7 @@ export default function describeSetProps({
         }
 
         render() {
-          return (<div />);
+          return <div />;
         }
       }
 
@@ -437,26 +401,10 @@ export default function describeSetProps({
       wrapper.setProps({ b: 'c', d: 'e' });
 
       expect(spy.args).to.deep.equal([
-        [
-          'componentWillReceiveProps',
-          { a: 'a', b: 'b' },
-          { a: 'a', b: 'c', d: 'e' },
-        ],
-        [
-          'shouldComponentUpdate',
-          { a: 'a', b: 'b' },
-          { a: 'a', b: 'c', d: 'e' },
-        ],
-        [
-          'componentWillUpdate',
-          { a: 'a', b: 'b' },
-          { a: 'a', b: 'c', d: 'e' },
-        ],
-        [
-          'componentDidUpdate',
-          { a: 'a', b: 'b' },
-          { a: 'a', b: 'c', d: 'e' },
-        ],
+        ['componentWillReceiveProps', { a: 'a', b: 'b' }, { a: 'a', b: 'c', d: 'e' }],
+        ['shouldComponentUpdate', { a: 'a', b: 'b' }, { a: 'a', b: 'c', d: 'e' }],
+        ['componentWillUpdate', { a: 'a', b: 'b' }, { a: 'a', b: 'c', d: 'e' }],
+        ['componentDidUpdate', { a: 'a', b: 'b' }, { a: 'a', b: 'c', d: 'e' }],
       ]);
     });
 
@@ -482,12 +430,8 @@ export default function describeSetProps({
             const { someState } = this.state;
             return (
               <div>
-                myProp:
-                {' '}
-                {myProp}
-                someState:
-                {' '}
-                {someState}
+                myProp: {myProp}
+                someState: {someState}
               </div>
             );
           }
@@ -513,12 +457,8 @@ export default function describeSetProps({
       });
 
       it('merges newProps with oldProps', () => {
-        const RendersBarSFC = (props) => (
-          <BarSFC {...props} />
-        );
-        const BarSFC = () => (
-          <div />
-        );
+        const RendersBarSFC = (props) => <BarSFC {...props} />;
+        const BarSFC = () => <div />;
 
         const wrapper = Wrap(<RendersBarSFC a="a" b="b" />);
         expect(wrapper.props().a).to.equal('a');
@@ -531,9 +471,7 @@ export default function describeSetProps({
       });
 
       it('passes in old context', () => {
-        const HasContextXSFC = (props, { x }) => (
-          <div>{x}</div>
-        );
+        const HasContextXSFC = (props, { x }) => <div>{x}</div>;
         HasContextXSFC.contextTypes = { x: PropTypes.string };
 
         const context = { x: 'yolo' };
@@ -548,11 +486,7 @@ export default function describeSetProps({
         let error;
         const Trainwreck = ({ user }) => {
           try {
-            return (
-              <div>
-                {user.name.givenName}
-              </div>
-            );
+            return <div>{user.name.givenName}</div>;
           } catch (e) {
             error = e;
             throw e;
@@ -596,7 +530,7 @@ export default function describeSetProps({
       render() {
         spy('render', this.props, this.state);
         const { count } = this.state;
-        return (<div>{count}</div>);
+        return <div>{count}</div>;
       }
     }
 
@@ -618,7 +552,7 @@ export default function describeSetProps({
       render() {
         spy('render', this.props, this.state);
         const { count } = this.state;
-        return (<div>{count}</div>);
+        return <div>{count}</div>;
       }
     }
 

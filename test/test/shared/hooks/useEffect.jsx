@@ -2,21 +2,10 @@ import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 
-import {
-  describeIf,
-  itIf,
-} from '../../_helpers';
-import {
-  useEffect,
-  useState,
-  Fragment,
-} from '../../_helpers/react-compat';
+import { describeIf, itIf } from '../../_helpers';
+import { useEffect, useState, Fragment } from '../../_helpers/react-compat';
 
-export default function describeUseEffect({
-  hasHooks,
-  Wrap,
-  isShallow,
-}) {
+export default function describeUseEffect({ hasHooks, Wrap, isShallow }) {
   // TODO: enable when the shallow renderer fixes its bug, see https://github.com/facebook/react/issues/15275.
   describeIf(hasHooks && !isShallow, 'hooks: useEffect', () => {
     const timeout = 100;
@@ -28,11 +17,7 @@ export default function describeUseEffect({
           setCtr(2);
         }, timeout);
       }, []);
-      return (
-        <div>
-          {ctr}
-        </div>
-      );
+      return <div>{ctr}</div>;
     }
 
     it('works', (done) => {
@@ -78,9 +63,7 @@ export default function describeUseEffect({
         }, []);
         return (
           <Fragment>
-            <span className="counter">
-              {count}
-            </span>
+            <span className="counter">{count}</span>
           </Fragment>
         );
       }
@@ -201,7 +184,7 @@ export default function describeUseEffect({
         wrapper.find('button').invoke('onClick')();
 
         expect(setDocumentTitle).to.have.property('callCount', 4);
-        const [,,, fourthCall] = setDocumentTitle.args;
+        const [, , , fourthCall] = setDocumentTitle.args;
         expect(fourthCall).to.deep.equal([expectedCountString(3)]);
         expect(wrapper.find('p').text()).to.equal(expectedCountString(3));
       });

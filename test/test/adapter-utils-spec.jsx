@@ -48,7 +48,9 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
     describe('given a node with displayName', () => {
       it('returns the displayName', () => {
         class Foo extends React.Component {
-          render() { return <div />; }
+          render() {
+            return <div />;
+          }
         }
 
         Foo.displayName = 'CustomWrapper';
@@ -67,7 +69,10 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
 
       describe('stateless memoized function components', () => {
         it('returns the displayName', () => {
-          const Foo = Object.assign(React.memo(() => <div />), { displayName: 'Memoized(CustomWrapper)' });
+          const Foo = Object.assign(
+            React.memo(() => <div />),
+            { displayName: 'Memoized(CustomWrapper)' },
+          );
 
           expect(displayNameOfNode(<Foo />)).to.equal('Memoized(CustomWrapper)');
         });
@@ -77,7 +82,9 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
     describe('given a node without displayName', () => {
       it('returns the name', () => {
         class Foo extends React.Component {
-          render() { return <div />; }
+          render() {
+            return <div />;
+          }
         }
 
         expect(displayNameOfNode(<Foo />)).to.equal('Foo');
@@ -153,14 +160,7 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
         return null;
       }
     }
-    const hierarchy = [
-      <A />,
-      <div />,
-      <span />,
-      <B />,
-      <C />,
-      <RootFinder />,
-    ];
+    const hierarchy = [<A />, <div />, <span />, <B />, <C />, <RootFinder />];
 
     it('outputs a formatted stack of react components', () => {
       expect(getComponentStack(hierarchy)).to.equal(`
@@ -212,11 +212,19 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
   });
 
   describe('elementToTree', () => {
-    class Target extends React.Component { render() { return null; } }
+    class Target extends React.Component {
+      render() {
+        return null;
+      }
+    }
     const classNodeType = 'class';
 
     it('produces a tree', () => {
-      const target = elementToTree(<Target a="1"><div /></Target>);
+      const target = elementToTree(
+        <Target a="1">
+          <div />
+        </Target>,
+      );
       expect(target).to.eql({
         nodeType: classNodeType,
         type: Target,
@@ -240,27 +248,33 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
     });
 
     it('works with Array map', () => {
-      const targets = [<Target a="1"><div /></Target>];
-      expect(targets.map(elementToTree)).to.eql([{
-        nodeType: classNodeType,
-        type: Target,
-        props: {
-          a: '1',
-          children: <div />,
-        },
-        key: undefined,
-        ref: null,
-        instance: null,
-        rendered: {
-          instance: null,
+      const targets = [
+        <Target a="1">
+          <div />
+        </Target>,
+      ];
+      expect(targets.map(elementToTree)).to.eql([
+        {
+          nodeType: classNodeType,
+          type: Target,
+          props: {
+            a: '1',
+            children: <div />,
+          },
           key: undefined,
-          nodeType: 'host',
-          props: {},
           ref: null,
-          rendered: null,
-          type: 'div',
+          instance: null,
+          rendered: {
+            instance: null,
+            key: undefined,
+            nodeType: 'host',
+            props: {},
+            ref: null,
+            rendered: null,
+            type: 'div',
+          },
         },
-      }]);
+      ]);
     });
 
     it('throws when `dangerouslySetInnerHTML` and `children` are combined on host elements', () => {
@@ -271,20 +285,38 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
   });
 
   describe('findElement', () => {
-    class Target extends React.Component { render() { return null; } }
-    class Other extends React.Component { render() { return null; } }
-    class Unfound extends React.Component { render() { return null; } }
+    class Target extends React.Component {
+      render() {
+        return null;
+      }
+    }
+    class Other extends React.Component {
+      render() {
+        return null;
+      }
+    }
+    class Unfound extends React.Component {
+      render() {
+        return null;
+      }
+    }
 
-    const other = elementToTree(<Other><div /></Other>);
-    const target = elementToTree(<Target><div><Other /></div></Target>);
+    const other = elementToTree(
+      <Other>
+        <div />
+      </Other>,
+    );
+    const target = elementToTree(
+      <Target>
+        <div>
+          <Other />
+        </div>
+      </Target>,
+    );
     const tree = elementToTree(
       <div>
-        <span>
-          {other}
-        </span>
-        <div>
-          {target}
-        </div>
+        <span>{other}</span>
+        <div>{target}</div>
       </div>,
     );
 
@@ -303,10 +335,22 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
 
   describe('getNodeFromRootFinder', () => {
     const isCustomComponent = (component) => typeof component === 'function';
-    class Target extends React.Component { render() { return null; } }
-    class WrappingComponent extends React.Component { render() { return null; } }
+    class Target extends React.Component {
+      render() {
+        return null;
+      }
+    }
+    class WrappingComponent extends React.Component {
+      render() {
+        return null;
+      }
+    }
 
-    const target = <Target><div /></Target>;
+    const target = (
+      <Target>
+        <div />
+      </Target>
+    );
 
     it('returns the RootFinder‘s children', () => {
       const tree = elementToTree(
@@ -316,49 +360,47 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
           </span>
         </WrappingComponent>,
       );
-      expect(getNodeFromRootFinder(
-        isCustomComponent,
-        tree,
-        { wrappingComponent: WrappingComponent },
-      )).to.eql(elementToTree(target));
+      expect(
+        getNodeFromRootFinder(isCustomComponent, tree, { wrappingComponent: WrappingComponent }),
+      ).to.eql(elementToTree(target));
     });
 
     it('throws an error if wrappingComponent is passed but RootFinder is not found', () => {
-      const treeMissing = elementToTree((
+      const treeMissing = elementToTree(
         <WrappingComponent>
-          <span>
-            {target}
-          </span>
-        </WrappingComponent>
-      ));
-      expect(() => getNodeFromRootFinder(
-        isCustomComponent,
-        treeMissing,
-        { wrappingComponent: WrappingComponent },
-      )).to.throw(
-        '`wrappingComponent` must render its children!',
+          <span>{target}</span>
+        </WrappingComponent>,
       );
+      expect(() =>
+        getNodeFromRootFinder(isCustomComponent, treeMissing, {
+          wrappingComponent: WrappingComponent,
+        }),
+      ).to.throw('`wrappingComponent` must render its children!');
     });
 
     it('returns the node if there is no wrapping component and rootFinder can‘t be found', () => {
-      const treeMissing = elementToTree((
+      const treeMissing = elementToTree(
         <WrappingComponent>
-          <span>
-            {target}
-          </span>
-        </WrappingComponent>
-      ));
-      expect(getNodeFromRootFinder(
-        isCustomComponent,
-        treeMissing,
-        {},
-      )).to.eql(treeMissing.rendered);
+          <span>{target}</span>
+        </WrappingComponent>,
+      );
+      expect(getNodeFromRootFinder(isCustomComponent, treeMissing, {})).to.eql(
+        treeMissing.rendered,
+      );
     });
   });
 
   describe('wrapWithWrappingComponent', () => {
-    class Target extends React.Component { render() { return null; } }
-    class WrappingComponent extends React.Component { render() { return null; } }
+    class Target extends React.Component {
+      render() {
+        return null;
+      }
+    }
+    class WrappingComponent extends React.Component {
+      render() {
+        return null;
+      }
+    }
 
     it('wraps the node in the wrappingComponent and RootFinder', () => {
       const node = <Target foo="bar" />;
@@ -368,10 +410,12 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
         </WrappingComponent>
       );
 
-      expect(wrapWithWrappingComponent(React.createElement, node, {
-        wrappingComponent: WrappingComponent,
-        wrappingComponentProps: { hello: 'world' },
-      })).to.eql(expected);
+      expect(
+        wrapWithWrappingComponent(React.createElement, node, {
+          wrappingComponent: WrappingComponent,
+          wrappingComponentProps: { hello: 'world' },
+        }),
+      ).to.eql(expected);
     });
 
     it('handles no wrappingComponentProps', () => {
@@ -382,9 +426,11 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
         </WrappingComponent>
       );
 
-      expect(wrapWithWrappingComponent(React.createElement, node, {
-        wrappingComponent: WrappingComponent,
-      })).to.eql(expected);
+      expect(
+        wrapWithWrappingComponent(React.createElement, node, {
+          wrappingComponent: WrappingComponent,
+        }),
+      ).to.eql(expected);
     });
 
     it('handles no wrappingComponent', () => {
@@ -449,7 +495,9 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
 
       it('throws an error if there is no instance', () => {
         instance = undefined;
-        expect(() => renderer.render(<div />, null, () => {})).to.throw('The wrapping component may not be updated if the root is unmounted.');
+        expect(() => renderer.render(<div />, null, () => {})).to.throw(
+          'The wrapping component may not be updated if the root is unmounted.',
+        );
       });
     });
   });
@@ -482,10 +530,12 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
     });
 
     describe('without DOM', () => {
-      wrap().withGlobal('document', () => null).it('noops', () => {
-        expect(!!global.document).to.equal(false);
-        expect(assertDomAvailable).to.throw();
-      });
+      wrap()
+        .withGlobal('document', () => null)
+        .it('noops', () => {
+          expect(!!global.document).to.equal(false);
+          expect(assertDomAvailable).to.throw();
+        });
     });
   });
 
@@ -533,7 +583,15 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
       const getDerivedStateFromError = sinon.spy(() => stateUpdate);
       const catchingType = { getDerivedStateFromError };
 
-      simulateError(error, catchingInstance, undefined, hierarchy, undefined, undefined, catchingType);
+      simulateError(
+        error,
+        catchingInstance,
+        undefined,
+        hierarchy,
+        undefined,
+        undefined,
+        catchingType,
+      );
 
       expect(catchingInstance.setState).to.have.property('callCount', 1);
       const setStateCall = catchingInstance.setState.getCall(0);
@@ -549,10 +607,14 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
     });
 
     class Foo extends React.Component {
-      render() { return <div />; }
+      render() {
+        return <div />;
+      }
     }
     class FooBang extends React.Component {
-      render() { return <div />; }
+      render() {
+        return <div />;
+      }
     }
     FooBang.displayName = 'Foo!';
     const hierarchy = [
@@ -561,7 +623,9 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
       { type: 'b', displayName: '<b>!' },
       { type: Foo },
     ];
-    function Bar() { return null; }
+    function Bar() {
+      return null;
+    }
     const hasSFCs = true;
     if (hasSFCs) {
       hierarchy.push({ type: Bar });
@@ -574,7 +638,15 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
       };
       const catchingType = {};
 
-      simulateError(error, catchingInstance, undefined, hierarchy, undefined, undefined, catchingType);
+      simulateError(
+        error,
+        catchingInstance,
+        undefined,
+        hierarchy,
+        undefined,
+        undefined,
+        catchingType,
+      );
 
       expect(catchingInstance.setState).to.have.property('callCount', 0);
 
@@ -607,7 +679,15 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
       const getDerivedStateFromError = sinon.spy(() => stateUpdate);
       const catchingType = { getDerivedStateFromError };
 
-      simulateError(error, catchingInstance, undefined, hierarchy, undefined, undefined, catchingType);
+      simulateError(
+        error,
+        catchingInstance,
+        undefined,
+        hierarchy,
+        undefined,
+        undefined,
+        catchingType,
+      );
 
       expect(catchingInstance.setState).to.have.property('callCount', 1);
 
@@ -679,7 +759,9 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
       let original;
       spyMethod(obj, 'method', (originalMethod) => {
         original = originalMethod;
-        stub = () => { throw new EvalError('stubbed'); };
+        stub = () => {
+          throw new EvalError('stubbed');
+        };
         return stub;
       });
       expect(original).to.equal(descriptor.value);
@@ -749,12 +831,8 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
 
       spy.restore();
 
-      expect(getSpy.args).to.deep.equal([
-        [1],
-      ]);
-      expect(setSpy.args).to.deep.equal([
-        [1, 2],
-      ]);
+      expect(getSpy.args).to.deep.equal([[1]]);
+      expect(setSpy.args).to.deep.equal([[1, 2]]);
     });
   });
 });

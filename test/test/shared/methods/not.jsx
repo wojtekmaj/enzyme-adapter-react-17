@@ -1,20 +1,18 @@
 import React from 'react';
 import { expect } from 'chai';
 
-export default function describeNot({
-  Wrap,
-}) {
+export default function describeNot({ Wrap }) {
   describe('.not(selector)', () => {
     it('filters to things not matching a selector', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="foo bar baz" />
           <div className="foo" />
           <div className="bar baz" />
           <div className="baz" />
           <div className="foo bar" />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('.foo').not('.bar')).to.have.lengthOf(1);
       expect(wrapper.find('.baz').not('.foo')).to.have.lengthOf(2);

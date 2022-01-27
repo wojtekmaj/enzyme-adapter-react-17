@@ -1,24 +1,18 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 
-export default function describeProp({
-  Wrap,
-  WrapRendered,
-  isMount,
-}) {
+export default function describeProp({ Wrap, WrapRendered, isMount }) {
   describe('.prop(name)', () => {
     it('returns the prop value for [name]', () => {
       const fn = () => {};
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div id="fooId" className="bax" onClick={fn}>
           <div className="baz" />
           <div className="foo" />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.prop('className')).to.equal('bax');
       expect(wrapper.prop('onClick')).to.equal(fn);
@@ -27,12 +21,12 @@ export default function describeProp({
 
     it('is allowed to be used on an inner node', () => {
       const fn = () => {};
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div className="bax">
           <div className="baz" onClick={fn} />
           <div className="foo" id="fooId" />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('.baz').prop('onClick')).to.equal(fn);
       expect(wrapper.find('.foo').prop('id')).to.equal('fooId');
@@ -41,9 +35,7 @@ export default function describeProp({
     class Foo extends React.Component {
       render() {
         const { bar, foo } = this.props;
-        return (
-          <div className={bar} id={foo} />
-        );
+        return <div className={bar} id={foo} />;
       }
     }
 
@@ -66,9 +58,7 @@ export default function describeProp({
     });
 
     describe('stateless function components (SFCs)', () => {
-      const FooSFC = ({ bar, foo }) => (
-        <div className={bar} id={foo} />
-      );
+      const FooSFC = ({ bar, foo }) => <div className={bar} id={foo} />;
 
       itIf(isMount, 'called on root should return props of root node', () => {
         const wrapper = Wrap(<FooSFC foo="hi" bar="bye" />);

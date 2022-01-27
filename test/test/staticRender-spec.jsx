@@ -47,7 +47,11 @@ describe('render', () => {
       });
       const ComplexComponent = createClass({
         render() {
-          return <div><SimpleComponent /></div>;
+          return (
+            <div>
+              <SimpleComponent />
+            </div>
+          );
         },
       });
 
@@ -123,9 +127,7 @@ describe('render', () => {
     it('throws if options.suspenseFallback is specified', () => {
       class DynamicComponent extends React.Component {
         render() {
-          return (
-            <div>Dynamic Component</div>
-          );
+          return <div>Dynamic Component</div>;
         }
       }
       const LazyComponent = lazy(fakeDynamicImport(DynamicComponent));

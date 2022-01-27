@@ -5,25 +5,28 @@ import sinon from 'sinon-sandbox';
 
 import getAdapter from 'enzyme/build/getAdapter';
 
-import {
-  createClass,
-} from '../../_helpers/react-compat';
+import { createClass } from '../../_helpers/react-compat';
 
-export default function describeName({
-  Wrap,
-  WrapRendered,
-}) {
+export default function describeName({ Wrap, WrapRendered }) {
   wrap()
-    .withOverride(() => getAdapter(), 'displayNameOfNode', () => undefined)
+    .withOverride(
+      () => getAdapter(),
+      'displayNameOfNode',
+      () => undefined,
+    )
     .describe('.name()', () => {
       describe('node with displayName', () => {
         it('returns the displayName of the node', () => {
           class Foo extends React.Component {
-            render() { return <div />; }
+            render() {
+              return <div />;
+            }
           }
 
           class FooWrapper extends React.Component {
-            render() { return <Foo />; }
+            render() {
+              return <Foo />;
+            }
           }
 
           Foo.displayName = 'CustomWrapper';
@@ -66,11 +69,17 @@ export default function describeName({
         });
 
         wrap()
-          .withOverride(() => getAdapter(), 'displayNameOfNode', () => sinon.stub())
+          .withOverride(
+            () => getAdapter(),
+            'displayNameOfNode',
+            () => sinon.stub(),
+          )
           .describe('adapter has `displayNameOfNode`', () => {
             it('delegates to the adapter’s `displayNameOfNode`', () => {
               class Foo extends React.Component {
-                render() { return <div />; }
+                render() {
+                  return <div />;
+                }
               }
               const stub = getAdapter().displayNameOfNode;
               const sentinel = {};
@@ -90,11 +99,15 @@ export default function describeName({
       describe('node without displayName', () => {
         it('returns the name of the node', () => {
           class Foo extends React.Component {
-            render() { return <div />; }
+            render() {
+              return <div />;
+            }
           }
 
           class FooWrapper extends React.Component {
-            render() { return <Foo />; }
+            render() {
+              return <Foo />;
+            }
           }
 
           const wrapper = WrapRendered(<FooWrapper />);

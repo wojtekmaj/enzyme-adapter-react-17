@@ -1,17 +1,11 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  ITERATOR_SYMBOL,
-} from 'enzyme/build/Utils';
+import { ITERATOR_SYMBOL } from 'enzyme/build/Utils';
 
-import {
-  describeIf,
-} from '../../_helpers';
+import { describeIf } from '../../_helpers';
 
-export default function describeIterator({
-  Wrap,
-}) {
+export default function describeIterator({ Wrap }) {
   describeIf(!!ITERATOR_SYMBOL, '@@iterator', () => {
     it('is iterable', () => {
       class Foo extends React.Component {

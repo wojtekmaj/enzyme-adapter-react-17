@@ -3,15 +3,10 @@ import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 import { Portal } from 'react-is';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 import realArrowFunction from '../../_helpers/realArrowFunction';
 
-import {
-  createPortal,
-  Fragment,
-} from '../../_helpers/react-compat';
+import { createPortal, Fragment } from '../../_helpers/react-compat';
 
 export default function describeFindWhere({
   Wrap,
@@ -22,22 +17,22 @@ export default function describeFindWhere({
 }) {
   describe('.findWhere(predicate)', () => {
     it('returns all elements for a truthy test', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <input className="foo" />
           <input />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.findWhere(() => true)).to.have.lengthOf(3);
     });
 
     it('returns no elements for a falsy test', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <input className="foo" />
           <input />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.findWhere(() => false)).to.have.lengthOf(0);
     });
 
@@ -57,13 +52,13 @@ export default function describeFindWhere({
     });
 
     it('calls the predicate with the wrapped node as the first argument', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="foo bar" />
           <div className="foo baz" />
           <div className="foo bux" />
-        </div>
-      ));
+        </div>,
+      );
 
       const stub = sinon.stub();
       stub.returns(true);
@@ -94,14 +89,14 @@ export default function describeFindWhere({
 
       const selector = 'blah';
       const wrapper = Wrap(<Foo selector={selector} />);
-      const foundSpan = wrapper.findWhere((n) => (
-        n.type() === 'span' && n.props()['data-foo'] === selector
-      ));
+      const foundSpan = wrapper.findWhere(
+        (n) => n.type() === 'span' && n.props()['data-foo'] === selector,
+      );
       expect(foundSpan.type()).to.equal('span');
 
-      const foundNotSpan = wrapper.findWhere((n) => (
-        n.type() !== 'span' && n.props()['data-foo'] === selector
-      ));
+      const foundNotSpan = wrapper.findWhere(
+        (n) => n.type() !== 'span' && n.props()['data-foo'] === selector,
+      );
       expect(foundNotSpan.type()).to.equal('i');
     });
 
@@ -127,16 +122,16 @@ export default function describeFindWhere({
 
         const selector = 'blah';
         const wrapper = Wrap(<FragmentFoo selector={selector} />);
-        const foundSpans = wrapper.findWhere((n) => (
-          n.type() === 'span' && n.props()['data-foo'] === selector
-        ));
+        const foundSpans = wrapper.findWhere(
+          (n) => n.type() === 'span' && n.props()['data-foo'] === selector,
+        );
         expect(foundSpans).to.have.lengthOf(2);
         expect(foundSpans.get(0).type).to.equal('span');
         expect(foundSpans.get(1).type).to.equal('span');
 
-        const foundNotSpans = wrapper.findWhere((n) => (
-          n.type() !== 'span' && n.props()['data-foo'] === selector
-        ));
+        const foundNotSpans = wrapper.findWhere(
+          (n) => n.type() !== 'span' && n.props()['data-foo'] === selector,
+        );
         expect(foundNotSpans).to.have.lengthOf(2);
         expect(foundNotSpans.get(0).type).to.equal('i');
         expect(foundNotSpans.get(1).type).to.equal('i');
@@ -158,14 +153,14 @@ export default function describeFindWhere({
 
       const selector = 'blah';
       const wrapper = Wrap(<Foo selector={selector} />);
-      const foundSpan = wrapper.findWhere((n) => (
-        n.type() === 'span' && n.props()['data-foo'] === selector
-      ));
+      const foundSpan = wrapper.findWhere(
+        (n) => n.type() === 'span' && n.props()['data-foo'] === selector,
+      );
       expect(foundSpan.type()).to.equal('span');
 
-      const foundNotSpan = wrapper.findWhere((n) => (
-        n.type() !== 'span' && n.props()['data-foo'] === selector
-      ));
+      const foundNotSpan = wrapper.findWhere(
+        (n) => n.type() !== 'span' && n.props()['data-foo'] === selector,
+      );
       expect(foundNotSpan).to.have.lengthOf(0);
     });
 
@@ -191,24 +186,21 @@ export default function describeFindWhere({
 
       const selector = 'blah';
       const wrapper = Wrap(<Foo selector={selector} />);
-      const foundSpan = wrapper.findWhere((n) => (
-        n.type() === 'span'
-        && n.props()['data-foo'] === selector
-      ));
+      const foundSpan = wrapper.findWhere(
+        (n) => n.type() === 'span' && n.props()['data-foo'] === selector,
+      );
 
-      expect(foundSpan.debug()).to.equal((
+      expect(foundSpan.debug()).to.equal(
         `<span data-foo="${selector}">
   Test
-</span>`
-      ));
+</span>`,
+      );
     });
 
     class HasDataFoo extends React.Component {
       render() {
         const { data } = this.props;
-        return (
-          <div data-foo={data}>Test Component</div>
-        );
+        return <div data-foo={data}>Test Component</div>;
       }
     }
 
@@ -246,14 +238,14 @@ export default function describeFindWhere({
 
         const selector = 'blah';
         const wrapper = Wrap(<SFC selector={selector} />);
-        const foundSpan = wrapper.findWhere((n) => (
-          n.type() === 'span' && n.props()['data-foo'] === selector
-        ));
+        const foundSpan = wrapper.findWhere(
+          (n) => n.type() === 'span' && n.props()['data-foo'] === selector,
+        );
         expect(foundSpan.type()).to.equal('span');
 
-        const foundNotSpan = wrapper.findWhere((n) => (
-          n.type() !== 'span' && n.props()['data-foo'] === selector
-        ));
+        const foundNotSpan = wrapper.findWhere(
+          (n) => n.type() !== 'span' && n.props()['data-foo'] === selector,
+        );
         expect(foundNotSpan.type()).to.equal('i');
       });
 
@@ -269,22 +261,20 @@ export default function describeFindWhere({
 
         const selector = 'blah';
         const wrapper = Wrap(<SFC selector={selector} />);
-        const foundSpan = wrapper.findWhere((n) => (
-          n.type() === 'span' && n.props()['data-foo'] === selector
-        ));
+        const foundSpan = wrapper.findWhere(
+          (n) => n.type() === 'span' && n.props()['data-foo'] === selector,
+        );
         expect(foundSpan.type()).to.equal('span');
 
-        const foundNotSpan = wrapper.findWhere((n) => (
-          n.type() !== 'span' && n.props()['data-foo'] === selector
-        ));
+        const foundNotSpan = wrapper.findWhere(
+          (n) => n.type() !== 'span' && n.props()['data-foo'] === selector,
+        );
         expect(foundNotSpan).to.have.lengthOf(0);
       });
 
       it('returns props object when props() is called', () => {
         const SFC = function SFC({ data }) {
-          return (
-            <div data-foo={data}>Test SFC</div>
-          );
+          return <div data-foo={data}>Test SFC</div>;
         };
 
         const content = 'blah';
@@ -294,9 +284,7 @@ export default function describeFindWhere({
 
       it('returns shallow rendered string when debug() is called', () => {
         const SFC = function SFC({ data }) {
-          return (
-            <div data-foo={data}>Test SFC</div>
-          );
+          return <div data-foo={data}>Test SFC</div>;
         };
 
         const content = 'blah';
@@ -316,7 +304,9 @@ export default function describeFindWhere({
       context('works with a nested SFC', () => {
         const Bar = realArrowFunction(<div>Hello</div>);
         class Foo extends React.Component {
-          render() { return <Bar />; }
+          render() {
+            return <Bar />;
+          }
         }
 
         itIf(isShallow, 'works in shallow', () => {
@@ -333,14 +323,14 @@ export default function describeFindWhere({
     });
 
     it('allows `.text()` to be called on text nodes', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <section>
           <div className="foo bar" />
           <div>foo bar</div>
           {null}
           {false}
-        </section>
-      ));
+        </section>,
+      );
 
       const stub = sinon.stub();
       wrapper.findWhere(stub);
@@ -358,14 +348,14 @@ export default function describeFindWhere({
     });
 
     it('does not pass in null or false nodes', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <section>
           <div className="foo bar" />
           <div>foo bar</div>
           {null}
           {false}
-        </section>
-      ));
+        </section>,
+      );
       const stub = sinon.stub();
       wrapper.findWhere(stub);
 
@@ -385,13 +375,13 @@ export default function describeFindWhere({
     });
 
     it('does not pass in null or false nodes', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="foo bar" />
           {null}
           {false}
-        </div>
-      ));
+        </div>,
+      );
       const stub = sinon.stub();
       stub.returns(true);
       const spy = sinon.spy(stub);
@@ -402,12 +392,7 @@ export default function describeFindWhere({
     it('finds portals by react-is Portal type', () => {
       const containerDiv = makeDOMElement();
       const Foo = () => (
-        <div>
-          {createPortal(
-            <div className="in-portal">InPortal</div>,
-            containerDiv,
-          )}
-        </div>
+        <div>{createPortal(<div className="in-portal">InPortal</div>, containerDiv)}</div>
       );
 
       const wrapper = Wrap(<Foo />);

@@ -1,6 +1,4 @@
 {
-  "presets": [
-    ["airbnb", { "transformRuntime": false }]
-  ],
+  "presets": [["airbnb", { "transformRuntime": false }]],
   "sourceMaps": "both"
 }

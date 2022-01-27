@@ -3,18 +3,10 @@ import sinon from 'sinon-sandbox';
 import { expect } from 'chai';
 import isEqual from 'lodash.isequal';
 
-import {
-  PureComponent,
-} from '../../_helpers/react-compat';
-import {
-  argSpy,
-  expectArgs,
-} from '../../_helpers';
+import { PureComponent } from '../../_helpers/react-compat';
+import { argSpy, expectArgs } from '../../_helpers';
 
-export default function describeCDU({
-  Wrap,
-  isShallow,
-}) {
+export default function describeCDU({ Wrap, isShallow }) {
   describe('componentDidUpdate()', () => {
     it('calls `componentDidUpdate` when component’s `setState` is called', () => {
       const spy = sinon.spy();
@@ -49,18 +41,12 @@ export default function describeCDU({
 
       wrapper.setState({ foo: 'wrapper setState update' });
       expect(wrapper.state('foo')).to.equal('wrapper setState update');
-      expect(spy.args).to.eql([
-        ['render'],
-        ['componentDidUpdate'],
-      ]);
+      expect(spy.args).to.eql([['render'], ['componentDidUpdate']]);
       spy.resetHistory();
 
       wrapper.instance().onChange();
       expect(wrapper.state('foo')).to.equal('onChange update');
-      expect(spy.args).to.eql([
-        ['render'],
-        ['componentDidUpdate'],
-      ]);
+      expect(spy.args).to.eql([['render'], ['componentDidUpdate']]);
     });
 
     it('calls `componentDidUpdate` when component’s `setState` is called through a bound method', () => {
@@ -91,7 +77,9 @@ export default function describeCDU({
           return (
             <div>
               {foo}
-              <button type="button" onClick={this.onChange}>click</button>
+              <button type="button" onClick={this.onChange}>
+                click
+              </button>
             </div>
           );
         }
@@ -102,10 +90,7 @@ export default function describeCDU({
 
       wrapper.find('button').prop('onClick')();
       expect(wrapper.state('foo')).to.equal('onChange update');
-      expect(spy.args).to.eql([
-        ['render'],
-        ['componentDidUpdate'],
-      ]);
+      expect(spy.args).to.eql([['render'], ['componentDidUpdate']]);
     });
 
     it('calls `componentDidUpdate` when component’s `setState` is called', () => {
@@ -174,24 +159,16 @@ export default function describeCDU({
         }
 
         const wrapper = Wrap(<Foo id={1} />);
-        expectArgs(spy, 1, [
-          ['render'],
-        ]);
+        expectArgs(spy, 1, [['render']]);
 
         wrapper.setState({ foo: 'update' });
-        expectArgs(spy, 2, [
-          ['render'],
-          ['componentDidUpdate'],
-        ]);
+        expectArgs(spy, 2, [['render'], ['componentDidUpdate']]);
 
         wrapper.setState({ foo: 'update' });
         expectArgs(spy, 3, []);
 
         wrapper.setProps({ id: 2 });
-        expectArgs(spy, 4, [
-          ['render'],
-          ['componentDidUpdate'],
-        ]);
+        expectArgs(spy, 4, [['render'], ['componentDidUpdate']]);
 
         wrapper.setProps({ id: 2 });
         expectArgs(spy, 5, []);
@@ -220,7 +197,11 @@ export default function describeCDU({
 
         render() {
           spy('render');
-          const { a: { b: { c } } } = this.state;
+          const {
+            a: {
+              b: { c },
+            },
+          } = this.state;
           return <div>{c}</div>;
         }
       }
@@ -258,7 +239,7 @@ export default function describeCDU({
 
           componentDidUpdate() {
             spy('componentDidUpdate');
-            this.setState({ b: false }); // eslint-disable-line react/no-did-update-set-state
+            this.setState({ b: false });
           }
 
           render() {
@@ -270,15 +251,17 @@ export default function describeCDU({
         }
 
         const wrapper = Wrap(<Example />);
-        expect(wrapper.debug()).to.equal(isShallow
-          ? `<div>
+        expect(wrapper.debug()).to.equal(
+          isShallow
+            ? `<div>
   false false 1
 </div>`
-          : `<Example>
+            : `<Example>
   <div>
     false false 1
   </div>
-</Example>`);
+</Example>`,
+        );
       });
     });
 
@@ -311,33 +294,19 @@ export default function describeCDU({
         }
 
         const wrapper = Wrap(<Foo id={1} />);
-        expectArgs(spy, 1, [
-          ['render'],
-        ]);
+        expectArgs(spy, 1, [['render']]);
 
         wrapper.setState({ foo: 'update' });
-        expectArgs(spy, 2, [
-          ['shouldComponentUpdate'],
-          ['render'],
-          ['componentDidUpdate'],
-        ]);
+        expectArgs(spy, 2, [['shouldComponentUpdate'], ['render'], ['componentDidUpdate']]);
 
         wrapper.setState({ foo: 'update' });
-        expectArgs(spy, 3, [
-          ['shouldComponentUpdate'],
-        ]);
+        expectArgs(spy, 3, [['shouldComponentUpdate']]);
 
         wrapper.setProps({ id: 2 });
-        expectArgs(spy, 4, [
-          ['shouldComponentUpdate'],
-          ['render'],
-          ['componentDidUpdate'],
-        ]);
+        expectArgs(spy, 4, [['shouldComponentUpdate'], ['render'], ['componentDidUpdate']]);
 
         wrapper.setProps({ id: 2 });
-        expectArgs(spy, 5, [
-          ['shouldComponentUpdate'],
-        ]);
+        expectArgs(spy, 5, [['shouldComponentUpdate']]);
       });
     });
   });

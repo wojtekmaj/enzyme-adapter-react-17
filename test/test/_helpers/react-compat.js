@@ -1,5 +1,3 @@
-/* eslint-disable prefer-const, import/no-mutable-exports */
-
 const { createFactory } = require('react');
 
 let createClass;
@@ -50,19 +48,11 @@ createClass = require('create-react-class');
 
 ({ Profiler } = require('react'));
 
-({
-  Suspense,
-  lazy,
-  memo,
-} = require('react'));
+({ Suspense, lazy, memo } = require('react'));
 
-({
-  unstable_ConcurrentMode: ConcurrentMode,
-} = require('react'));
+({ unstable_ConcurrentMode: ConcurrentMode } = require('react'));
 
-({
-  unstable_createRoot: createRoot,
-} = require('react'));
+({ unstable_createRoot: createRoot } = require('react'));
 
 ({
   useCallback,
@@ -77,9 +67,7 @@ createClass = require('create-react-class');
   useState,
 } = require('react'));
 
-({
-  act,
-} = require('react-dom/test-utils'));
+({ act } = require('react-dom/test-utils'));
 
 export {
   createClass,

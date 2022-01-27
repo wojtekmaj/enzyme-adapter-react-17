@@ -1,16 +1,9 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 
-export default function describeWrap({
-  Wrap,
-  Wrapper,
-  isShallow,
-  isMount,
-}) {
+export default function describeWrap({ Wrap, Wrapper, isShallow, isMount }) {
   describe('.wrap()', () => {
     class Foo extends React.Component {
       render() {

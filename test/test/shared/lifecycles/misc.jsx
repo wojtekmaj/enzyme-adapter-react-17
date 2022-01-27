@@ -3,22 +3,11 @@ import sinon from 'sinon-sandbox';
 import { expect } from 'chai';
 import PropTypes from 'prop-types';
 
-import {
-  itIf,
-  argSpy,
-  expectArgs,
-} from '../../_helpers';
-import {
-  PureComponent,
-} from '../../_helpers/react-compat';
-import {
-  BATCHING,
-} from '../../_helpers/version';
+import { itIf, argSpy, expectArgs } from '../../_helpers';
+import { PureComponent } from '../../_helpers/react-compat';
+import { BATCHING } from '../../_helpers/version';
 
-export default function describeMisc({
-  Wrap,
-  isShallow,
-}) {
+export default function describeMisc({ Wrap, isShallow }) {
   describe('miscellaneous lifecycle combos', () => {
     let spy;
 
@@ -207,7 +196,9 @@ export default function describeMisc({
           return (
             <div>
               {foo}
-              <button type="button" onClick={this.onChange}>click</button>
+              <button type="button" onClick={this.onChange}>
+                click
+              </button>
             </div>
           );
         }
@@ -216,11 +207,7 @@ export default function describeMisc({
       const wrapper = Wrap(<Foo />);
       wrapper.find('button').prop('onClick')();
       expect(wrapper.state('foo')).to.equal('onChange update');
-      expectArgs(spy, 1, [
-        ['render'],
-        ['render'],
-        ['componentDidUpdate'],
-      ]);
+      expectArgs(spy, 1, [['render'], ['render'], ['componentDidUpdate']]);
     });
 
     it('calls `componentDidUpdate` when component’s `setState` is called by componentDidMount', () => {
@@ -251,12 +238,7 @@ export default function describeMisc({
 
       const wrapper = Wrap(<Foo />);
       expect(wrapper.state('foo')).to.equal('update');
-      expectArgs(spy, 1, [
-        ['render'],
-        ['componentDidMount'],
-        ['render'],
-        ['componentDidUpdate'],
-      ]);
+      expectArgs(spy, 1, [['render'], ['componentDidMount'], ['render'], ['componentDidUpdate']]);
     });
 
     it('calls `componentDidUpdate` when component’s `setState` is called directly', () => {
@@ -284,24 +266,16 @@ export default function describeMisc({
       }
 
       const wrapper = Wrap(<Foo />);
-      expectArgs(spy, 1, [
-        ['render'],
-      ]);
+      expectArgs(spy, 1, [['render']]);
 
       wrapper.setState({ foo: 'wrapper setState update' });
       expect(wrapper.state('foo')).to.equal('wrapper setState update');
-      expectArgs(spy, 2, [
-        ['render'],
-        ['componentDidUpdate'],
-      ]);
+      expectArgs(spy, 2, [['render'], ['componentDidUpdate']]);
 
       wrapper.instance().onChange();
       expect(wrapper.state('foo')).to.equal('onChange update');
 
-      expectArgs(spy, 3, [
-        ['render'],
-        ['componentDidUpdate'],
-      ]);
+      expectArgs(spy, 3, [['render'], ['componentDidUpdate']]);
     });
 
     it('does not call `componentDidMount` twice when a child component is created', () => {
@@ -332,25 +306,21 @@ export default function describeMisc({
       }
 
       const wrapper = Wrap(<Foo />);
-      expectArgs(spy, 1, [
-        ['render'],
-        ['componentDidMount'],
-      ]);
+      expectArgs(spy, 1, [['render'], ['componentDidMount']]);
 
       wrapper.find('button').prop('onClick')();
-      expectArgs(spy, 2, [
-        ['render'],
-      ]);
+      expectArgs(spy, 2, [['render']]);
     });
 
     describe('getDerivedStateFromError and componentDidCatch combined', () => {
       const errorToThrow = new EvalError('threw an error!');
       // in React 16.0 - 16.2 and 16.9+, and some older nodes, the actual error thrown isn't reported.
-      const reactError = new Error('An error was thrown inside one of your components, but React doesn\'t know what it was. This is likely due to browser flakiness. React does its best to preserve the "Pause on exceptions" behavior of the DevTools, which requires some DEV-mode only tricks. It\'s possible that these don\'t work in your browser. Try triggering the error in production mode, or switching to a modern browser. If you suspect that this is actually an issue with React, please file an issue.');
-      const properErrorMessage = (error) => error instanceof Error && (
-        error.message === errorToThrow.message
-        || error.message === reactError.message
+      const reactError = new Error(
+        "An error was thrown inside one of your components, but React doesn't know what it was. This is likely due to browser flakiness. React does its best to preserve the \"Pause on exceptions\" behavior of the DevTools, which requires some DEV-mode only tricks. It's possible that these don't work in your browser. Try triggering the error in production mode, or switching to a modern browser. If you suspect that this is actually an issue with React, please file an issue.",
       );
+      const properErrorMessage = (error) =>
+        error instanceof Error &&
+        (error.message === errorToThrow.message || error.message === reactError.message);
       const expectedInfo = {
         componentStack: `
     in Thrower (created by ErrorBoundary)
@@ -402,9 +372,7 @@ export default function describeMisc({
           render() {
             lifecycleSpy('render');
 
-            const {
-              throws,
-            } = this.state;
+            const { throws } = this.state;
 
             return (
               <div>
@@ -417,10 +385,7 @@ export default function describeMisc({
         itIf(isShallow, 'does not catch errors during shallow render', () => {
           const wrapper = Wrap(<ErrorBoundary />);
 
-          expect(lifecycleSpy.args).to.deep.equal([
-            ['constructor'],
-            ['render'],
-          ]);
+          expect(lifecycleSpy.args).to.deep.equal([['constructor'], ['render']]);
           lifecycleSpy.resetHistory();
 
           expect(stateSpy.args).to.deep.equal([]);
@@ -433,19 +398,14 @@ export default function describeMisc({
 
           expect(() => thrower.dive()).to.throw(errorToThrow);
 
-          expect(lifecycleSpy.args).to.deep.equal([
-            ['render'],
-          ]);
+          expect(lifecycleSpy.args).to.deep.equal([['render']]);
           expect(stateSpy.args).to.deep.equal([]);
         });
 
         it('calls getDerivedStateFromError first and then componentDidCatch for simulated error', () => {
           const wrapper = Wrap(<ErrorBoundary />);
 
-          expect(lifecycleSpy.args).to.deep.equal([
-            ['constructor'],
-            ['render'],
-          ]);
+          expect(lifecycleSpy.args).to.deep.equal([['constructor'], ['render']]);
           lifecycleSpy.resetHistory();
 
           expect(stateSpy.args).to.deep.equal([]);
@@ -459,20 +419,19 @@ export default function describeMisc({
           ]);
 
           expect(stateSpy.args).to.deep.equal([
-            [{
-              throws: false,
-              didThrow: true,
-            }],
+            [
+              {
+                throws: false,
+                didThrow: true,
+              },
+            ],
           ]);
         });
 
         itIf(!isShallow, 'calls getDerivedStateFromError first and then componentDidCatch', () => {
           const wrapper = Wrap(<ErrorBoundary />);
 
-          expect(lifecycleSpy.args).to.deep.equal([
-            ['constructor'],
-            ['render'],
-          ]);
+          expect(lifecycleSpy.args).to.deep.equal([['constructor'], ['render']]);
           lifecycleSpy.resetHistory();
 
           expect(stateSpy.args).to.deep.equal([]);
@@ -482,9 +441,10 @@ export default function describeMisc({
           expect(lifecycleSpy).to.have.property('callCount', 4);
           const [first, second, third, fourth] = lifecycleSpy.args;
           expect(first).to.deep.equal(['render']);
-          expect(second).to.satisfy(([name, error, ...rest]) => name === 'getDerivedStateFromError'
-            && properErrorMessage(error)
-            && rest.length === 0);
+          expect(second).to.satisfy(
+            ([name, error, ...rest]) =>
+              name === 'getDerivedStateFromError' && properErrorMessage(error) && rest.length === 0,
+          );
           expect(third).to.deep.equal(['render']);
           const [name, error, info] = fourth;
           expect(name).to.equal('componentDidCatch');
@@ -492,10 +452,12 @@ export default function describeMisc({
           expect(info).to.deep.equal(expectedInfo);
 
           expect(stateSpy.args).to.deep.equal([
-            [{
-              throws: false,
-              didThrow: true,
-            }],
+            [
+              {
+                throws: false,
+                didThrow: true,
+              },
+            ],
           ]);
         });
       });
@@ -529,17 +491,12 @@ export default function describeMisc({
           render() {
             spy('render');
 
-            const {
-              didThrow,
-              throws,
-            } = this.state;
+            const { didThrow, throws } = this.state;
 
             return (
               <div>
                 <Thrower throws={throws} />
-                <div>
-                  {didThrow ? 'HasThrown' : 'HasNotThrown'}
-                </div>
+                <div>{didThrow ? 'HasThrown' : 'HasNotThrown'}</div>
               </div>
             );
           }
@@ -548,10 +505,7 @@ export default function describeMisc({
         itIf(isShallow, 'does not catch errors during shallow render', () => {
           const wrapper = Wrap(<ErrorBoundary />);
 
-          expectArgs(spy, 1, [
-            ['constructor'],
-            ['render'],
-          ]);
+          expectArgs(spy, 1, [['constructor'], ['render']]);
 
           wrapper.setState({ throws: true });
 
@@ -561,18 +515,13 @@ export default function describeMisc({
 
           expect(() => thrower.dive()).to.throw(errorToThrow);
 
-          expectArgs(spy, 2, [
-            ['render'],
-          ]);
+          expectArgs(spy, 2, [['render']]);
         });
 
         itIf(!isShallow, 'renders again without calling componentDidCatch and then fails', () => {
           const wrapper = Wrap(<ErrorBoundary />);
 
-          expectArgs(spy, 1, [
-            ['constructor'],
-            ['render'],
-          ]);
+          expectArgs(spy, 1, [['constructor'], ['render']]);
           spy.resetHistory();
 
           try {
@@ -585,21 +534,17 @@ export default function describeMisc({
           expect(spy).to.have.property('callCount', 3);
           const [first, second, third] = spy.args;
           expect(first).to.deep.equal(['render']);
-          expect(second).to.satisfy(([name, arg, ...rest]) => (
-            name === 'getDerivedStateFromError'
-            && properErrorMessage(arg)
-            && rest.length === 0
-          ));
+          expect(second).to.satisfy(
+            ([name, arg, ...rest]) =>
+              name === 'getDerivedStateFromError' && properErrorMessage(arg) && rest.length === 0,
+          );
           expect(third).to.deep.equal(['render']);
         });
 
         it('rerenders on a simulated error', () => {
           const wrapper = Wrap(<ErrorBoundary />);
 
-          expectArgs(spy, 1, [
-            ['constructor'],
-            ['render'],
-          ]);
+          expectArgs(spy, 1, [['constructor'], ['render']]);
 
           const thrower = wrapper.find(Thrower);
 
@@ -615,10 +560,7 @@ export default function describeMisc({
         it('renders again on simulated error', () => {
           const wrapper = Wrap(<ErrorBoundary />);
 
-          expectArgs(spy, 1, [
-            ['constructor'],
-            ['render'],
-          ]);
+          expectArgs(spy, 1, [['constructor'], ['render']]);
 
           expect(() => wrapper.find(Thrower).simulateError(errorToThrow)).not.to.throw();
 
@@ -650,11 +592,7 @@ export default function describeMisc({
 
         Wrap(<Foo />);
 
-        expectArgs(spy, 1, [
-          ['componentWillMount'],
-          ['render'],
-          ['componentDidMount'],
-        ]);
+        expectArgs(spy, 1, [['componentWillMount'], ['render'], ['componentDidMount']]);
       });
 
       itIf(!isShallow || BATCHING, 'is batching updates', () => {
@@ -668,18 +606,14 @@ export default function describeMisc({
 
           componentWillMount() {
             spy('componentWillMount');
-            /* eslint-disable react/destructuring-assignment */
             this.setState({ count: this.state.count + 1 });
             this.setState({ count: this.state.count + 1 });
-            /* eslint-enable react/destructuring-assignment */
           }
 
           componentDidMount() {
             spy('componentDidMount');
-            /* eslint-disable react/destructuring-assignment */
             this.setState({ count: this.state.count + 1 });
             this.setState({ count: this.state.count + 1 });
-            /* eslint-enable react/destructuring-assignment */
           }
 
           render() {
@@ -690,12 +624,7 @@ export default function describeMisc({
         }
         const result = Wrap(<Foo />);
         expect(result.state('count')).to.equal(2);
-        expectArgs(spy, 1, [
-          ['componentWillMount'],
-          ['render'],
-          ['componentDidMount'],
-          ['render'],
-        ]);
+        expectArgs(spy, 1, [['componentWillMount'], ['render'], ['componentDidMount'], ['render']]);
       });
     });
 
@@ -736,65 +665,69 @@ export default function describeMisc({
           foo: PropTypes.string,
         };
 
-        const wrapper = Wrap(
-          <Foo foo="bar" />,
-          {
-            context: { foo: 'context' },
-          },
-        );
-        expectArgs(spy, 1, [
-          ['render'],
-        ]);
+        const wrapper = Wrap(<Foo foo="bar" />, {
+          context: { foo: 'context' },
+        });
+        expectArgs(spy, 1, [['render']]);
 
         wrapper.setProps({ foo: 'baz' });
         wrapper.setProps({ foo: 'bax' });
         expectArgs(spy, 2, [
           [
             'componentWillReceiveProps',
-            { foo: 'bar' }, { foo: 'baz' },
+            { foo: 'bar' },
+            { foo: 'baz' },
             { foo: 'context' }, // this will be fixed
           ],
           [
             'shouldComponentUpdate',
-            { foo: 'bar' }, { foo: 'baz' },
-            { foo: 'state' }, { foo: 'state' },
+            { foo: 'bar' },
+            { foo: 'baz' },
+            { foo: 'state' },
+            { foo: 'state' },
             { foo: 'context' },
           ],
           [
             'componentWillUpdate',
-            { foo: 'bar' }, { foo: 'baz' },
-            { foo: 'state' }, { foo: 'state' },
+            { foo: 'bar' },
+            { foo: 'baz' },
+            { foo: 'state' },
+            { foo: 'state' },
             { foo: 'context' },
           ],
           ['render'],
           [
             'componentDidUpdate',
-            { foo: 'bar' }, { foo: 'baz' },
-            { foo: 'state' }, { foo: 'state' },
+            { foo: 'bar' },
+            { foo: 'baz' },
+            { foo: 'state' },
+            { foo: 'state' },
             undefined,
           ],
-          [
-            'componentWillReceiveProps',
-            { foo: 'baz' }, { foo: 'bax' },
-            { foo: 'context' },
-          ],
+          ['componentWillReceiveProps', { foo: 'baz' }, { foo: 'bax' }, { foo: 'context' }],
           [
             'shouldComponentUpdate',
-            { foo: 'baz' }, { foo: 'bax' },
-            { foo: 'state' }, { foo: 'state' },
+            { foo: 'baz' },
+            { foo: 'bax' },
+            { foo: 'state' },
+            { foo: 'state' },
             { foo: 'context' },
           ],
           [
             'componentWillUpdate',
-            { foo: 'baz' }, { foo: 'bax' },
-            { foo: 'state' }, { foo: 'state' },
+            { foo: 'baz' },
+            { foo: 'bax' },
+            { foo: 'state' },
+            { foo: 'state' },
             { foo: 'context' },
           ],
           ['render'],
           [
             'componentDidUpdate',
-            { foo: 'baz' }, { foo: 'bax' },
-            { foo: 'state' }, { foo: 'state' },
+            { foo: 'baz' },
+            { foo: 'bax' },
+            { foo: 'state' },
+            { foo: 'state' },
             undefined,
           ],
         ]);
@@ -821,38 +754,20 @@ export default function describeMisc({
 
           render() {
             spy('render');
-            return (<div />);
+            return <div />;
           }
         }
 
         const wrapper = Wrap(<Foo a="a" b="b" />);
-        expectArgs(spy, 1, [
-          ['render'],
-        ]);
+        expectArgs(spy, 1, [['render']]);
 
         wrapper.setProps({ b: 'c', d: 'e' });
         expectArgs(spy, 2, [
-          [
-            'componentWillReceiveProps',
-            { a: 'a', b: 'b' },
-            { a: 'a', b: 'c', d: 'e' },
-          ],
-          [
-            'shouldComponentUpdate',
-            { a: 'a', b: 'b' },
-            { a: 'a', b: 'c', d: 'e' },
-          ],
-          [
-            'componentWillUpdate',
-            { a: 'a', b: 'b' },
-            { a: 'a', b: 'c', d: 'e' },
-          ],
+          ['componentWillReceiveProps', { a: 'a', b: 'b' }, { a: 'a', b: 'c', d: 'e' }],
+          ['shouldComponentUpdate', { a: 'a', b: 'b' }, { a: 'a', b: 'c', d: 'e' }],
+          ['componentWillUpdate', { a: 'a', b: 'b' }, { a: 'a', b: 'c', d: 'e' }],
           ['render'],
-          [
-            'componentDidUpdate',
-            { a: 'a', b: 'b' },
-            { a: 'a', b: 'c', d: 'e' },
-          ],
+          ['componentDidUpdate', { a: 'a', b: 'b' }, { a: 'a', b: 'c', d: 'e' }],
         ]);
       });
 
@@ -883,147 +798,136 @@ export default function describeMisc({
 
         const wrapper = Wrap(<Foo foo="bar" />);
         expect(wrapper.instance().props.foo).to.equal('bar');
-        expectArgs(spy, 1, [
-          ['render'],
-        ]);
+        expectArgs(spy, 1, [['render']]);
 
         wrapper.setProps({ foo: 'baz' });
         expect(wrapper.instance().props.foo).to.equal('baz');
-        expectArgs(spy, 2, [
-          ['componentWillReceiveProps'],
-          ['shouldComponentUpdate'],
-        ]);
+        expectArgs(spy, 2, [['componentWillReceiveProps'], ['shouldComponentUpdate']]);
 
         wrapper.setProps({ foo: 'bax' });
         expect(wrapper.instance().props.foo).to.equal('bax');
-        expectArgs(spy, 3, [
-          ['componentWillReceiveProps'],
-          ['shouldComponentUpdate'],
-        ]);
+        expectArgs(spy, 3, [['componentWillReceiveProps'], ['shouldComponentUpdate']]);
       });
 
-      itIf(!isShallow || BATCHING, 'does not provoke another renders to call setState in componentWillReceiveProps', () => {
-        class Foo extends React.Component {
-          constructor(props) {
-            super(props);
-            this.state = {
-              count: 0,
-            };
-          }
+      itIf(
+        !isShallow || BATCHING,
+        'does not provoke another renders to call setState in componentWillReceiveProps',
+        () => {
+          class Foo extends React.Component {
+            constructor(props) {
+              super(props);
+              this.state = {
+                count: 0,
+              };
+            }
 
-          componentWillReceiveProps() {
-            spy('componentWillReceiveProps');
-            /* eslint-disable react/destructuring-assignment */
-            this.setState({ count: this.state.count + 1 });
-            this.setState({ count: this.state.count + 1 });
-            /* eslint-enable react/destructuring-assignment */
-          }
-
-          render() {
-            spy('render');
-            const { foo } = this.props;
-            return <div>{foo}</div>;
-          }
-        }
-        const result = Wrap(<Foo />);
-        expectArgs(spy, 1, [
-          ['render'],
-        ]);
-
-        result.setProps({ name: 'bar' });
-
-        expect(result.state('count')).to.equal(1);
-        expectArgs(spy, 2, [
-          ['componentWillReceiveProps'],
-          ['render'],
-        ]);
-      });
-
-      itIf(!isShallow || BATCHING, 'provokes another render to call setState twice in componentWillUpdate', () => {
-        class Foo extends React.Component {
-          constructor(props) {
-            super(props);
-            this.updated = false;
-            this.state = {
-              count: 0,
-            };
-          }
-
-          componentWillUpdate() {
-            spy('componentWillUpdate');
-            if (!this.updated) {
-              this.updated = true;
-              /* eslint-disable react/destructuring-assignment */
+            componentWillReceiveProps() {
+              spy('componentWillReceiveProps');
               this.setState({ count: this.state.count + 1 });
               this.setState({ count: this.state.count + 1 });
-              /* eslint-enable react/destructuring-assignment */
+            }
+
+            render() {
+              spy('render');
+              const { foo } = this.props;
+              return <div>{foo}</div>;
             }
           }
+          const result = Wrap(<Foo />);
+          expectArgs(spy, 1, [['render']]);
 
-          render() {
-            spy('render');
-            const { foo } = this.props;
-            return <div>{foo}</div>;
-          }
-        }
-        const result = Wrap(<Foo />);
-        expectArgs(spy, 1, [
-          ['render'],
-        ]);
+          result.setProps({ name: 'bar' });
 
-        result.setProps({ name: 'bar' });
+          expect(result.state('count')).to.equal(1);
+          expectArgs(spy, 2, [['componentWillReceiveProps'], ['render']]);
+        },
+      );
 
-        expect(result.state('count')).to.equal(1);
-        expectArgs(spy, 2, [
-          ['componentWillUpdate'],
-          ['render'],
-          ['componentWillUpdate'],
-          ['render'],
-        ]);
-      });
+      itIf(
+        !isShallow || BATCHING,
+        'provokes another render to call setState twice in componentWillUpdate',
+        () => {
+          class Foo extends React.Component {
+            constructor(props) {
+              super(props);
+              this.updated = false;
+              this.state = {
+                count: 0,
+              };
+            }
 
-      itIf(!isShallow || BATCHING, 'provokes another render to call setState twice in componentDidUpdate', () => {
-        class Foo extends React.Component {
-          constructor(props) {
-            super(props);
-            this.updated = false;
-            this.state = {
-              count: 0,
-            };
-          }
+            componentWillUpdate() {
+              spy('componentWillUpdate');
+              if (!this.updated) {
+                this.updated = true;
+                this.setState({ count: this.state.count + 1 });
+                this.setState({ count: this.state.count + 1 });
+              }
+            }
 
-          componentDidUpdate() {
-            spy('componentDidUpdate');
-            if (!this.updated) {
-              this.updated = true;
-              /* eslint-disable react/no-did-update-set-state, react/destructuring-assignment */
-              this.setState({ count: this.state.count + 1 });
-              this.setState({ count: this.state.count + 1 });
-              /* eslint-enable react/no-did-update-set-state, react/destructuring-assignment */
+            render() {
+              spy('render');
+              const { foo } = this.props;
+              return <div>{foo}</div>;
             }
           }
+          const result = Wrap(<Foo />);
+          expectArgs(spy, 1, [['render']]);
 
-          render() {
-            spy('render');
-            const { foo } = this.props;
-            return <div>{foo}</div>;
+          result.setProps({ name: 'bar' });
+
+          expect(result.state('count')).to.equal(1);
+          expectArgs(spy, 2, [
+            ['componentWillUpdate'],
+            ['render'],
+            ['componentWillUpdate'],
+            ['render'],
+          ]);
+        },
+      );
+
+      itIf(
+        !isShallow || BATCHING,
+        'provokes another render to call setState twice in componentDidUpdate',
+        () => {
+          class Foo extends React.Component {
+            constructor(props) {
+              super(props);
+              this.updated = false;
+              this.state = {
+                count: 0,
+              };
+            }
+
+            componentDidUpdate() {
+              spy('componentDidUpdate');
+              if (!this.updated) {
+                this.updated = true;
+                this.setState({ count: this.state.count + 1 });
+                this.setState({ count: this.state.count + 1 });
+              }
+            }
+
+            render() {
+              spy('render');
+              const { foo } = this.props;
+              return <div>{foo}</div>;
+            }
           }
-        }
-        const result = Wrap(<Foo />);
-        expectArgs(spy, 1, [
-          ['render'],
-        ]);
+          const result = Wrap(<Foo />);
+          expectArgs(spy, 1, [['render']]);
 
-        result.setProps({ name: 'bar' });
+          result.setProps({ name: 'bar' });
 
-        expect(result.state('count')).to.equal(1);
-        expectArgs(spy, 2, [
-          ['render'],
-          ['componentDidUpdate'],
-          ['render'],
-          ['componentDidUpdate'],
-        ]);
-      });
+          expect(result.state('count')).to.equal(1);
+          expectArgs(spy, 2, [
+            ['render'],
+            ['componentDidUpdate'],
+            ['render'],
+            ['componentDidUpdate'],
+          ]);
+        },
+      );
     });
 
     context('updating state', () => {
@@ -1059,35 +963,36 @@ export default function describeMisc({
           foo: PropTypes.string,
         };
 
-        const wrapper = Wrap(
-          <Foo foo="props" />,
-          {
-            context: { foo: 'context' },
-          },
-        );
-        expectArgs(spy, 1, [
-          ['render'],
-        ]);
+        const wrapper = Wrap(<Foo foo="props" />, {
+          context: { foo: 'context' },
+        });
+        expectArgs(spy, 1, [['render']]);
 
         wrapper.setState({ foo: 'baz' });
         expectArgs(spy, 2, [
           [
             'shouldComponentUpdate',
-            { foo: 'props' }, { foo: 'props' },
-            { foo: 'bar' }, { foo: 'baz' },
+            { foo: 'props' },
+            { foo: 'props' },
+            { foo: 'bar' },
+            { foo: 'baz' },
             { foo: 'context' },
           ],
           [
             'componentWillUpdate',
-            { foo: 'props' }, { foo: 'props' },
-            { foo: 'bar' }, { foo: 'baz' },
+            { foo: 'props' },
+            { foo: 'props' },
+            { foo: 'bar' },
+            { foo: 'baz' },
             { foo: 'context' },
           ],
           ['render'],
           [
             'componentDidUpdate',
-            { foo: 'props' }, { foo: 'props' },
-            { foo: 'bar' }, { foo: 'baz' },
+            { foo: 'props' },
+            { foo: 'props' },
+            { foo: 'bar' },
+            { foo: 'baz' },
             undefined,
           ],
         ]);
@@ -1123,102 +1028,98 @@ export default function describeMisc({
         }
         const wrapper = Wrap(<Foo />);
         expect(wrapper.instance().state.foo).to.equal('bar');
-        expectArgs(spy, 1, [
-          ['render'],
-        ]);
+        expectArgs(spy, 1, [['render']]);
 
         wrapper.setState({ foo: 'baz' });
         expect(wrapper.instance().state.foo).to.equal('baz');
-        expectArgs(spy, 2, [
-          ['shouldComponentUpdate'],
-        ]);
+        expectArgs(spy, 2, [['shouldComponentUpdate']]);
       });
 
-      itIf(!isShallow || BATCHING, 'provokes another render to call setState twice in componentWillUpdate', () => {
-        class Foo extends React.Component {
-          constructor(props) {
-            super(props);
-            this.updated = false;
-            this.state = {
-              name: 'foo',
-              count: 0,
-            };
-          }
+      itIf(
+        !isShallow || BATCHING,
+        'provokes another render to call setState twice in componentWillUpdate',
+        () => {
+          class Foo extends React.Component {
+            constructor(props) {
+              super(props);
+              this.updated = false;
+              this.state = {
+                name: 'foo',
+                count: 0,
+              };
+            }
 
-          componentWillUpdate() {
-            spy('componentWillUpdate');
-            if (!this.updated) {
-              this.updated = true;
-              /* eslint-disable react/destructuring-assignment */
-              this.setState({ count: this.state.count + 1 });
-              this.setState({ count: this.state.count + 1 });
-              /* eslint-enable react/destructuring-assignment */
+            componentWillUpdate() {
+              spy('componentWillUpdate');
+              if (!this.updated) {
+                this.updated = true;
+                this.setState({ count: this.state.count + 1 });
+                this.setState({ count: this.state.count + 1 });
+              }
+            }
+
+            render() {
+              spy('render');
+              const { name } = this.state;
+              return <div>{name}</div>;
             }
           }
+          const result = Wrap(<Foo />);
+          expectArgs(spy, 1, [['render']]);
 
-          render() {
-            spy('render');
-            const { name } = this.state;
-            return <div>{name}</div>;
-          }
-        }
-        const result = Wrap(<Foo />);
-        expectArgs(spy, 1, [
-          ['render'],
-        ]);
+          result.setState({ name: 'bar' });
+          expect(result.state('count')).to.equal(1);
+          expectArgs(spy, 2, [
+            ['componentWillUpdate'],
+            ['render'],
+            ['componentWillUpdate'],
+            ['render'],
+          ]);
+        },
+      );
 
-        result.setState({ name: 'bar' });
-        expect(result.state('count')).to.equal(1);
-        expectArgs(spy, 2, [
-          ['componentWillUpdate'],
-          ['render'],
-          ['componentWillUpdate'],
-          ['render'],
-        ]);
-      });
+      itIf(
+        !isShallow || BATCHING,
+        'provokes another render to call setState twice in componentDidUpdate',
+        () => {
+          class Foo extends React.Component {
+            constructor(props) {
+              super(props);
+              this.updated = false;
+              this.state = {
+                name: 'foo',
+                count: 0,
+              };
+            }
 
-      itIf(!isShallow || BATCHING, 'provokes another render to call setState twice in componentDidUpdate', () => {
-        class Foo extends React.Component {
-          constructor(props) {
-            super(props);
-            this.updated = false;
-            this.state = {
-              name: 'foo',
-              count: 0,
-            };
-          }
+            componentDidUpdate() {
+              spy('componentDidUpdate');
+              if (!this.updated) {
+                this.updated = true;
+                this.setState({ count: this.state.count + 1 });
+                this.setState({ count: this.state.count + 1 });
+              }
+            }
 
-          componentDidUpdate() {
-            spy('componentDidUpdate');
-            if (!this.updated) {
-              this.updated = true;
-              /* eslint-disable react/no-did-update-set-state, react/destructuring-assignment */
-              this.setState({ count: this.state.count + 1 });
-              this.setState({ count: this.state.count + 1 });
-              /* eslint-enable react/no-did-update-set-state, react/destructuring-assignment */
+            render() {
+              spy('render');
+              const { name } = this.state;
+              return <div>{name}</div>;
             }
           }
+          const result = Wrap(<Foo />);
+          expectArgs(spy, 1, [['render']]);
 
-          render() {
-            spy('render');
-            const { name } = this.state;
-            return <div>{name}</div>;
-          }
-        }
-        const result = Wrap(<Foo />);
-        expectArgs(spy, 1, [
-          ['render'],
-        ]);
-
-        result.setState({ name: 'bar' });
-        expect(result.state('count')).to.equal(1);
-        expectArgs(spy, 2, [
-          ['render'],
-          ['componentDidUpdate'],
-          ['render'],
-          ['componentDidUpdate'],
-        ]);
-      });
+          result.setState({ name: 'bar' });
+          expect(result.state('count')).to.equal(1);
+          expectArgs(spy, 2, [
+            ['render'],
+            ['componentDidUpdate'],
+            ['render'],
+            ['componentDidUpdate'],
+          ]);
+        },
+      );
     });
 
     context('updating context', () => {
@@ -1253,37 +1154,38 @@ export default function describeMisc({
         Foo.contextTypes = {
           foo: PropTypes.string,
         };
-        const wrapper = Wrap(
-          <Foo foo="props" />,
-          {
-            context: { foo: 'bar' },
-          },
-        );
+        const wrapper = Wrap(<Foo foo="props" />, {
+          context: { foo: 'bar' },
+        });
         expect(wrapper.instance().context.foo).to.equal('bar');
-        expectArgs(spy, 1, [
-          ['render'],
-        ]);
+        expectArgs(spy, 1, [['render']]);
 
         wrapper.setContext({ foo: 'baz' });
         expect(wrapper.instance().context.foo).to.equal('baz');
         expectArgs(spy, 2, [
           [
             'shouldComponentUpdate',
-            { foo: 'props' }, { foo: 'props' },
-            { foo: 'state' }, { foo: 'state' },
+            { foo: 'props' },
+            { foo: 'props' },
+            { foo: 'state' },
+            { foo: 'state' },
             { foo: 'baz' },
           ],
           [
             'componentWillUpdate',
-            { foo: 'props' }, { foo: 'props' },
-            { foo: 'state' }, { foo: 'state' },
+            { foo: 'props' },
+            { foo: 'props' },
+            { foo: 'state' },
+            { foo: 'state' },
             { foo: 'baz' },
           ],
           ['render'],
           [
             'componentDidUpdate',
-            { foo: 'props' }, { foo: 'props' },
-            { foo: 'state' }, { foo: 'state' },
+            { foo: 'props' },
+            { foo: 'props' },
+            { foo: 'state' },
+            { foo: 'state' },
             undefined,
           ],
         ]);
@@ -1312,116 +1214,103 @@ export default function describeMisc({
         Foo.contextTypes = {
           foo: PropTypes.string,
         };
-        const wrapper = Wrap(
-          <Foo />,
-          {
-            context: { foo: 'bar' },
-          },
-        );
-        expectArgs(spy, 1, [
-          ['render'],
-        ]);
+        const wrapper = Wrap(<Foo />, {
+          context: { foo: 'bar' },
+        });
+        expectArgs(spy, 1, [['render']]);
 
         wrapper.setContext({ foo: 'baz' });
 
-        expectArgs(spy, 2, [
-          ['shouldComponentUpdate'],
-        ]);
+        expectArgs(spy, 2, [['shouldComponentUpdate']]);
       });
 
-      itIf(!isShallow || BATCHING, 'provokes another render to call setState twice in componentWillUpdate', () => {
-        class Foo extends React.Component {
-          constructor(props) {
-            super(props);
-            this.updated = false;
-            this.state = {
-              count: 0,
-            };
-          }
+      itIf(
+        !isShallow || BATCHING,
+        'provokes another render to call setState twice in componentWillUpdate',
+        () => {
+          class Foo extends React.Component {
+            constructor(props) {
+              super(props);
+              this.updated = false;
+              this.state = {
+                count: 0,
+              };
+            }
 
-          componentWillUpdate() {
-            spy('componentWillUpdate');
-            if (!this.updated) {
-              this.updated = true;
-              /* eslint-disable react/destructuring-assignment */
-              this.setState({ count: this.state.count + 1 });
-              this.setState({ count: this.state.count + 1 });
-              /* eslint-enable react/destructuring-assignment */
+            componentWillUpdate() {
+              spy('componentWillUpdate');
+              if (!this.updated) {
+                this.updated = true;
+                this.setState({ count: this.state.count + 1 });
+                this.setState({ count: this.state.count + 1 });
+              }
+            }
+
+            render() {
+              spy('render');
+              const { name } = this.state;
+              return <div>{name}</div>;
             }
           }
-
-          render() {
-            spy('render');
-            const { name } = this.state;
-            return <div>{name}</div>;
-          }
-        }
-        const result = Wrap(
-          <Foo />,
-          {
+          const result = Wrap(<Foo />, {
             context: { foo: 'bar' },
-          },
-        );
-        expectArgs(spy, 1, [
-          ['render'],
-        ]);
+          });
+          expectArgs(spy, 1, [['render']]);
 
-        result.setContext({ foo: 'baz' });
-        expect(result.state('count')).to.equal(1);
-        expectArgs(spy, 2, [
-          ['componentWillUpdate'],
-          ['render'],
-          ['componentWillUpdate'],
-          ['render'],
-        ]);
-      });
+          result.setContext({ foo: 'baz' });
+          expect(result.state('count')).to.equal(1);
+          expectArgs(spy, 2, [
+            ['componentWillUpdate'],
+            ['render'],
+            ['componentWillUpdate'],
+            ['render'],
+          ]);
+        },
+      );
 
-      itIf(!isShallow || BATCHING, 'provokes an another render to call setState twice in componentDidUpdate', () => {
-        class Foo extends React.Component {
-          constructor(props) {
-            super(props);
-            this.updated = false;
-            this.state = {
-              count: 0,
-            };
-          }
+      itIf(
+        !isShallow || BATCHING,
+        'provokes an another render to call setState twice in componentDidUpdate',
+        () => {
+          class Foo extends React.Component {
+            constructor(props) {
+              super(props);
+              this.updated = false;
+              this.state = {
+                count: 0,
+              };
+            }
 
-          componentDidUpdate() {
-            spy('componentDidUpdate');
-            if (!this.updated) {
-              this.updated = true;
-              /* eslint-disable react/no-did-update-set-state, react/destructuring-assignment */
-              this.setState({ count: this.state.count + 1 });
-              this.setState({ count: this.state.count + 1 });
-              /* eslint-enable react/no-did-update-set-state, react/destructuring-assignment */
+            componentDidUpdate() {
+              spy('componentDidUpdate');
+              if (!this.updated) {
+                this.updated = true;
+                this.setState({ count: this.state.count + 1 });
+                this.setState({ count: this.state.count + 1 });
+              }
+            }
+
+            render() {
+              spy('render');
+              const { name } = this.state;
+              return <div>{name}</div>;
             }
           }
-
-          render() {
-            spy('render');
-            const { name } = this.state;
-            return <div>{name}</div>;
-          }
-        }
-        const result = Wrap(
-          <Foo />,
-          {
+          const result = Wrap(<Foo />, {
             context: { foo: 'bar' },
-          },
-        );
-        expectArgs(spy, 1, [
-          ['render'],
-        ]);
+          });
+          expectArgs(spy, 1, [['render']]);
 
-        result.setContext({ foo: 'baz' });
-        expect(result.state('count')).to.equal(1);
-        expectArgs(spy, 2, [
-          ['render'],
-          ['componentDidUpdate'],
-          ['render'],
-          ['componentDidUpdate'],
-        ]);
-      });
+          result.setContext({ foo: 'baz' });
+          expect(result.state('count')).to.equal(1);
+          expectArgs(spy, 2, [
+            ['render'],
+            ['componentDidUpdate'],
+            ['render'],
+            ['componentDidUpdate'],
+          ]);
+        },
+      );
     });
   });
 }

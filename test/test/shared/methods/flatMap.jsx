@@ -1,12 +1,10 @@
 import React from 'react';
 import { expect } from 'chai';
 
-export default function describeFlatMap({
-  Wrap,
-}) {
+export default function describeFlatMap({ Wrap }) {
   describe('.flatMap(fn)', () => {
     it('returns a wrapper with the mapped and flattened nodes', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="foo">
             <div className="bar" />
@@ -20,8 +18,8 @@ export default function describeFlatMap({
             <div className="bax" />
             <div className="bax" />
           </div>
-        </div>
-      ));
+        </div>,
+      );
 
       const nodes = wrapper.find('.foo').flatMap((w) => w.children().getElements());
 

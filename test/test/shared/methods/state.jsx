@@ -1,20 +1,11 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 
-import {
-  createPortal,
-} from '../../_helpers/react-compat';
+import { createPortal } from '../../_helpers/react-compat';
 
-export default function describeState({
-  Wrap,
-  WrapperName,
-  isShallow,
-  makeDOMElement,
-}) {
+export default function describeState({ Wrap, WrapperName, isShallow, makeDOMElement }) {
   describe('.state([name])', () => {
     class HasFooState extends React.Component {
       constructor(props) {
@@ -45,20 +36,27 @@ export default function describeState({
     });
 
     it('throws on host nodes', () => {
-      const wrapper = Wrap(<div><span /></div>);
+      const wrapper = Wrap(
+        <div>
+          <span />
+        </div>,
+      );
 
-      expect(() => wrapper.state()).to.throw(Error, `${WrapperName}::state() can only be called on class components`);
+      expect(() => wrapper.state()).to.throw(
+        Error,
+        `${WrapperName}::state() can only be called on class components`,
+      );
     });
 
     it('throws on Portals', () => {
       const containerDiv = makeDOMElement();
-      const portal = createPortal(
-        <div />,
-        containerDiv,
-      );
+      const portal = createPortal(<div />, containerDiv);
 
       const wrapper = Wrap(<div>{portal}</div>);
-      expect(() => wrapper.state()).to.throw(Error, `${WrapperName}::state() can only be called on class components`);
+      expect(() => wrapper.state()).to.throw(
+        Error,
+        `${WrapperName}::state() can only be called on class components`,
+      );
     });
 
     describe('stateless function components (SFCs)', () => {
@@ -68,7 +66,10 @@ export default function describeState({
         }
 
         const wrapper = Wrap(<FooSFC />);
-        expect(() => wrapper.state()).to.throw(Error, `${WrapperName}::state() can only be called on class components`);
+        expect(() => wrapper.state()).to.throw(
+          Error,
+          `${WrapperName}::state() can only be called on class components`,
+        );
       });
     });
 
@@ -114,7 +115,10 @@ export default function describeState({
         const wrapper = Wrap(<Parent />);
 
         const child = wrapper.find(Child);
-        expect(() => child.state()).to.throw(Error, `${WrapperName}::state() can only be called on the root`);
+        expect(() => child.state()).to.throw(
+          Error,
+          `${WrapperName}::state() can only be called on the root`,
+        );
       });
 
       itIf(!isShallow, 'gets the state of the stateful child of a stateful root', () => {
@@ -133,7 +137,10 @@ export default function describeState({
           const wrapper = Wrap(<StatelessParent />);
 
           const child = wrapper.find(Child);
-          expect(() => child.state()).to.throw(Error, `${WrapperName}::state() can only be called on the root`);
+          expect(() => child.state()).to.throw(
+            Error,
+            `${WrapperName}::state() can only be called on the root`,
+          );
         });
 
         itIf(!isShallow, 'gets the state of the stateful child of a stateless root', () => {
@@ -146,13 +153,13 @@ export default function describeState({
     });
 
     it('throws when called on a wrapper of multiple nodes', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <span />
           <span />
           <span />
-        </div>
-      ));
+        </div>,
+      );
       const spans = wrapper.find('span');
       expect(spans).to.have.lengthOf(3);
       expect(() => spans.state()).to.throw(

@@ -1,14 +1,12 @@
 import React from 'react';
 import { expect } from 'chai';
 
-export default function describeRender({
-  Wrap,
-}) {
+export default function describeRender({ Wrap }) {
   describe('.render()', () => {
     it('returns a cheerio wrapper around the current node', () => {
       class Foo extends React.Component {
         render() {
-          return (<div className="in-foo" />);
+          return <div className="in-foo" />;
         }
       }
 
@@ -38,9 +36,7 @@ export default function describeRender({
 
     describe('stateless function components (SFCs)', () => {
       it('returns a cheerio wrapper around the current node', () => {
-        const Foo = () => (
-          <div className="in-foo" />
-        );
+        const Foo = () => <div className="in-foo" />;
 
         const Bar = () => (
           <div className="in-bar">

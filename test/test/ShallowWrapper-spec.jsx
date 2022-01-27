@@ -5,15 +5,10 @@ import sinon from 'sinon-sandbox';
 import wrap from 'mocha-wrap';
 import inspect from 'object-inspect';
 
-import {
-  shallow,
-  ShallowWrapper,
-} from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import shallowEntry from 'enzyme/shallow';
 import ShallowWrapperEntry from 'enzyme/ShallowWrapper';
-import {
-  withSetStateAllowed,
-} from 'enzyme/build/Utils';
+import { withSetStateAllowed } from 'enzyme/build/Utils';
 import getAdapter from 'enzyme/build/getAdapter';
 import { fakeDynamicImport } from '@wojtekmaj/enzyme-adapter-utils';
 
@@ -30,10 +25,7 @@ import {
   Suspense,
   useCallback,
 } from './_helpers/react-compat';
-import {
-  describeIf,
-  itIf,
-} from './_helpers';
+import { describeIf, itIf } from './_helpers';
 import describeMethods from './_helpers/describeMethods';
 import describeLifecycles from './_helpers/describeLifecycles';
 import describeHooks from './_helpers/describeHooks';
@@ -85,16 +77,14 @@ describe('shallow', () => {
     describe('wrapping invalid elements', () => {
       it('throws with combined dangerouslySetInnerHTML and children on host nodes', () => {
         /* eslint react/no-danger-with-children: 0 */
-        expect(() => shallow((
-          <div dangerouslySetInnerHTML={{ __html: '{}' }}>child</div>
-        ))).to.throw(Error, 'Can only set one of `children` or `props.dangerouslySetInnerHTML`.');
+        expect(() => shallow(<div dangerouslySetInnerHTML={{ __html: '{}' }}>child</div>)).to.throw(
+          Error,
+          'Can only set one of `children` or `props.dangerouslySetInnerHTML`.',
+        );
       });
 
       it('throws when shallow rendering Portals', () => {
-        const portal = createPortal(
-          <div />,
-          { nodeType: 1 },
-        );
+        const portal = createPortal(<div />, { nodeType: 1 });
 
         expect(() => shallow(portal)).to.throw(
           Error,
@@ -103,10 +93,7 @@ describe('shallow', () => {
       });
 
       it('throws when shallow rendering plain text', () => {
-        expect(() => shallow('Foo')).to.throw(
-          Error,
-          'ShallowWrapper can only wrap valid elements',
-        );
+        expect(() => shallow('Foo')).to.throw(Error, 'ShallowWrapper can only wrap valid elements');
       });
 
       it('throws when shallow rendering multiple elements', () => {
@@ -145,13 +132,17 @@ describe('shallow', () => {
 
       const wrapper = shallow(<Foo />);
       expect(wrapper.state()).to.equal(null);
-      expect(wrapper.debug()).to.equal(`
+      expect(wrapper.debug()).to.equal(
+        `
 <div>
   object
   null
 </div>
-      `.trim());
-      expect(() => wrapper.state('key')).to.throw('ShallowWrapper::state("key") requires that `state` not be `null` or `undefined`');
+      `.trim(),
+      );
+      expect(() => wrapper.state('key')).to.throw(
+        'ShallowWrapper::state("key") requires that `state` not be `null` or `undefined`',
+      );
     });
 
     describe('wrappingComponent', () => {
@@ -207,9 +198,7 @@ describe('shallow', () => {
                 renderMore={renderMore}
                 renderStateTester={renderStateTester}
               >
-                <div>
-                  {children}
-                </div>
+                <div>{children}</div>
               </TestProvider>
             </div>
           );
@@ -285,9 +274,7 @@ describe('shallow', () => {
           const { value1, value2, children } = props;
           return (
             <Context1.Provider value={value1}>
-              <Context2.Provider value={value2}>
-                {children}
-              </Context2.Provider>
+              <Context2.Provider value={value2}>{children}</Context2.Provider>
             </Context1.Provider>
           );
         }
@@ -332,17 +319,22 @@ describe('shallow', () => {
             return <div />;
           }
         }
-        expect(() => shallow(<MyComponent />, {
-          wrappingComponent: BadWrapper,
-        })).to.throw('`wrappingComponent` must render its children!');
+        expect(() =>
+          shallow(<MyComponent />, {
+            wrappingComponent: BadWrapper,
+          }),
+        ).to.throw('`wrappingComponent` must render its children!');
       });
 
       wrap()
-        .withOverrides(() => getAdapter(), () => ({
-          isCustomComponent: undefined,
-          RootFinder: undefined,
-          wrapWithWrappingComponent: undefined,
-        }))
+        .withOverrides(
+          () => getAdapter(),
+          () => ({
+            isCustomComponent: undefined,
+            RootFinder: undefined,
+            wrapWithWrappingComponent: undefined,
+          }),
+        )
         .describe('with an old adapter', () => {
           it('renders fine when wrappingComponent is not passed', () => {
             const wrapper = shallow(<MyComponent />);
@@ -355,9 +347,11 @@ describe('shallow', () => {
           });
 
           it('throws an error if wrappingComponent is passed', () => {
-            expect(() => shallow(<MyComponent />, {
-              wrappingComponent: MyWrappingComponent,
-            })).to.throw('your adapter does not support `wrappingComponent`. Try upgrading it!');
+            expect(() =>
+              shallow(<MyComponent />, {
+                wrappingComponent: MyWrappingComponent,
+              }),
+            ).to.throw('your adapter does not support `wrappingComponent`. Try upgrading it!');
           });
         });
     });
@@ -370,23 +364,35 @@ describe('shallow', () => {
     }
 
     itIf.skip(false, 'throws an error if wrappingComponent is passed', () => {
-      expect(() => shallow(<div />, {
-        wrappingComponent: RendersChildren,
-      })).to.throw('your adapter does not support `wrappingComponent`. Try upgrading it!');
+      expect(() =>
+        shallow(<div />, {
+          wrappingComponent: RendersChildren,
+        }),
+      ).to.throw('your adapter does not support `wrappingComponent`. Try upgrading it!');
     });
 
-    describeIf.skip(true, 'uses the isValidElementType from the Adapter to validate the prop type of Component', () => {
-      const Foo = () => null;
-      const Bar = () => null;
-      wrap()
-        .withConsoleThrows()
-        .withOverride(() => getAdapter(), 'isValidElementType', () => (val) => val === Foo)
-        .it('with isValidElementType defined on the Adapter', () => {
-          expect(() => {
-            shallow(<Bar />);
-          }).to.throw('Warning: Failed prop type: Component must be a valid element type!\n    in WrapperComponent');
-        });
-    });
+    describeIf.skip(
+      true,
+      'uses the isValidElementType from the Adapter to validate the prop type of Component',
+      () => {
+        const Foo = () => null;
+        const Bar = () => null;
+        wrap()
+          .withConsoleThrows()
+          .withOverride(
+            () => getAdapter(),
+            'isValidElementType',
+            () => (val) => val === Foo,
+          )
+          .it('with isValidElementType defined on the Adapter', () => {
+            expect(() => {
+              shallow(<Bar />);
+            }).to.throw(
+              'Warning: Failed prop type: Component must be a valid element type!\n    in WrapperComponent',
+            );
+          });
+      },
+    );
   });
 
   describe('context', () => {
@@ -452,7 +458,11 @@ describe('shallow', () => {
       class Provides extends React.Component {
         render() {
           return (
-            <Provider value="foo"><div><Consumes /></div></Provider>
+            <Provider value="foo">
+              <div>
+                <Consumes />
+              </div>
+            </Provider>
           );
         }
       }
@@ -486,24 +496,22 @@ describe('shallow', () => {
           it('can be rendered as the root', () => {
             const wrapper = shallow(
               <Context.Provider value="hello">
-                <Context.Consumer>
-                  {(value) => <div>{value}</div>}
-                </Context.Consumer>
+                <Context.Consumer>{(value) => <div>{value}</div>}</Context.Consumer>
               </Context.Provider>,
             );
-            expect(wrapper.debug()).to.eql(`
+            expect(wrapper.debug()).to.eql(
+              `
 <ContextConsumer>
   [function]
 </ContextConsumer>
-            `.trim());
+            `.trim(),
+            );
           });
 
           it('supports changing the value', () => {
             const wrapper = shallow(
               <Context.Provider value="hello">
-                <Context.Consumer>
-                  {(value) => <div>{value}</div>}
-                </Context.Consumer>
+                <Context.Consumer>{(value) => <div>{value}</div>}</Context.Consumer>
               </Context.Provider>,
             );
             wrapper.setProps({ value: 'world' });
@@ -517,22 +525,20 @@ describe('shallow', () => {
           }
           it('can be rendered as the root', () => {
             const wrapper = shallow(
-              <Context.Consumer>
-                {(value) => <DivRenderer>{value}</DivRenderer>}
-              </Context.Consumer>,
+              <Context.Consumer>{(value) => <DivRenderer>{value}</DivRenderer>}</Context.Consumer>,
             );
-            expect(wrapper.debug()).to.eql(`
+            expect(wrapper.debug()).to.eql(
+              `
 <DivRenderer>
   cool
 </DivRenderer>
-            `.trim());
+            `.trim(),
+            );
           });
 
           it('supports changing the children', () => {
             const wrapper = shallow(
-              <Context.Consumer>
-                {(value) => <DivRenderer>{value}</DivRenderer>}
-              </Context.Consumer>,
+              <Context.Consumer>{(value) => <DivRenderer>{value}</DivRenderer>}</Context.Consumer>,
             );
             wrapper.setProps({
               children: (value) => (
@@ -583,7 +589,9 @@ describe('shallow', () => {
         class MyComponent extends React.Component {
           render() {
             return (
-              <Provides><Consumes /></Provides>
+              <Provides>
+                <Consumes />
+              </Provides>
             );
           }
         }
@@ -660,7 +668,9 @@ describe('shallow', () => {
         class MyComponent extends React.Component {
           render() {
             return (
-              <Provides><Consumes /></Provides>
+              <Provides>
+                <Consumes />
+              </Provides>
             );
           }
         }
@@ -693,9 +703,7 @@ describe('shallow', () => {
 
     describe('stateless function components (SFCs)', () => {
       it('can pass in context', () => {
-        const SimpleComponent = (props, { name }) => (
-          <div>{name}</div>
-        );
+        const SimpleComponent = (props, { name }) => <div>{name}</div>;
         SimpleComponent.contextTypes = { name: PropTypes.string };
 
         const context = { name: 'foo' };
@@ -704,18 +712,14 @@ describe('shallow', () => {
       });
 
       it('does not throw if context is passed in but contextTypes is missing', () => {
-        const SimpleComponent = (props, { name }) => (
-          <div>{name}</div>
-        );
+        const SimpleComponent = (props, { name }) => <div>{name}</div>;
 
         const context = { name: 'foo' };
         expect(() => shallow(<SimpleComponent />, { context })).not.to.throw();
       });
 
       itIf(false, 'is introspectable through context API', () => {
-        const SimpleComponent = (props, { name }) => (
-          <div>{name}</div>
-        );
+        const SimpleComponent = (props, { name }) => <div>{name}</div>;
         SimpleComponent.contextTypes = { name: PropTypes.string };
 
         const context = { name: 'foo' };
@@ -726,9 +730,7 @@ describe('shallow', () => {
       });
 
       it('is not introspectable through context API', () => {
-        const SimpleComponent = (props, { name }) => (
-          <div>{name}</div>
-        );
+        const SimpleComponent = (props, { name }) => <div>{name}</div>;
         SimpleComponent.contextTypes = { name: PropTypes.string };
 
         const wrapper = shallow(<SimpleComponent />, { context });
@@ -817,27 +819,29 @@ describe('shallow', () => {
 
       describe('parent-based context', () => {
         const adapter = getAdapter();
-        const {
-          createShallowRenderer: realCreateShallowRenderer,
-          options: realAdapterOptions,
-        } = adapter;
+        const { createShallowRenderer: realCreateShallowRenderer, options: realAdapterOptions } =
+          adapter;
 
         wrap()
-          .withOverride(() => adapter, 'options', () => {
-            const {
-              legacyContextMode, // omit legacyContextMode
-              lifecycles: {
-                getChildContext, // omit getChildContext
-                ...lifecycles
-              },
-              ...options
-            } = realAdapterOptions;
+          .withOverride(
+            () => adapter,
+            'options',
+            () => {
+              const {
+                legacyContextMode, // omit legacyContextMode
+                lifecycles: {
+                  getChildContext, // omit getChildContext
+                  ...lifecycles
+                },
+                ...options
+              } = realAdapterOptions;
 
-            return {
-              ...options,
-              lifecycles,
-            };
-          })
+              return {
+                ...options,
+                lifecycles,
+              };
+            },
+          )
           .describe('with older adapters', () => {
             it('still supports the context option', () => {
               const wrapper = shallow(<TestComponent />, { context: { baz: 'enzyme' } });
@@ -933,11 +937,15 @@ describe('shallow', () => {
           }
           FaultyFooProvider.childContextTypes = {};
 
-          expect(() => shallow((
-            <FaultyFooProvider value="foo">
-              <div />
-            </FaultyFooProvider>
-          ))).to.throw('FaultyFooProvider.getChildContext(): key "foo" is not defined in childContextTypes');
+          expect(() =>
+            shallow(
+              <FaultyFooProvider value="foo">
+                <div />
+              </FaultyFooProvider>,
+            ),
+          ).to.throw(
+            'FaultyFooProvider.getChildContext(): key "foo" is not defined in childContextTypes',
+          );
         });
 
         it('allows overridding context with the context option', () => {
@@ -973,12 +981,20 @@ describe('shallow', () => {
 
         it('warns and works but provides no context, without childContextTypes', () => {
           const stub = sinon.stub(console, 'warn');
-          const wrapper = shallow(<Provider><Receiver /></Provider>).dive();
+          const wrapper = shallow(
+            <Provider>
+              <Receiver />
+            </Provider>,
+          ).dive();
           expect(wrapper.debug()).to.equal(`<div>
   {}
 </div>`);
           expect(stub).to.have.property('callCount', 1);
-          expect(stub.args).to.eql([['Provider.getChildContext(): childContextTypes must be defined in order to use getChildContext().']]);
+          expect(stub.args).to.eql([
+            [
+              'Provider.getChildContext(): childContextTypes must be defined in order to use getChildContext().',
+            ],
+          ]);
         });
 
         wrap()
@@ -996,37 +1012,51 @@ describe('shallow', () => {
                 return null;
               }
             }
-            expect(() => shallow((
-              <FaultyFooProvider />
-            ))).to.throw('FaultyFooProvider.getChildContext(): childContextTypes must be defined in order to use getChildContext().');
+            expect(() => shallow(<FaultyFooProvider />)).to.throw(
+              'FaultyFooProvider.getChildContext(): childContextTypes must be defined in order to use getChildContext().',
+            );
           });
 
         wrap()
           .withConsoleThrows()
           .it('checks prop types', () => {
             try {
-              shallow(<FooProvider value={1612}><div /></FooProvider>);
+              shallow(
+                <FooProvider value={1612}>
+                  <div />
+                </FooProvider>,
+              );
               throw new EvalError('shallow() did not throw!');
             } catch (error) {
-              expect(error.message).to.contain('`foo` of type `number` supplied to `FooProvider`, expected `string`');
+              expect(error.message).to.contain(
+                '`foo` of type `number` supplied to `FooProvider`, expected `string`',
+              );
               expect(error.message).to.match(/context/i);
             }
           });
 
         wrap()
-          .withOverride(() => getAdapter(), 'createShallowRenderer', () => (...args) => {
-            const renderer = realCreateShallowRenderer(...args);
-            delete renderer.checkPropTypes;
-            return renderer;
-          })
-          .it('if the adapter can‘t check propTypes, it works, but does not check prop types', () => {
-            expect(() => {
-              const wrapper = shallow(<TestComponent />, { context: { baz: 'enzyme' } });
-              const fooProvider = wrapper.find(FooProvider).dive();
-              const barProvider = fooProvider.find(BarProvider).dive();
-              return barProvider.find(FooBarBazConsumer).dive();
-            }).not.to.throw();
-          });
+          .withOverride(
+            () => getAdapter(),
+            'createShallowRenderer',
+            () =>
+              (...args) => {
+                const renderer = realCreateShallowRenderer(...args);
+                delete renderer.checkPropTypes;
+                return renderer;
+              },
+          )
+          .it(
+            'if the adapter can‘t check propTypes, it works, but does not check prop types',
+            () => {
+              expect(() => {
+                const wrapper = shallow(<TestComponent />, { context: { baz: 'enzyme' } });
+                const fooProvider = wrapper.find(FooProvider).dive();
+                const barProvider = fooProvider.find(BarProvider).dive();
+                return barProvider.find(FooBarBazConsumer).dive();
+              }).not.to.throw();
+            },
+          );
       });
     });
   });
@@ -1050,10 +1080,7 @@ describe('shallow', () => {
     it('shows portals in shallow debug tree', () => {
       const Foo = () => (
         <div className="foo">
-          {createPortal(
-            <div className="in-portal">InPortal</div>,
-            { nodeType: 1 },
-          )}
+          {createPortal(<div className="in-portal">InPortal</div>, { nodeType: 1 })}
         </div>
       );
 
@@ -1070,10 +1097,7 @@ describe('shallow', () => {
     it('shows portal container in shallow debug tree', () => {
       const Foo = () => (
         <div className="foo">
-          {createPortal(
-            <div className="in-portal">InPortal</div>,
-            { nodeType: 1 },
-          )}
+          {createPortal(<div className="in-portal">InPortal</div>, { nodeType: 1 })}
         </div>
       );
 
@@ -1116,12 +1140,7 @@ describe('shallow', () => {
     });
 
     it('has top level portals in debug tree', () => {
-      const Foo = () => (
-        createPortal(
-          <div className="in-portal">InPortal</div>,
-          { nodeType: 1 },
-        )
-      );
+      const Foo = () => createPortal(<div className="in-portal">InPortal</div>, { nodeType: 1 });
 
       const wrapper = shallow(<Foo />);
       expect(wrapper.debug()).to.equal(`<Portal containerInfo={{...}}>
@@ -1151,7 +1170,8 @@ describe('shallow', () => {
 
     it('renders', () => {
       const wrapper = shallow(<SomeComponent />);
-      expect(wrapper.debug()).to.equal(`<Profiler id="SomeComponent" onRender={[Function: onRender]}>
+      expect(wrapper.debug()).to
+        .equal(`<Profiler id="SomeComponent" onRender={[Function: onRender]}>
   <main>
     <div className="child" />
   </main>
@@ -1165,7 +1185,11 @@ describe('shallow', () => {
     });
 
     it('finds Profiler element', () => {
-      const Parent = () => <span><SomeComponent foo="hello" /></span>;
+      const Parent = () => (
+        <span>
+          <SomeComponent foo="hello" />
+        </span>
+      );
 
       const wrapper = shallow(<Parent foo="hello" />);
       const results = wrapper.find(SomeComponent);
@@ -1249,14 +1273,17 @@ describe('shallow', () => {
   });
 
   it('does not support fragments', () => {
-    const wrapper = () => shallow((
-      <Fragment>
-        <p>hello</p>
-        <span>boo</span>
-      </Fragment>
-    ));
+    const wrapper = () =>
+      shallow(
+        <Fragment>
+          <p>hello</p>
+          <span>boo</span>
+        </Fragment>,
+      );
 
-    expect(wrapper).to.throw('ReactShallowRenderer render(): Shallow rendering works only with custom components, but the provided element type was `symbol`.');
+    expect(wrapper).to.throw(
+      'ReactShallowRenderer render(): Shallow rendering works only with custom components, but the provided element type was `symbol`.',
+    );
   });
 
   const Wrap = shallow;
@@ -1452,7 +1479,9 @@ describe('shallow', () => {
         }
 
         const context = { name: 'foo' };
-        const wrapper = shallow(<Foo />).find(Bar).shallow({ context });
+        const wrapper = shallow(<Foo />)
+          .find(Bar)
+          .shallow({ context });
 
         expect(wrapper.context().name).to.equal(context.name);
         expect(wrapper.context('name')).to.equal(context.name);
@@ -1504,9 +1533,7 @@ describe('shallow', () => {
 
       describe('context', () => {
         it('can pass in context', () => {
-          const Bar = (props, { name }) => (
-            <div>{name}</div>
-          );
+          const Bar = (props, { name }) => <div>{name}</div>;
           Bar.contextTypes = { name: PropTypes.string };
           const Foo = () => (
             <div>
@@ -1520,9 +1547,7 @@ describe('shallow', () => {
         });
 
         it('does not throw if context is passed in but contextTypes is missing', () => {
-          const Bar = (props, { name }) => (
-            <div>{name}</div>
-          );
+          const Bar = (props, { name }) => <div>{name}</div>;
           const Foo = () => (
             <div>
               <Bar />
@@ -1535,9 +1560,7 @@ describe('shallow', () => {
         });
 
         itIf(false, 'is introspectable through context API', () => {
-          const Bar = (props, { name }) => (
-            <div>{name}</div>
-          );
+          const Bar = (props, { name }) => <div>{name}</div>;
           Bar.contextTypes = { name: PropTypes.string };
           const Foo = () => (
             <div>
@@ -1546,16 +1569,16 @@ describe('shallow', () => {
           );
 
           const context = { name: 'foo' };
-          const wrapper = shallow(<Foo />).find(Bar).shallow({ context });
+          const wrapper = shallow(<Foo />)
+            .find(Bar)
+            .shallow({ context });
 
           expect(wrapper.context().name).to.equal(context.name);
           expect(wrapper.context('name')).to.equal(context.name);
         });
 
         it('will throw when trying to inspect context', () => {
-          const Bar = (props, { name }) => (
-            <div>{name}</div>
-          );
+          const Bar = (props, { name }) => <div>{name}</div>;
           Bar.contextTypes = { name: PropTypes.string };
           const Foo = () => (
             <div>
@@ -1564,7 +1587,9 @@ describe('shallow', () => {
           );
 
           const context = { name: 'foo' };
-          const wrapper = shallow(<Foo />).find(Bar).shallow({ context });
+          const wrapper = shallow(<Foo />)
+            .find(Bar)
+            .shallow({ context });
 
           expect(() => wrapper.context()).to.throw(
             Error,
@@ -1582,7 +1607,11 @@ describe('shallow', () => {
   describe('.dive()', () => {
     class RendersDOM extends React.Component {
       render() {
-        return <div><i /></div>;
+        return (
+          <div>
+            <i />
+          </div>
+        );
       }
     }
     class RendersNull extends React.Component {
@@ -1627,44 +1656,45 @@ describe('shallow', () => {
       const wrapper = shallow(<RendersDOM />);
       expect(wrapper.is('div')).to.equal(true);
 
-      expect(() => { wrapper.dive(); }).to.throw(
-        TypeError,
-        'ShallowWrapper::dive() can not be called on Host Components',
-      );
+      expect(() => {
+        wrapper.dive();
+      }).to.throw(TypeError, 'ShallowWrapper::dive() can not be called on Host Components');
     });
 
     it('throws on a non-component', () => {
       const wrapper = shallow(<RendersNull />);
       expect(wrapper.type()).to.equal(null);
 
-      expect(() => { wrapper.dive(); }).to.throw(
-        TypeError,
-        'ShallowWrapper::dive() can only be called on components',
-      );
+      expect(() => {
+        wrapper.dive();
+      }).to.throw(TypeError, 'ShallowWrapper::dive() can only be called on components');
     });
 
     it('throws on multiple children found', () => {
-      const wrapper = shallow(<RendersMultiple />).find('div').children();
-      expect(() => { wrapper.dive(); }).to.throw(
-        Error,
-        'Method “dive” is meant to be run on 1 node. 2 found instead.',
-      );
+      const wrapper = shallow(<RendersMultiple />)
+        .find('div')
+        .children();
+      expect(() => {
+        wrapper.dive();
+      }).to.throw(Error, 'Method “dive” is meant to be run on 1 node. 2 found instead.');
     });
 
     it('throws on zero children found', () => {
-      const wrapper = shallow(<RendersZero />).find('div').children();
-      expect(() => { wrapper.dive(); }).to.throw(
-        Error,
-        'Method “dive” is meant to be run on 1 node. 0 found instead.',
-      );
+      const wrapper = shallow(<RendersZero />)
+        .find('div')
+        .children();
+      expect(() => {
+        wrapper.dive();
+      }).to.throw(Error, 'Method “dive” is meant to be run on 1 node. 0 found instead.');
     });
 
     it('throws on zero children found', () => {
-      const wrapper = shallow(<RendersZero />).find('div').children();
-      expect(() => { wrapper.dive(); }).to.throw(
-        Error,
-        'Method “dive” is meant to be run on 1 node. 0 found instead.',
-      );
+      const wrapper = shallow(<RendersZero />)
+        .find('div')
+        .children();
+      expect(() => {
+        wrapper.dive();
+      }).to.throw(Error, 'Method “dive” is meant to be run on 1 node. 0 found instead.');
     });
 
     it('dives + shallow-renders when there is one component child', () => {
@@ -1677,7 +1707,8 @@ describe('shallow', () => {
 
     describe('forwardRef Elements', () => {
       const ForwardRefWrapsRendersDOM = forwardRef && forwardRef(() => <WrapsRendersDOM />);
-      const NestedForwarRefsWrapsRendersDom = forwardRef && forwardRef(() => <ForwardRefWrapsRendersDOM />);
+      const NestedForwarRefsWrapsRendersDom =
+        forwardRef && forwardRef(() => <ForwardRefWrapsRendersDOM />);
 
       if (forwardRef) {
         NestedForwarRefsWrapsRendersDom.contextTypes = { foo: PropTypes.string };
@@ -1743,26 +1774,20 @@ describe('shallow', () => {
   describe('Suspense & lazy', () => {
     class DynamicComponent extends React.Component {
       render() {
-        return (
-          <div>Dynamic Component</div>
-        );
+        return <div>Dynamic Component</div>;
       }
     }
 
     class Fallback extends React.Component {
       render() {
-        return (
-          <div>Fallback</div>
-        );
+        return <div>Fallback</div>;
       }
     }
 
     it('finds Suspense and its children when no lazy component', () => {
       class Component extends React.Component {
         render() {
-          return (
-            <div>test</div>
-          );
+          return <div>test</div>;
         }
       }
 
@@ -1780,12 +1805,13 @@ describe('shallow', () => {
     });
 
     it('works with Suspense with multiple children if options.suspenseFallback=true', () => {
-      const wrapper = shallow((
+      const wrapper = shallow(
         <Suspense fallback={<Fallback />}>
           <div />
           <div />
-        </Suspense>
-      ), { suspenseFallback: true });
+        </Suspense>,
+        { suspenseFallback: true },
+      );
       expect(wrapper.debug()).to.equal(`<Suspense fallback={{...}}>
   <div />
   <div />
@@ -1793,12 +1819,13 @@ describe('shallow', () => {
     });
 
     it('works with Suspense with multiple children if options.suspenseFallback=false', () => {
-      const wrapper = shallow((
+      const wrapper = shallow(
         <Suspense fallback={<Fallback />}>
           <div />
           <div />
-        </Suspense>
-      ), { suspenseFallback: false });
+        </Suspense>,
+        { suspenseFallback: false },
+      );
       expect(wrapper.debug()).to.equal(`<Suspense fallback={{...}}>
   <div />
   <div />
@@ -1838,11 +1865,11 @@ describe('shallow', () => {
     it('renders lazy component when render Suspense without option', () => {
       const LazyComponent = lazy(() => fakeDynamicImport(DynamicComponent));
 
-      const wrapper = shallow((
+      const wrapper = shallow(
         <Suspense fallback={<Fallback />}>
           <LazyComponent />
-        </Suspense>
-      ));
+        </Suspense>,
+      );
 
       expect(wrapper.find(LazyComponent)).to.have.lengthOf(1);
       expect(wrapper.find(Fallback)).to.have.lengthOf(0);
@@ -1851,11 +1878,11 @@ describe('shallow', () => {
     it('returns lazy component string when debug() is called', () => {
       const LazyComponent = lazy(() => fakeDynamicImport(DynamicComponent));
 
-      const wrapper = shallow((
+      const wrapper = shallow(
         <Suspense fallback={<Fallback />}>
           <LazyComponent />
-        </Suspense>
-      ));
+        </Suspense>,
+      );
 
       expect(wrapper.debug()).to.equal(`<Suspense fallback={{...}}>
   <lazy />
@@ -1865,11 +1892,12 @@ describe('shallow', () => {
     it('replaces LazyComponent with Fallback when render Suspense if options.suspenseFallback=true', () => {
       const LazyComponent = lazy(() => fakeDynamicImport(DynamicComponent));
 
-      const wrapper = shallow((
+      const wrapper = shallow(
         <Suspense fallback={<Fallback />}>
           <LazyComponent />
-        </Suspense>
-      ), { suspenseFallback: true });
+        </Suspense>,
+        { suspenseFallback: true },
+      );
 
       expect(wrapper.find(LazyComponent)).to.have.lengthOf(0);
       expect(wrapper.find(Fallback)).to.have.lengthOf(1);
@@ -1878,11 +1906,12 @@ describe('shallow', () => {
     it('returns fallback component string when debug() is called if options.suspenseFallback=true', () => {
       const LazyComponent = lazy(() => fakeDynamicImport(DynamicComponent));
 
-      const wrapper = shallow((
+      const wrapper = shallow(
         <Suspense fallback={<Fallback />}>
           <LazyComponent />
-        </Suspense>
-      ), { suspenseFallback: true });
+        </Suspense>,
+        { suspenseFallback: true },
+      );
 
       expect(wrapper.debug()).to.equal(`<Suspense fallback={{...}}>
   <Fallback />
@@ -1917,7 +1946,7 @@ describe('shallow', () => {
     it('replaces nested LazyComponent with Fallback when render Suspense with options.suspenseFallback=true', () => {
       const LazyComponent = lazy(() => fakeDynamicImport(DynamicComponent));
 
-      const wrapper = shallow((
+      const wrapper = shallow(
         <Suspense fallback={<Fallback />}>
           <div className="should-be-rendered" />
           <LazyComponent />
@@ -1925,8 +1954,9 @@ describe('shallow', () => {
             <LazyComponent />
             <div className="inner" />
           </div>
-        </Suspense>
-      ), { suspenseFallback: true });
+        </Suspense>,
+        { suspenseFallback: true },
+      );
 
       expect(wrapper.find(LazyComponent)).to.have.lengthOf(0);
       expect(wrapper.find(Fallback)).to.have.lengthOf(2);
@@ -1937,11 +1967,12 @@ describe('shallow', () => {
     it('does not replace LazyComponent with Fallback when render Suspense if options.suspenseFallback=false', () => {
       const LazyComponent = lazy(() => fakeDynamicImport(DynamicComponent));
 
-      const wrapper = shallow((
+      const wrapper = shallow(
         <Suspense fallback={<Fallback />}>
           <LazyComponent />
-        </Suspense>
-      ), { suspenseFallback: false });
+        </Suspense>,
+        { suspenseFallback: false },
+      );
 
       expect(wrapper.find(LazyComponent)).to.have.lengthOf(1);
       expect(wrapper.find(Fallback)).to.have.lengthOf(0);
@@ -1950,7 +1981,7 @@ describe('shallow', () => {
     it('does not replace nested LazyComponent with Fallback when render Suspense if option.suspenseFallback=false', () => {
       const LazyComponent = lazy(() => fakeDynamicImport(DynamicComponent));
 
-      const wrapper = shallow((
+      const wrapper = shallow(
         <Suspense fallback={<Fallback />}>
           <div className="should-be-rendered" />
           <LazyComponent />
@@ -1958,8 +1989,9 @@ describe('shallow', () => {
             <LazyComponent />
             <div className="inner" />
           </div>
-        </Suspense>
-      ), { suspenseFallback: false });
+        </Suspense>,
+        { suspenseFallback: false },
+      );
 
       expect(wrapper.find(LazyComponent)).to.have.lengthOf(2);
       expect(wrapper.find(Fallback)).to.have.lengthOf(0);
@@ -1994,13 +2026,7 @@ describe('shallow', () => {
       class MyComponent extends React.Component {
         render() {
           const { fallback, requiredString } = this.props;
-          return (
-            <Suspense fallback={fallback}>
-              hello world
-              {' '}
-              {requiredString}
-            </Suspense>
-          );
+          return <Suspense fallback={fallback}>hello world {requiredString}</Suspense>;
         }
       }
       MyComponent.propTypes = {
@@ -2009,13 +2035,7 @@ describe('shallow', () => {
       };
 
       function MySFC({ fallback, requiredString }) {
-        return (
-          <Suspense fallback={fallback}>
-            hello world
-            {' '}
-            {requiredString}
-          </Suspense>
-        );
+        return <Suspense fallback={fallback}>hello world {requiredString}</Suspense>;
       }
       MySFC.propTypes = MyComponent.propTypes;
 
@@ -2053,34 +2073,38 @@ describe('shallow', () => {
       const PageSwitchFallback = memo ? memo(() => <div aria-live="polite" aria-busy />) : {};
       PageSwitchFallback.displayName = 'PageSwitchFallback';
 
-      const PageSwitch = memo ? memo(({ pageData }) => {
-        const renderPageComponent = useCallback ? useCallback(() => {
-          if (pageData === 'NOT_FOUND') return null;
+      const PageSwitch = memo
+        ? memo(({ pageData }) => {
+            const renderPageComponent = useCallback
+              ? useCallback(() => {
+                  if (pageData === 'NOT_FOUND') return null;
 
-          switch (pageData.key) {
-            case 'home':
-              return <Home />;
-            default:
-              return null;
-          }
-        }, [pageData]) : () => {};
+                  switch (pageData.key) {
+                    case 'home':
+                      return <Home />;
+                    default:
+                      return null;
+                  }
+                }, [pageData])
+              : () => {};
 
-        return (
-          <Suspense fallback={<PageSwitchFallback />}>
-            {renderPageComponent()}
-          </Suspense>
-        );
-      }) : {};
+            return <Suspense fallback={<PageSwitchFallback />}>{renderPageComponent()}</Suspense>;
+          })
+        : {};
       PageSwitch.displayName = 'PageSwitch';
 
       it('works with suspenseFallback: true', () => {
-        const wrapper = shallow(<PageSwitch pageData={{ key: 'home' }} />, { suspenseFallback: true });
+        const wrapper = shallow(<PageSwitch pageData={{ key: 'home' }} />, {
+          suspenseFallback: true,
+        });
         expect(wrapper.find(PageSwitchFallback)).to.have.lengthOf(1);
         expect(wrapper.find(Home)).to.have.lengthOf(0);
       });
 
       it('works with suspenseFallback: false', () => {
-        const wrapper = shallow(<PageSwitch pageData={{ key: 'home' }} />, { suspenseFallback: false });
+        const wrapper = shallow(<PageSwitch pageData={{ key: 'home' }} />, {
+          suspenseFallback: false,
+        });
         expect(wrapper.find(PageSwitchFallback)).to.have.lengthOf(0);
         expect(wrapper.find(Home)).to.have.lengthOf(1);
       });
@@ -2092,17 +2116,21 @@ describe('shallow', () => {
       describe('validation', () => {
         it('throws for a non-boolean value', () => {
           ['value', 42, null].forEach((value) => {
-            expect(() => shallow(<div />, {
-              disableLifecycleMethods: value,
-            })).to.throw(/true or false/);
+            expect(() =>
+              shallow(<div />, {
+                disableLifecycleMethods: value,
+              }),
+            ).to.throw(/true or false/);
           });
         });
 
         it('does not throw for a boolean value or undefined', () => {
           [true, false, undefined].forEach((value) => {
-            expect(() => shallow(<div />, {
-              disableLifecycleMethods: value,
-            })).not.to.throw();
+            expect(() =>
+              shallow(<div />, {
+                disableLifecycleMethods: value,
+              }),
+            ).not.to.throw();
           });
         });
 
@@ -2112,10 +2140,12 @@ describe('shallow', () => {
 
         it('throws when used with lifecycleExperimental in invalid combinations', () => {
           [true, false].forEach((value) => {
-            expect(() => shallow(<div />, {
-              lifecycleExperimental: value,
-              disableLifecycleMethods: value,
-            })).to.throw(/same value/);
+            expect(() =>
+              shallow(<div />, {
+                lifecycleExperimental: value,
+                disableLifecycleMethods: value,
+              }),
+            ).to.throw(/same value/);
           });
         });
       });
@@ -2123,22 +2153,34 @@ describe('shallow', () => {
       describe('when disabled', () => {
         const spy = sinon.spy();
         class Foo extends React.Component {
-          componentWillMount() { spy('componentWillMount'); }
+          componentWillMount() {
+            spy('componentWillMount');
+          }
 
-          componentDidMount() { spy('componentDidMount'); }
+          componentDidMount() {
+            spy('componentDidMount');
+          }
 
-          componentWillReceiveProps() { spy('componentWillReceiveProps'); }
+          componentWillReceiveProps() {
+            spy('componentWillReceiveProps');
+          }
 
           shouldComponentUpdate() {
             spy('shouldComponentUpdate');
             return true;
           }
 
-          componentWillUpdate() { spy('componentWillUpdate'); }
+          componentWillUpdate() {
+            spy('componentWillUpdate');
+          }
 
-          componentDidUpdate() { spy('componentDidUpdate'); }
+          componentDidUpdate() {
+            spy('componentDidUpdate');
+          }
 
-          componentWillUnmount() { spy('componentWillUnmount'); }
+          componentWillUnmount() {
+            spy('componentWillUnmount');
+          }
 
           render() {
             spy('render');
@@ -2163,18 +2205,12 @@ describe('shallow', () => {
 
         it('does not call componentDidMount when mounting', () => {
           shallow(<Foo />, options);
-          expect(spy.args).to.deep.equal([
-            ['componentWillMount'],
-            ['render'],
-          ]);
+          expect(spy.args).to.deep.equal([['componentWillMount'], ['render']]);
         });
 
         it('calls expected methods when receiving new props', () => {
           const wrapper = shallow(<Foo />, options);
-          expect(spy.args).to.deep.equal([
-            ['componentWillMount'],
-            ['render'],
-          ]);
+          expect(spy.args).to.deep.equal([['componentWillMount'], ['render']]);
           spy.resetHistory();
           wrapper.setProps({ foo: 'foo' });
           expect(spy.args).to.deep.equal([
@@ -2188,10 +2224,7 @@ describe('shallow', () => {
         describe('setContext', () => {
           it('calls expected methods when receiving new context', () => {
             const wrapper = shallow(<Foo />, options);
-            expect(spy.args).to.deep.equal([
-              ['componentWillMount'],
-              ['render'],
-            ]);
+            expect(spy.args).to.deep.equal([['componentWillMount'], ['render']]);
             spy.resetHistory();
 
             wrapper.setContext({ foo: 'bar' });
@@ -2207,10 +2240,7 @@ describe('shallow', () => {
 
         itIf(false, 'calls expected methods for setState', () => {
           const wrapper = shallow(<Foo />, options);
-          expect(spy.args).to.deep.equal([
-            ['componentWillMount'],
-            ['render'],
-          ]);
+          expect(spy.args).to.deep.equal([['componentWillMount'], ['render']]);
           spy.resetHistory();
           wrapper.setState({ bar: 'bar' });
           expect(spy.args).to.deep.equal([
@@ -2224,10 +2254,7 @@ describe('shallow', () => {
         // componentDidUpdate is not called in react 16
         it('calls expected methods for setState', () => {
           const wrapper = shallow(<Foo />, options);
-          expect(spy.args).to.deep.equal([
-            ['componentWillMount'],
-            ['render'],
-          ]);
+          expect(spy.args).to.deep.equal([['componentWillMount'], ['render']]);
           spy.resetHistory();
           wrapper.setState({ bar: 'bar' });
           expect(spy.args).to.deep.equal([
@@ -2239,15 +2266,10 @@ describe('shallow', () => {
 
         it('calls expected methods when unmounting', () => {
           const wrapper = shallow(<Foo />, options);
-          expect(spy.args).to.deep.equal([
-            ['componentWillMount'],
-            ['render'],
-          ]);
+          expect(spy.args).to.deep.equal([['componentWillMount'], ['render']]);
           spy.resetHistory();
           wrapper.unmount();
-          expect(spy.args).to.deep.equal([
-            ['componentWillUnmount'],
-          ]);
+          expect(spy.args).to.deep.equal([['componentWillUnmount']]);
         });
       });
 
@@ -2269,7 +2291,7 @@ describe('shallow', () => {
       it('calls `componentDidMount` directly when disableLifecycleMethods is true', () => {
         class Table extends React.Component {
           render() {
-            return (<table />);
+            return <table />;
           }
         }
 
@@ -2287,7 +2309,7 @@ describe('shallow', () => {
 
           render() {
             const { showTable } = this.state;
-            return (<div>{showTable ? <Table /> : null}</div>);
+            return <div>{showTable ? <Table /> : null}</div>;
           }
         }
         const wrapper = shallow(<MyComponent />, { disableLifecycleMethods: true });
@@ -2316,13 +2338,10 @@ describe('shallow', () => {
             return <div>{foo}</div>;
           }
         }
-        const wrapper = shallow(
-          <Foo foo="foo" />,
-          {
-            context: { foo: 'foo' },
-            disableLifecycleMethods: true,
-          },
-        );
+        const wrapper = shallow(<Foo foo="foo" />, {
+          context: { foo: 'foo' },
+          disableLifecycleMethods: true,
+        });
         expect(spy).to.have.property('callCount', 0);
         wrapper.setProps({ foo: 'bar' });
         expect(spy).to.have.property('callCount', 1);
@@ -2337,17 +2356,21 @@ describe('shallow', () => {
       describe('validation', () => {
         it('throws for a non-boolean value', () => {
           ['value', 42, null].forEach((value) => {
-            expect(() => shallow(<div />, {
-              lifecycleExperimental: value,
-            })).to.throw(/true or false/);
+            expect(() =>
+              shallow(<div />, {
+                lifecycleExperimental: value,
+              }),
+            ).to.throw(/true or false/);
           });
         });
 
         it('does not throw for a boolean value or when not provided', () => {
           [true, false, undefined].forEach((value) => {
-            expect(() => shallow(<div />, {
-              lifecycleExperimental: value,
-            })).not.to.throw();
+            expect(() =>
+              shallow(<div />, {
+                lifecycleExperimental: value,
+              }),
+            ).not.to.throw();
           });
         });
       });
@@ -2377,7 +2400,8 @@ describe('shallow', () => {
         const adapter = getAdapter();
         const { lifecycles = {} } = adapter;
         const options = {
-          supportPrevContextArgumentOfComponentDidUpdate: !!adapter.supportPrevContextArgumentOfComponentDidUpdate,
+          supportPrevContextArgumentOfComponentDidUpdate:
+            !!adapter.supportPrevContextArgumentOfComponentDidUpdate,
           lifecycles: {
             ...lifecycles,
             componentDidUpdate: {
@@ -2461,7 +2485,6 @@ describe('shallow', () => {
       }
 
       render() {
-        /* eslint-disable react/destructuring-assignment */
         return (
           <div>
             {this.state && this.state.showSpan && <span className="show-me" />}
@@ -2469,7 +2492,6 @@ describe('shallow', () => {
             <Child callback={() => this.callbackSetState()} />
           </div>
         );
-        /* eslint-enable react/destructuring-assignment */
       }
     }
 
@@ -2498,7 +2520,11 @@ describe('shallow', () => {
     class Child extends React.Component {
       render() {
         const { onClick } = this.props;
-        return <button type="button" onClick={onClick}>click</button>;
+        return (
+          <button type="button" onClick={onClick}>
+            click
+          </button>
+        );
       }
     }
 
@@ -2513,7 +2539,7 @@ describe('shallow', () => {
 
         onIncrement() {
           this.setState({
-            count: this.state.count + 1, // eslint-disable-line react/destructuring-assignment
+            count: this.state.count + 1,
           });
         }
 
@@ -2542,7 +2568,11 @@ describe('shallow', () => {
     class Child extends React.Component {
       render() {
         const { onClick } = this.props;
-        return <button type="button" onClick={onClick}>click</button>;
+        return (
+          <button type="button" onClick={onClick}>
+            click
+          </button>
+        );
       }
     }
 
@@ -2559,9 +2589,12 @@ describe('shallow', () => {
 
           onIncrement() {
             setTimeout(() => {
-              this.setState({
-                count: this.state.count + 1, // eslint-disable-line react/destructuring-assignment
-              }, resolve);
+              this.setState(
+                {
+                  count: this.state.count + 1,
+                },
+                resolve,
+              );
             });
           }
 
@@ -2592,28 +2625,25 @@ describe('shallow', () => {
         const mappedChildren = [];
         React.Children.forEach(children, (child, i) => {
           const clonedChild = React.cloneElement(child, {
-            key: i, // eslint-disable-line react/no-array-index-key
+            // eslint-disable-next-line react/no-array-index-key
+            key: i,
             onClick() {
               return child.props.name;
             },
           });
           mappedChildren.push(clonedChild);
         });
-        return (
-          <div>
-            {mappedChildren}
-          </div>
-        );
+        return <div>{mappedChildren}</div>;
       }
     }
 
     it('merges cloned element props', () => {
-      const wrapper = shallow((
+      const wrapper = shallow(
         <Foo>
           <span data-foo="1">1</span>
           <div data-bar="2">2</div>
-        </Foo>
-      ));
+        </Foo>,
+      );
 
       const children = wrapper.children();
       expect(children).to.have.lengthOf(2);

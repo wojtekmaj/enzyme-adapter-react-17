@@ -2,9 +2,7 @@ import React from 'react';
 import sinon from 'sinon-sandbox';
 import { expect } from 'chai';
 
-export default function describeGDSFP({
-  Wrap,
-}) {
+export default function describeGDSFP({ Wrap }) {
   describe('getDerivedStateFromProps()', () => {
     let spy;
 
@@ -15,7 +13,7 @@ export default function describeGDSFP({
     class Spy extends React.Component {
       constructor(...args) {
         super(...args);
-        this.state = { state: true }; // eslint-disable-line react/no-unused-state
+        this.state = { state: true };
         spy('constructor');
       }
 
@@ -73,7 +71,7 @@ export default function describeGDSFP({
     }
 
     class U_CWRP extends Spy {
-      UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
+      UNSAFE_componentWillReceiveProps(nextProps) {
         spy('UNSAFE_componentWillReceiveProps', {
           prevProps: this.props,
           nextProps,
@@ -95,10 +93,7 @@ export default function describeGDSFP({
     it('calls cWRP when expected', () => {
       const prevProps = { a: 1 };
       const wrapper = Wrap(<CWRP {...prevProps} />);
-      expect(spy.args).to.deep.equal([
-        ['constructor'],
-        ['render'],
-      ]);
+      expect(spy.args).to.deep.equal([['constructor'], ['render']]);
       spy.resetHistory();
 
       const foo = {};
@@ -126,21 +121,20 @@ export default function describeGDSFP({
         ['shouldComponentUpdate', data],
         ['componentWillUpdate', data],
         ['render'],
-        ['componentDidUpdate', {
-          ...data,
-          prevContext: undefined,
-        }],
+        [
+          'componentDidUpdate',
+          {
+            ...data,
+            prevContext: undefined,
+          },
+        ],
       ]);
     });
 
     it('calls UNSAFE_cWRP when expected', () => {
       const prevProps = { a: 1 };
-      // eslint-disable-next-line react/jsx-pascal-case
       const wrapper = Wrap(<U_CWRP {...prevProps} />);
-      expect(spy.args).to.deep.equal([
-        ['constructor'],
-        ['render'],
-      ]);
+      expect(spy.args).to.deep.equal([['constructor'], ['render']]);
       spy.resetHistory();
 
       const foo = {};
@@ -164,17 +158,23 @@ export default function describeGDSFP({
         nextContext,
       };
       expect(spy.args).to.deep.equal([
-        ['UNSAFE_componentWillReceiveProps', {
-          ...data,
-          nextContext: undefined,
-        }],
+        [
+          'UNSAFE_componentWillReceiveProps',
+          {
+            ...data,
+            nextContext: undefined,
+          },
+        ],
         ['shouldComponentUpdate', data],
         ['componentWillUpdate', data],
         ['render'],
-        ['componentDidUpdate', {
-          ...data,
-          prevContext: undefined,
-        }],
+        [
+          'componentDidUpdate',
+          {
+            ...data,
+            prevContext: undefined,
+          },
+        ],
       ]);
     });
 
@@ -184,10 +184,13 @@ export default function describeGDSFP({
       const wrapper = Wrap(<GDSFP {...prevProps} />);
       expect(spy.args).to.deep.equal([
         ['constructor'],
-        ['getDerivedStateFromProps', {
-          props: prevProps,
-          state,
-        }],
+        [
+          'getDerivedStateFromProps',
+          {
+            props: prevProps,
+            state,
+          },
+        ],
         ['render'],
       ]);
       spy.resetHistory();
@@ -213,16 +216,22 @@ export default function describeGDSFP({
         nextContext,
       };
       expect(spy.args).to.deep.equal([
-        ['getDerivedStateFromProps', {
-          props: nextProps,
-          state: nextState,
-        }],
+        [
+          'getDerivedStateFromProps',
+          {
+            props: nextProps,
+            state: nextState,
+          },
+        ],
         ['shouldComponentUpdate', data],
         ['render'],
-        ['componentDidUpdate', {
-          ...data,
-          prevContext: undefined,
-        }],
+        [
+          'componentDidUpdate',
+          {
+            ...data,
+            prevContext: undefined,
+          },
+        ],
       ]);
     });
 
@@ -244,7 +253,7 @@ export default function describeGDSFP({
 
         render() {
           const { value } = this.state;
-          return (<input value={value} />);
+          return <input value={value} />;
         }
       }
       const wrapper = Wrap(<SimpleComponent value="initial" />);

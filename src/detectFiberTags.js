@@ -28,11 +28,7 @@ function getLazyFiber(LazyComponent) {
 
   class SuspenseWrapper extends React.Component {
     render() {
-      return React.createElement(
-        React.Suspense,
-        { fallback: false },
-        React.createElement(Tester),
-      );
+      return React.createElement(React.Suspense, { fallback: false }, React.createElement(Tester));
     }
   }
   ReactDOM.render(React.createElement(SuspenseWrapper), container);
@@ -44,7 +40,8 @@ module.exports = function detectFiberTags() {
   const supportsContext = typeof React.createContext !== 'undefined';
   const supportsForwardRef = typeof React.forwardRef !== 'undefined';
   const supportsMemo = typeof React.memo !== 'undefined';
-  const supportsProfiler = typeof React.unstable_Profiler !== 'undefined' || typeof React.Profiler !== 'undefined';
+  const supportsProfiler =
+    typeof React.unstable_Profiler !== 'undefined' || typeof React.Profiler !== 'undefined';
   const supportsSuspense = typeof React.Suspense !== 'undefined';
   const supportsLazy = typeof React.lazy !== 'undefined';
 
@@ -76,36 +73,31 @@ module.exports = function detectFiberTags() {
     ClassComponent: getFiber(React.createElement(Cls)).tag,
     Fragment: getFiber([['nested']]).tag,
     FunctionalComponent: getFiber(React.createElement(Fn)).tag,
-    MemoSFC: supportsMemo
-      ? getFiber(React.createElement(React.memo(Fn))).tag
-      : -1,
-    MemoClass: supportsMemo
-      ? getFiber(React.createElement(React.memo(Cls))).tag
-      : -1,
+    MemoSFC: supportsMemo ? getFiber(React.createElement(React.memo(Fn))).tag : -1,
+    MemoClass: supportsMemo ? getFiber(React.createElement(React.memo(Cls))).tag : -1,
     HostPortal: getFiber(ReactDOM.createPortal(null, global.document.createElement('div'))).tag,
     HostComponent: getFiber(React.createElement('span')).tag,
     HostText: getFiber('text').tag,
-    Mode: supportsMode
-      ? getFiber(React.createElement(React.StrictMode)).tag
-      : -1,
+    Mode: supportsMode ? getFiber(React.createElement(React.StrictMode)).tag : -1,
     ContextConsumer: supportsContext
       ? getFiber(React.createElement(Ctx.Consumer, null, () => null)).tag
       : -1,
     ContextProvider: supportsContext
       ? getFiber(React.createElement(Ctx.Provider, { value: null }, null)).tag
       : -1,
-    ForwardRef: supportsForwardRef
-      ? getFiber(React.createElement(FwdRef)).tag
-      : -1,
+    ForwardRef: supportsForwardRef ? getFiber(React.createElement(FwdRef)).tag : -1,
     Profiler: supportsProfiler
-      ? getFiber(React.createElement((React.Profiler || React.unstable_Profiler), { id: 'mock', onRender() {} })).tag
+      ? getFiber(
+          React.createElement(React.Profiler || React.unstable_Profiler, {
+            id: 'mock',
+            onRender() {},
+          }),
+        ).tag
       : -1,
     Suspense: supportsSuspense
       ? getFiber(React.createElement(React.Suspense, { fallback: false })).tag
       : -1,
-    Lazy: supportsLazy
-      ? getLazyFiber(LazyComponent).tag
-      : -1,
+    Lazy: supportsLazy ? getLazyFiber(LazyComponent).tag : -1,
     OffscreenComponent: supportsLazy
       ? getLazyFiber('div').return.return.tag // Go two levels above to find the root
       : -1,

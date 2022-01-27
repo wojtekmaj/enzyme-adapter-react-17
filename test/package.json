@@ -56,8 +56,9 @@
   "devDependencies": {
     "@babel/cli": "^7.15.0",
     "@babel/core": "^7.15.0",
-    "eslint": "^7.15.0",
-    "eslint-config-wojtekmaj": "^0.5.0",
+    "eslint": "^8.5.0",
+    "eslint-config-wojtekmaj": "^0.6.5",
+    "prettier": "^2.5.0",
     "rimraf": "^3.0.0"
   },
   "repository": {

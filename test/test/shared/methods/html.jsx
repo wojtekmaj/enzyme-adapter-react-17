@@ -1,27 +1,23 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  Fragment,
-} from '../../_helpers/react-compat';
+import { Fragment } from '../../_helpers/react-compat';
 
-export default function describeHTML({
-  Wrap,
-}) {
+export default function describeHTML({ Wrap }) {
   describe('.html()', () => {
     it('returns html of straight DOM elements', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div className="test">
           <span>Hello World!</span>
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.html()).to.equal('<div class="test"><span>Hello World!</span></div>');
     });
 
     it('renders out nested composite components', () => {
       class Foo extends React.Component {
         render() {
-          return (<div className="in-foo" />);
+          return <div className="in-foo" />;
         }
       }
       class Bar extends React.Component {
@@ -58,8 +54,12 @@ export default function describeHTML({
         render() {
           return (
             <Fragment>
-              <div><span>Foo</span></div>
-              <div><span>Bar</span></div>
+              <div>
+                <span>Foo</span>
+              </div>
+              <div>
+                <span>Bar</span>
+              </div>
             </Fragment>
           );
         }
@@ -67,8 +67,12 @@ export default function describeHTML({
 
       const FragmentConstExample = () => (
         <Fragment>
-          <div><span>Foo</span></div>
-          <div><span>Bar</span></div>
+          <div>
+            <span>Foo</span>
+          </div>
+          <div>
+            <span>Bar</span>
+          </div>
         </Fragment>
       );
 
@@ -95,12 +99,16 @@ export default function describeHTML({
 
       it('correctly renders html for both children for class', () => {
         const classWrapper = Wrap(<FragmentClassExample />);
-        expect(classWrapper.html()).to.equal('<div><span>Foo</span></div><div><span>Bar</span></div>');
+        expect(classWrapper.html()).to.equal(
+          '<div><span>Foo</span></div><div><span>Bar</span></div>',
+        );
       });
 
       it('correctly renders html for both children for const', () => {
         const constWrapper = Wrap(<FragmentConstExample />);
-        expect(constWrapper.html()).to.equal('<div><span>Foo</span></div><div><span>Bar</span></div>');
+        expect(constWrapper.html()).to.equal(
+          '<div><span>Foo</span></div><div><span>Bar</span></div>',
+        );
       });
 
       it('correctly renders html for custom component children', () => {

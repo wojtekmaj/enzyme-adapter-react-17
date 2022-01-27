@@ -2,19 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { expect } from 'chai';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 
-import {
-  createClass,
-} from '../../_helpers/react-compat';
+import { createClass } from '../../_helpers/react-compat';
 
-export default function describeContext({
-  Wrap,
-  WrapperName,
-  isShallow,
-}) {
+export default function describeContext({ Wrap, WrapperName, isShallow }) {
   describe('.context()', () => {
     const contextTypes = {
       name: PropTypes.string,
@@ -74,7 +66,11 @@ export default function describeContext({
 
     class RendersHTML extends React.Component {
       render() {
-        return <div><span>hi</span></div>;
+        return (
+          <div>
+            <span>hi</span>
+          </div>
+        );
       }
     }
 
@@ -93,7 +89,11 @@ export default function describeContext({
     }
 
     it('throws on non-root', () => {
-      const wrapper = Wrap(<RendersChildren><RendersHTML /></RendersChildren>);
+      const wrapper = Wrap(
+        <RendersChildren>
+          <RendersHTML />
+        </RendersChildren>,
+      );
       const child = wrapper.find(RendersHTML);
       expect(child).to.have.lengthOf(1);
       expect(() => child.context()).to.throw(Error);
@@ -104,7 +104,11 @@ export default function describeContext({
         return <RendersHTML />;
       }
 
-      const wrapper = Wrap(<RendersChildren><Bar /></RendersChildren>);
+      const wrapper = Wrap(
+        <RendersChildren>
+          <Bar />
+        </RendersChildren>,
+      );
       const child = wrapper.find(Bar);
       expect(child).to.have.lengthOf(1);
       expect(() => child.context()).to.throw(Error);

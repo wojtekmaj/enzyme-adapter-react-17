@@ -1,11 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 
-export default function describeChildren({
-  Wrap,
-  WrapRendered,
-  isShallow,
-}) {
+export default function describeChildren({ Wrap, WrapRendered, isShallow }) {
   describe('.children([selector])', () => {
     it('returns empty wrapper for node with no children', () => {
       const wrapper = Wrap(<div />);
@@ -16,8 +12,7 @@ export default function describeChildren({
       const wrapper = Wrap(
         <div>
           B
-          <span />
-          C
+          <span />C
         </div>,
       ).children();
       expect(wrapper).to.have.lengthOf(3);
@@ -27,15 +22,14 @@ export default function describeChildren({
       const wrapper = WrapRendered(
         <div>
           B
-          <span />
-          C
+          <span />C
         </div>,
       );
       expect(wrapper).to.have.lengthOf(isShallow ? 1 : 3);
     });
 
     it('skips the falsy children', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div>
             {false}
@@ -52,21 +46,21 @@ export default function describeChildren({
             {[null, null]}
             <p>baz</p>
           </div>
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.childAt(0).children()).to.have.lengthOf(1);
       expect(wrapper.childAt(1).children()).to.have.lengthOf(1);
       expect(wrapper.childAt(2).children()).to.have.lengthOf(1);
     });
 
     it('returns the children nodes of the root', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="foo" />
           <div className="bar" />
           <div className="baz" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.children()).to.have.lengthOf(3);
       expect(wrapper.children().at(0).hasClass('foo')).to.equal(true);
       expect(wrapper.children().at(1).hasClass('bar')).to.equal(true);
@@ -74,14 +68,14 @@ export default function describeChildren({
     });
 
     it('does not return any of the children of children', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="foo">
             <div className="bar" />
           </div>
           <div className="baz" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.children()).to.have.lengthOf(2);
       expect(wrapper.children().at(0).hasClass('foo')).to.equal(true);
       expect(wrapper.children().at(1).hasClass('baz')).to.equal(true);
@@ -99,14 +93,18 @@ export default function describeChildren({
           );
         }
       }
-      const wrapper = WrapRendered((
+      const wrapper = WrapRendered(
         <Foo
           items={[
-            <i key={1} className="bar">abc</i>,
-            <i key={2} className="baz">def</i>,
+            <i key={1} className="bar">
+              abc
+            </i>,
+            <i key={2} className="baz">
+              def
+            </i>,
           ]}
-        />
-      ));
+        />,
+      );
       expect(wrapper.children()).to.have.lengthOf(3);
       expect(wrapper.children().at(0).hasClass('foo')).to.equal(true);
       expect(wrapper.children().at(1).hasClass('bar')).to.equal(true);
@@ -114,13 +112,13 @@ export default function describeChildren({
     });
 
     it('optionally allows a selector to filter by', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="foo" />
           <div className="bar bip" />
           <div className="baz bip" />
-        </div>
-      ));
+        </div>,
+      );
       const children = wrapper.children('.bip');
       expect(children).to.have.lengthOf(2);
       expect(children.at(0).hasClass('bar')).to.equal(true);
@@ -136,14 +134,18 @@ export default function describeChildren({
           </div>
         );
 
-        const wrapper = WrapRendered((
+        const wrapper = WrapRendered(
           <Foo
             items={[
-              <i key={1} className="bar">abc</i>,
-              <i key={2} className="baz">def</i>,
+              <i key={1} className="bar">
+                abc
+              </i>,
+              <i key={2} className="baz">
+                def
+              </i>,
             ]}
-          />
-        ));
+          />,
+        );
         expect(wrapper.children()).to.have.lengthOf(3);
         expect(wrapper.children().at(0).hasClass('foo')).to.equal(true);
         expect(wrapper.children().at(1).hasClass('bar')).to.equal(true);
@@ -196,13 +198,13 @@ export default function describeChildren({
         }
       }
 
-      const wrapper = WrapRendered((
+      const wrapper = WrapRendered(
         <JustificationRow>
           <div>foo</div>
           <div>bar</div>
           <div>baz</div>
-        </JustificationRow>
-      ));
+        </JustificationRow>,
+      );
 
       expect(wrapper.children().map((x) => x.debug())).to.eql([
         `<span>

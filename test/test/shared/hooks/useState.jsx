@@ -1,33 +1,24 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  describeIf,
-  itIf,
-} from '../../_helpers';
+import { describeIf, itIf } from '../../_helpers';
 
-import {
-  useState,
-  useEffect,
-  Fragment,
-} from '../../_helpers/react-compat';
+import { useState, useEffect, Fragment } from '../../_helpers/react-compat';
 
-export default function describeUseState({
-  hasHooks,
-  Wrap,
-  isShallow,
-}) {
+export default function describeUseState({ hasHooks, Wrap, isShallow }) {
   describeIf(hasHooks, 'hooks: useState', () => {
     function FooCounter({ initialCount: initial = 0 }) {
       const [count, setCount] = useState(+initial);
 
       return (
         <Fragment>
-          <button className="increment" type="button" onClick={() => setCount(count + 1)}>-</button>
-          <span className="counter">
-            {count}
-          </span>
-          <button className="decrement" type="button" onClick={() => setCount(count - 1)}>+</button>
+          <button className="increment" type="button" onClick={() => setCount(count + 1)}>
+            -
+          </button>
+          <span className="counter">{count}</span>
+          <button className="decrement" type="button" onClick={() => setCount(count - 1)}>
+            +
+          </button>
         </Fragment>
       );
     }
@@ -94,9 +85,7 @@ export default function describeUseState({
 
         return (
           <Fragment>
-            <span className="counter">
-              {count}
-            </span>
+            <span className="counter">{count}</span>
           </Fragment>
         );
       }

@@ -20,11 +20,7 @@ import {
 } from 'enzyme/build/Utils';
 import getAdapter from 'enzyme/build/getAdapter';
 import EnzymeAdapter from 'enzyme/build/EnzymeAdapter';
-import {
-  flatten,
-  mapNativeEventNames,
-  propFromEvent,
-} from '@wojtekmaj/enzyme-adapter-utils';
+import { flatten, mapNativeEventNames, propFromEvent } from '@wojtekmaj/enzyme-adapter-utils';
 import { get, reset, merge as configure } from 'enzyme/build/configuration';
 
 import './_helpers/setupAdapters';
@@ -32,217 +28,170 @@ import './_helpers/setupAdapters';
 describe('Utils', () => {
   describe('nodeEqual', () => {
     it('matches empty elements of same tag', () => {
-      expect(nodeEqual(
-        <div />,
-        <div />,
-      )).to.equal(true);
+      expect(nodeEqual(<div />, <div />)).to.equal(true);
     });
 
     it('does not match empty elements of different type', () => {
-      expect(nodeEqual(
-        <div />,
-        <nav />,
-      )).to.equal(false);
+      expect(nodeEqual(<div />, <nav />)).to.equal(false);
     });
 
     it('matches basic prop types', () => {
-      expect(nodeEqual(
-        <div className="foo" />,
-        <div className="foo" />,
-      )).to.equal(true);
+      expect(nodeEqual(<div className="foo" />, <div className="foo" />)).to.equal(true);
 
-      expect(nodeEqual(
-        <div id="foo" className="bar" />,
-        <div id="foo" className="bar" />,
-      )).to.equal(true);
+      expect(
+        nodeEqual(<div id="foo" className="bar" />, <div id="foo" className="bar" />),
+      ).to.equal(true);
 
-      expect(nodeEqual(
-        <div id="foo" className="baz" />,
-        <div id="foo" className="bar" />,
-      )).to.equal(false);
+      expect(
+        nodeEqual(<div id="foo" className="baz" />, <div id="foo" className="bar" />),
+      ).to.equal(false);
     });
 
     it('skips undefined props', () => {
-      expect(nodeEqual(
-        <div id="foo" className={undefined} />,
-        <div id="foo" />,
-      )).to.equal(true);
+      expect(nodeEqual(<div id="foo" className={undefined} />, <div id="foo" />)).to.equal(true);
     });
 
     it('checks children as well', () => {
-      expect(nodeEqual(
-        <div>
-          <div />
-        </div>,
-        <div />,
-      )).to.equal(false);
+      expect(
+        nodeEqual(
+          <div>
+            <div />
+          </div>,
+          <div />,
+        ),
+      ).to.equal(false);
 
-      expect(nodeEqual(
-        <div>
-          <div />
-        </div>,
-        <div>
-          <div />
-        </div>,
-      )).to.equal(true);
+      expect(
+        nodeEqual(
+          <div>
+            <div />
+          </div>,
+          <div>
+            <div />
+          </div>,
+        ),
+      ).to.equal(true);
 
-      expect(nodeEqual(
-        <div>
-          <div className="foo" />
-        </div>,
-        <div>
-          <div className="foo" />
-        </div>,
-      )).to.equal(true);
+      expect(
+        nodeEqual(
+          <div>
+            <div className="foo" />
+          </div>,
+          <div>
+            <div className="foo" />
+          </div>,
+        ),
+      ).to.equal(true);
 
-      expect(nodeEqual(
-        <div>
-          <div className="foo" />
-        </div>,
-        <div>
-          <div />
-        </div>,
-      )).to.equal(false);
+      expect(
+        nodeEqual(
+          <div>
+            <div className="foo" />
+          </div>,
+          <div>
+            <div />
+          </div>,
+        ),
+      ).to.equal(false);
     });
 
     it('tests deepEquality with object props', () => {
-      expect(nodeEqual(
-        <div foo={{ a: 1, b: 2 }} />,
-        <div foo={{ a: 1, b: 2 }} />,
-      )).to.equal(true);
+      expect(nodeEqual(<div foo={{ a: 1, b: 2 }} />, <div foo={{ a: 1, b: 2 }} />)).to.equal(true);
 
-      expect(nodeEqual(
-        <div foo={{ a: 2, b: 2 }} />,
-        <div foo={{ a: 1, b: 2 }} />,
-      )).to.equal(false);
+      expect(nodeEqual(<div foo={{ a: 2, b: 2 }} />, <div foo={{ a: 1, b: 2 }} />)).to.equal(false);
     });
 
     describe('children props', () => {
       it('matches equal nodes', () => {
-        expect(nodeEqual(
-          <div>child</div>,
-          <div>child</div>,
-        )).to.equal(true);
+        expect(nodeEqual(<div>child</div>, <div>child</div>)).to.equal(true);
       });
 
       it('does not match not equal nodes', () => {
-        expect(nodeEqual(
-          <div>child</div>,
-          <div />,
-        )).to.equal(false);
+        expect(nodeEqual(<div>child</div>, <div />)).to.equal(false);
 
-        expect(nodeEqual(
-          <div />,
-          <div>child</div>,
-        )).to.equal(false);
+        expect(nodeEqual(<div />, <div>child</div>)).to.equal(false);
       });
 
       it('matches children before and after interpolation', () => {
-        expect(nodeEqual(
-          <div>
-            {2}
-            {' children'}
-            <span />
-            {' '}
-            abc
-            {' '}
-            hey
-          </div>,
-          <div>
-            2 children
-            <span />
-            {' '}
-            abc hey
-          </div>,
-        )).to.equal(true);
+        expect(
+          nodeEqual(
+            <div>
+              {2}
+              {' children'}
+              <span /> abc hey
+            </div>,
+            <div>
+              2 children
+              <span /> abc hey
+            </div>,
+          ),
+        ).to.equal(true);
       });
 
       it('skips null children', () => {
-        expect(nodeEqual(
-          <div>{null}</div>,
-          <div />,
-        )).to.equal(true);
+        expect(nodeEqual(<div>{null}</div>, <div />)).to.equal(true);
       });
 
       it('skips undefined children', () => {
-        expect(nodeEqual(
-          <div>{undefined}</div>,
-          <div />,
-        )).to.equal(true);
+        expect(nodeEqual(<div>{undefined}</div>, <div />)).to.equal(true);
       });
 
       it('skips empty children', () => {
-        expect(nodeEqual(
-          <div>{[]}</div>,
-          <div />,
-        )).to.equal(true);
+        expect(nodeEqual(<div>{[]}</div>, <div />)).to.equal(true);
       });
 
       it('skips array of null children', () => {
-        expect(nodeEqual(
-          <div>{[null, null, null]}</div>,
-          <div />,
-        )).to.equal(true);
+        expect(nodeEqual(<div>{[null, null, null]}</div>, <div />)).to.equal(true);
       });
     });
 
     describe('basic props and children mixed', () => {
       it('matches equal nodes', () => {
-        expect(nodeEqual(
-          <div className="foo">child</div>,
-          <div className="foo">child</div>,
-        )).to.equal(true);
+        expect(
+          nodeEqual(<div className="foo">child</div>, <div className="foo">child</div>),
+        ).to.equal(true);
       });
 
       it('does not match when basic props are not equal', () => {
-        expect(nodeEqual(
-          <div className="foo">child</div>,
-          <div className="bar">child</div>,
-        )).to.equal(false);
+        expect(
+          nodeEqual(<div className="foo">child</div>, <div className="bar">child</div>),
+        ).to.equal(false);
 
-        expect(nodeEqual(
-          <div className="foo">child</div>,
-          <div className="bar">child</div>,
-        )).to.equal(false);
+        expect(
+          nodeEqual(<div className="foo">child</div>, <div className="bar">child</div>),
+        ).to.equal(false);
       });
 
       it('does not match when children are not equal', () => {
-        expect(nodeEqual(
-          <div className="foo">child</div>,
-          <div className="foo">other child</div>,
-        )).to.equal(false);
+        expect(
+          nodeEqual(<div className="foo">child</div>, <div className="foo">other child</div>),
+        ).to.equal(false);
 
-        expect(nodeEqual(
-          <div className="foo">child</div>,
-          <div className="foo">other child</div>,
-        )).to.equal(false);
+        expect(
+          nodeEqual(<div className="foo">child</div>, <div className="foo">other child</div>),
+        ).to.equal(false);
       });
 
       it('matches nodes when children are different but falsy', () => {
-        expect(nodeEqual(
-          <div className="foo">{null}</div>,
-          <div className="foo" />,
-        )).to.equal(true);
+        expect(nodeEqual(<div className="foo">{null}</div>, <div className="foo" />)).to.equal(
+          true,
+        );
 
-        expect(nodeEqual(
-          <div children={null} className="foo" />, // eslint-disable-line react/no-children-prop
-          <div className="foo" />,
-        )).to.equal(true);
+        expect(
+          nodeEqual(
+            <div children={null} className="foo" />, // eslint-disable-line react/no-children-prop
+            <div className="foo" />,
+          ),
+        ).to.equal(true);
       });
     });
   });
 
   describe('nodeMatches', () => {
     function nodesMatchTwoWays(aProps, bProps, LeftTag = 'div', RightTag = 'div', matches = true) {
-      expect(nodeMatches(
-        <LeftTag {...aProps} />,
-        <RightTag {...bProps} />,
-      )).to.equal(matches);
+      expect(nodeMatches(<LeftTag {...aProps} />, <RightTag {...bProps} />)).to.equal(matches);
 
-      expect(nodeMatches(
-        <LeftTag {...bProps} />,
-        <RightTag {...aProps} />,
-      )).to.equal(matches);
+      expect(nodeMatches(<LeftTag {...bProps} />, <RightTag {...aProps} />)).to.equal(matches);
     }
     function nodesDoNotMatchTwoWays(aProps, bProps, LeftTag = 'div', RightTag = 'div') {
       return nodesMatchTwoWays(aProps, bProps, LeftTag, RightTag, false);
@@ -283,177 +232,192 @@ describe('Utils', () => {
     });
 
     it('checks children as well, not distinguishing null/undefined/absent', () => {
-      expect(nodeMatches(
-        <div>
-          <div />
-        </div>,
-        <div />,
-      )).to.equal(false);
+      expect(
+        nodeMatches(
+          <div>
+            <div />
+          </div>,
+          <div />,
+        ),
+      ).to.equal(false);
 
-      expect(nodeMatches(
-        <div><div /></div>,
-        <div><div /></div>,
-      )).to.equal(true);
+      expect(
+        nodeMatches(
+          <div>
+            <div />
+          </div>,
+          <div>
+            <div />
+          </div>,
+        ),
+      ).to.equal(true);
 
-      expect(nodeMatches(
-        <div><div id={null} /></div>,
-        <div><div /></div>,
-      )).to.equal(true);
-      expect(nodeMatches(
-        <div><div /></div>,
-        <div><div id={null} /></div>,
-      )).to.equal(true);
+      expect(
+        nodeMatches(
+          <div>
+            <div id={null} />
+          </div>,
+          <div>
+            <div />
+          </div>,
+        ),
+      ).to.equal(true);
+      expect(
+        nodeMatches(
+          <div>
+            <div />
+          </div>,
+          <div>
+            <div id={null} />
+          </div>,
+        ),
+      ).to.equal(true);
 
-      expect(nodeMatches(
-        <div><div id={undefined} /></div>,
-        <div><div /></div>,
-      )).to.equal(true);
-      expect(nodeMatches(
-        <div><div /></div>,
-        <div><div id={undefined} /></div>,
-      )).to.equal(true);
+      expect(
+        nodeMatches(
+          <div>
+            <div id={undefined} />
+          </div>,
+          <div>
+            <div />
+          </div>,
+        ),
+      ).to.equal(true);
+      expect(
+        nodeMatches(
+          <div>
+            <div />
+          </div>,
+          <div>
+            <div id={undefined} />
+          </div>,
+        ),
+      ).to.equal(true);
 
-      expect(nodeMatches(
-        <div><div id={undefined} /></div>,
-        <div><div id={null} /></div>,
-      )).to.equal(true);
-      expect(nodeMatches(
-        <div><div id={null} /></div>,
-        <div><div id={undefined} /></div>,
-      )).to.equal(true);
+      expect(
+        nodeMatches(
+          <div>
+            <div id={undefined} />
+          </div>,
+          <div>
+            <div id={null} />
+          </div>,
+        ),
+      ).to.equal(true);
+      expect(
+        nodeMatches(
+          <div>
+            <div id={null} />
+          </div>,
+          <div>
+            <div id={undefined} />
+          </div>,
+        ),
+      ).to.equal(true);
 
-      expect(nodeMatches(
-        <div>
-          <div className="foo" />
-        </div>,
-        <div>
-          <div className="foo" />
-        </div>,
-      )).to.equal(true);
+      expect(
+        nodeMatches(
+          <div>
+            <div className="foo" />
+          </div>,
+          <div>
+            <div className="foo" />
+          </div>,
+        ),
+      ).to.equal(true);
 
-      expect(nodeMatches(
-        <div>
-          <div className="foo" />
-        </div>,
-        <div>
-          <div />
-        </div>,
-      )).to.equal(false);
+      expect(
+        nodeMatches(
+          <div>
+            <div className="foo" />
+          </div>,
+          <div>
+            <div />
+          </div>,
+        ),
+      ).to.equal(false);
     });
 
     it('tests deepEquality with object props', () => {
-      expect(nodeMatches(
-        <div foo={{ a: 1, b: 2 }} />,
-        <div foo={{ a: 1, b: 2 }} />,
-      )).to.equal(true);
+      expect(nodeMatches(<div foo={{ a: 1, b: 2 }} />, <div foo={{ a: 1, b: 2 }} />)).to.equal(
+        true,
+      );
 
-      expect(nodeMatches(
-        <div foo={{ a: 2, b: 2 }} />,
-        <div foo={{ a: 1, b: 2 }} />,
-      )).to.equal(false);
+      expect(nodeMatches(<div foo={{ a: 2, b: 2 }} />, <div foo={{ a: 1, b: 2 }} />)).to.equal(
+        false,
+      );
     });
 
     describe('children props', () => {
       it('matches equal nodes', () => {
-        expect(nodeMatches(
-          <div>child</div>,
-          <div>child</div>,
-        )).to.equal(true);
+        expect(nodeMatches(<div>child</div>, <div>child</div>)).to.equal(true);
       });
 
       it('does not match not equal nodes', () => {
-        expect(nodeMatches(
-          <div>child</div>,
-          <div />,
-        )).to.equal(false);
+        expect(nodeMatches(<div>child</div>, <div />)).to.equal(false);
 
-        expect(nodeMatches(
-          <div />,
-          <div>child</div>,
-        )).to.equal(false);
+        expect(nodeMatches(<div />, <div>child</div>)).to.equal(false);
       });
 
       it('skips null children', () => {
-        expect(nodeMatches(
-          <div>{null}</div>,
-          <div />,
-        )).to.equal(true);
+        expect(nodeMatches(<div>{null}</div>, <div />)).to.equal(true);
       });
 
       it('skips undefined children', () => {
-        expect(nodeMatches(
-          <div>{undefined}</div>,
-          <div />,
-        )).to.equal(true);
+        expect(nodeMatches(<div>{undefined}</div>, <div />)).to.equal(true);
       });
 
       it('skips empty children', () => {
-        expect(nodeMatches(
-          <div>{[]}</div>,
-          <div />,
-        )).to.equal(true);
+        expect(nodeMatches(<div>{[]}</div>, <div />)).to.equal(true);
       });
 
       it('skips array of null children', () => {
-        expect(nodeMatches(
-          <div>{[null, null, null]}</div>,
-          <div />,
-        )).to.equal(true);
+        expect(nodeMatches(<div>{[null, null, null]}</div>, <div />)).to.equal(true);
       });
     });
 
     describe('basic props and children mixed', () => {
       it('matches equal nodes', () => {
-        expect(nodeMatches(
-          <div className="foo">child</div>,
-          <div className="foo">child</div>,
-        )).to.equal(true);
+        expect(
+          nodeMatches(<div className="foo">child</div>, <div className="foo">child</div>),
+        ).to.equal(true);
       });
 
       it('does not match when basic props are not equal', () => {
-        expect(nodeMatches(
-          <div className="foo">child</div>,
-          <div className="bar">child</div>,
-        )).to.equal(false);
+        expect(
+          nodeMatches(<div className="foo">child</div>, <div className="bar">child</div>),
+        ).to.equal(false);
 
-        expect(nodeMatches(
-          <div className="foo">child</div>,
-          <div className="bar">child</div>,
-        )).to.equal(false);
+        expect(
+          nodeMatches(<div className="foo">child</div>, <div className="bar">child</div>),
+        ).to.equal(false);
       });
 
       it('does not match when children are not equal', () => {
-        expect(nodeMatches(
-          <div className="foo">child</div>,
-          <div className="foo">other child</div>,
-        )).to.equal(false);
+        expect(
+          nodeMatches(<div className="foo">child</div>, <div className="foo">other child</div>),
+        ).to.equal(false);
 
-        expect(nodeMatches(
-          <div className="foo">child</div>,
-          <div className="foo">other child</div>,
-        )).to.equal(false);
+        expect(
+          nodeMatches(<div className="foo">child</div>, <div className="foo">other child</div>),
+        ).to.equal(false);
       });
 
       it('matches nodes when children are different but falsy', () => {
-        expect(nodeMatches(
-          <div className="foo">{null}</div>,
-          <div className="foo" />,
-        )).to.equal(true);
+        expect(nodeMatches(<div className="foo">{null}</div>, <div className="foo" />)).to.equal(
+          true,
+        );
 
-        expect(nodeMatches(
-          <div children={null} className="foo" />, // eslint-disable-line react/no-children-prop
-          <div className="foo" />,
-        )).to.equal(true);
+        expect(
+          nodeMatches(
+            <div children={null} className="foo" />, // eslint-disable-line react/no-children-prop
+            <div className="foo" />,
+          ),
+        ).to.equal(true);
 
-        expect(nodeMatches(
-          <div foo="" />,
-          <div foo={0} />,
-        )).to.equal(false);
+        expect(nodeMatches(<div foo="" />, <div foo={0} />)).to.equal(false);
 
-        expect(nodeMatches(
-          <div />,
-          <div>{0}</div>,
-        )).to.equal(false);
+        expect(nodeMatches(<div />, <div>{0}</div>)).to.equal(false);
       });
     });
   });
@@ -466,8 +430,12 @@ describe('Utils', () => {
 
     describe('conditionally supported events', () => {
       it('transforms animation events when supported', () => {
-        expect(propFromEvent('animationiteration', { animation: false })).to.equal('onAnimationiteration');
-        expect(propFromEvent('animationiteration', { animation: true })).to.equal('onAnimationIteration');
+        expect(propFromEvent('animationiteration', { animation: false })).to.equal(
+          'onAnimationiteration',
+        );
+        expect(propFromEvent('animationiteration', { animation: true })).to.equal(
+          'onAnimationIteration',
+        );
       });
 
       it('transforms pointer events when supported', () => {
@@ -526,7 +494,9 @@ describe('Utils', () => {
     describe('given a node with displayName', () => {
       it('returns the displayName', () => {
         class Foo extends React.Component {
-          render() { return <div />; }
+          render() {
+            return <div />;
+          }
         }
 
         Foo.displayName = 'CustomWrapper';
@@ -547,7 +517,9 @@ describe('Utils', () => {
     describe('given a node without displayName', () => {
       it('returns the name', () => {
         class Foo extends React.Component {
-          render() { return <div />; }
+          render() {
+            return <div />;
+          }
         }
 
         expect(displayNameOfNode(<Foo />)).to.equal('Foo');
@@ -607,7 +579,9 @@ describe('Utils', () => {
         Foo.displayName = 'CustomWrapper';
 
         const MemoForwardFoo = React.memo(React.forwardRef(Foo));
-        expect(adapter.displayNameOfNode(<MemoForwardFoo />)).to.equal('Memo(ForwardRef(CustomWrapper))');
+        expect(adapter.displayNameOfNode(<MemoForwardFoo />)).to.equal(
+          'Memo(ForwardRef(CustomWrapper))',
+        );
       });
     });
   });
@@ -772,7 +746,10 @@ describe('Utils', () => {
     const nonEmptyNodeData = [
       [{ rendered: null }, { rendered: <div /> }],
       [{ rendered: null }, { rendered: { rendered: 'hello test' } }],
-      [{ rendered: null }, { rendered: { rendered: [{ rendered: null }, { rendered: <span /> }] } }],
+      [
+        { rendered: null },
+        { rendered: { rendered: [{ rendered: null }, { rendered: <span /> }] } },
+      ],
       { rendered: '' },
       { rendered: { rendered: [{ rendered: null }, { rendered: <span /> }] } },
     ];
@@ -848,7 +825,9 @@ describe('Utils', () => {
       let original;
       spyMethod(obj, 'method', (originalMethod) => {
         original = originalMethod;
-        stub = () => { throw new EvalError('stubbed'); };
+        stub = () => {
+          throw new EvalError('stubbed');
+        };
         return stub;
       });
       expect(original).to.equal(descriptor.value);
@@ -918,12 +897,8 @@ describe('Utils', () => {
 
       spy.restore();
 
-      expect(getSpy.args).to.deep.equal([
-        [1],
-      ]);
-      expect(setSpy.args).to.deep.equal([
-        [1, 2],
-      ]);
+      expect(getSpy.args).to.deep.equal([[1]]);
+      expect(setSpy.args).to.deep.equal([[1, 2]]);
     });
   });
 
@@ -931,12 +906,18 @@ describe('Utils', () => {
     const adapter = getAdapter();
 
     wrap()
-      .withOverride(() => adapter, 'isCustomComponentElement', () => undefined)
+      .withOverride(
+        () => adapter,
+        'isCustomComponentElement',
+        () => undefined,
+      )
       .describe('with an adapter lacking `.isCustomComponentElement`', () => {
         describe('given a valid CustomComponentElement', () => {
           it('returns true', () => {
             class Foo extends React.Component {
-              render() { return <div />; }
+              render() {
+                return <div />;
+              }
             }
             expect(isCustomComponentElement(<Foo />, adapter)).to.equal(true);
           });
@@ -963,14 +944,7 @@ describe('Utils', () => {
           });
 
           it('returns false for non-Components', () => {
-            [
-              class Foo {},
-              {},
-              () => {},
-              'div',
-              'Foo',
-              null,
-            ].forEach((nonComponent) => {
+            [class Foo {}, {}, () => {}, 'div', 'Foo', null].forEach((nonComponent) => {
               expect(isCustomComponentElement(nonComponent, adapter)).to.equal(false);
             });
           });
@@ -978,102 +952,110 @@ describe('Utils', () => {
       });
 
     wrap()
-      .withOverride(() => adapter, 'isCustomComponentElement', () => () => false)
-      .describe('with an adapter that has `.isCustomComponentElement` that always returns false', () => {
-        describe('given a valid CustomComponentElement', () => {
-          it('returns false', () => {
-            class Foo extends React.Component {
-              render() { return <div />; }
-            }
-            expect(isCustomComponentElement(<Foo />, adapter)).to.equal(false);
-          });
-
-          describe('stateless function elements', () => {
+      .withOverride(
+        () => adapter,
+        'isCustomComponentElement',
+        () => () => false,
+      )
+      .describe(
+        'with an adapter that has `.isCustomComponentElement` that always returns false',
+        () => {
+          describe('given a valid CustomComponentElement', () => {
             it('returns false', () => {
-              const Foo = () => <div />;
-
+              class Foo extends React.Component {
+                render() {
+                  return <div />;
+                }
+              }
               expect(isCustomComponentElement(<Foo />, adapter)).to.equal(false);
             });
-          });
 
-          describe('forwardRef Elements', () => {
-            it('returns false', () => {
-              const Foo = React.forwardRef(() => <div />);
-              expect(isCustomComponentElement(<Foo />, adapter)).to.equal(false);
+            describe('stateless function elements', () => {
+              it('returns false', () => {
+                const Foo = () => <div />;
+
+                expect(isCustomComponentElement(<Foo />, adapter)).to.equal(false);
+              });
+            });
+
+            describe('forwardRef Elements', () => {
+              it('returns false', () => {
+                const Foo = React.forwardRef(() => <div />);
+                expect(isCustomComponentElement(<Foo />, adapter)).to.equal(false);
+              });
             });
           });
-        });
 
-        describe('given an invalid CustomComponentElement', () => {
-          it('returns false for HTML elements', () => {
-            expect(isCustomComponentElement(<div />, adapter)).to.equal(false);
-          });
+          describe('given an invalid CustomComponentElement', () => {
+            it('returns false for HTML elements', () => {
+              expect(isCustomComponentElement(<div />, adapter)).to.equal(false);
+            });
 
-          it('returns false for non-Components', () => {
-            [
-              class Foo {},
-              {},
-              () => {},
-              'div',
-              'Foo',
-              null,
-            ].forEach((nonComponent) => {
-              expect(isCustomComponentElement(nonComponent, adapter)).to.equal(false);
+            it('returns false for non-Components', () => {
+              [class Foo {}, {}, () => {}, 'div', 'Foo', null].forEach((nonComponent) => {
+                expect(isCustomComponentElement(nonComponent, adapter)).to.equal(false);
+              });
             });
           });
-        });
-      });
+        },
+      );
 
     wrap()
-      .withOverride(() => adapter, 'isCustomComponentElement', () => () => true)
-      .describe('with an adapter that has `.isCustomComponentElement` that always returns true', () => {
-        describe('given a valid CustomComponentElement', () => {
-          it('returns true', () => {
-            class Foo extends React.Component {
-              render() { return <div />; }
-            }
-            expect(isCustomComponentElement(<Foo />, adapter)).to.equal(true);
-          });
-
-          describe('stateless function elements', () => {
+      .withOverride(
+        () => adapter,
+        'isCustomComponentElement',
+        () => () => true,
+      )
+      .describe(
+        'with an adapter that has `.isCustomComponentElement` that always returns true',
+        () => {
+          describe('given a valid CustomComponentElement', () => {
             it('returns true', () => {
-              const Foo = () => <div />;
-
+              class Foo extends React.Component {
+                render() {
+                  return <div />;
+                }
+              }
               expect(isCustomComponentElement(<Foo />, adapter)).to.equal(true);
             });
-          });
 
-          describe('forwardRef Elements', () => {
-            it('returns true', () => {
-              const Foo = React.forwardRef(() => <div />);
-              expect(isCustomComponentElement(<Foo />, adapter)).to.equal(true);
+            describe('stateless function elements', () => {
+              it('returns true', () => {
+                const Foo = () => <div />;
+
+                expect(isCustomComponentElement(<Foo />, adapter)).to.equal(true);
+              });
+            });
+
+            describe('forwardRef Elements', () => {
+              it('returns true', () => {
+                const Foo = React.forwardRef(() => <div />);
+                expect(isCustomComponentElement(<Foo />, adapter)).to.equal(true);
+              });
             });
           });
-        });
 
-        describe('given an invalid CustomComponentElement', () => {
-          it('returns true for HTML elements', () => {
-            expect(isCustomComponentElement(<div />, adapter)).to.equal(true);
-          });
+          describe('given an invalid CustomComponentElement', () => {
+            it('returns true for HTML elements', () => {
+              expect(isCustomComponentElement(<div />, adapter)).to.equal(true);
+            });
 
-          it('returns true for non-Components', () => {
-            [
-              class Foo {},
-              {},
-              () => {},
-              'div',
-              'Foo',
-              null,
-            ].forEach((nonComponent) => {
-              expect(isCustomComponentElement(nonComponent, adapter)).to.equal(true);
+            it('returns true for non-Components', () => {
+              [class Foo {}, {}, () => {}, 'div', 'Foo', null].forEach((nonComponent) => {
+                expect(isCustomComponentElement(nonComponent, adapter)).to.equal(true);
+              });
             });
           });
-        });
-      });
+        },
+      );
   });
 
   wrap()
-    .withOverride(() => getAdapter(), 'displayNameOfNode', () => undefined)
+    .withOverride(
+      () => getAdapter(),
+      'displayNameOfNode',
+      () => undefined,
+    )
     .describe('nodeHasType', () => {
       it('is `false` if either argument is falsy', () => {
         expect(nodeHasType(null, {})).to.equal(false);
@@ -1096,27 +1078,20 @@ describe('Utils', () => {
       describe('when only `node.type.displayName` matches `type`', () => {
         const x = {};
         it('is `true` when `node.type` is an object', () => {
-          expect(nodeHasType(
-            { type: { displayName: x } },
-            x,
-          )).to.equal(true);
+          expect(nodeHasType({ type: { displayName: x } }, x)).to.equal(true);
         });
 
         it('is `true` when `node.type` is a function', () => {
-          expect(nodeHasType(
-            { type: Object.assign(() => {}, { displayName: x }) },
-            x,
-          )).to.equal(true);
+          expect(nodeHasType({ type: Object.assign(() => {}, { displayName: x }) }, x)).to.equal(
+            true,
+          );
         });
       });
 
       describe('when only `node.type.name` matches `type`', () => {
         const x = {};
         it('is `true` when `node.type` is an object', () => {
-          expect(nodeHasType(
-            { type: { name: x } },
-            x,
-          )).to.equal(true);
+          expect(nodeHasType({ type: { name: x } }, x)).to.equal(true);
         });
 
         it('is `true` when `node.type` is a function', () => {
@@ -1127,7 +1102,11 @@ describe('Utils', () => {
       });
 
       wrap()
-        .withOverride(() => getAdapter(), 'displayNameOfNode', () => sinon.stub())
+        .withOverride(
+          () => getAdapter(),
+          'displayNameOfNode',
+          () => sinon.stub(),
+        )
         .describe('when the adapter has a `displayNameOfNode` function', () => {
           it('is `true` when `displayNameOfNode` matches `type`', () => {
             const stub = getAdapter().displayNameOfNode;
@@ -1197,8 +1176,14 @@ describe('Utils', () => {
       expect(loadCheerioRoot('foo')).to.have.property('cheerio', '[cheerio object]');
       expect(loadCheerioRoot('123')).to.have.property('cheerio', '[cheerio object]');
       expect(loadCheerioRoot('<div>bar</div>')).to.have.property('cheerio', '[cheerio object]');
-      expect(loadCheerioRoot('leading <span>text</span>')).to.have.property('cheerio', '[cheerio object]');
-      expect(loadCheerioRoot('<div>malformed</><<html')).to.have.property('cheerio', '[cheerio object]');
+      expect(loadCheerioRoot('leading <span>text</span>')).to.have.property(
+        'cheerio',
+        '[cheerio object]',
+      );
+      expect(loadCheerioRoot('<div>malformed</><<html')).to.have.property(
+        'cheerio',
+        '[cheerio object]',
+      );
     });
   });
 

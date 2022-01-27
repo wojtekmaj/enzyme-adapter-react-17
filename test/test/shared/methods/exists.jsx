@@ -2,10 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 
-export default function describeExists({
-  Wrap,
-  Wrapper,
-}) {
+export default function describeExists({ Wrap, Wrapper }) {
   describe('.exists()', () => {
     it('has no required arguments', () => {
       expect(Wrapper.prototype.exists).to.have.lengthOf(0);
@@ -30,9 +27,17 @@ export default function describeExists({
 
       it('returns .find(arg).exists() instead', () => {
         const wrapper = Wrap(<div />);
-        const fakeFindExistsReturnVal = { toString() { return 'fake .find(arg).exists() return value'; } };
+        const fakeFindExistsReturnVal = {
+          toString() {
+            return 'fake .find(arg).exists() return value';
+          },
+        };
         const fakeSelector = '.someClass';
-        wrapper.find = sinon.stub().returns({ exists() { return fakeFindExistsReturnVal; } });
+        wrapper.find = sinon.stub().returns({
+          exists() {
+            return fakeFindExistsReturnVal;
+          },
+        });
         const existsResult = wrapper.exists(fakeSelector);
         expect(wrapper.find).to.have.property('callCount', 1);
         expect(wrapper.find.firstCall.args[0]).to.equal(fakeSelector);

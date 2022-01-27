@@ -5,19 +5,11 @@ import wrap from 'mocha-wrap';
 
 import getAdapter from 'enzyme/build/getAdapter';
 
-import {
-  sym,
-} from 'enzyme/build/Utils';
+import { sym } from 'enzyme/build/Utils';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 
-export default function describeSimulateError({
-  Wrap,
-  WrapRendered,
-  isShallow,
-}) {
+export default function describeSimulateError({ Wrap, WrapRendered, isShallow }) {
   describe('.simulateError(error)', () => {
     class Div extends React.Component {
       render() {
@@ -39,7 +31,11 @@ export default function describeSimulateError({
 
     class Nested extends React.Component {
       render() {
-        return <Div><Spans /></Div>;
+        return (
+          <Div>
+            <Spans />
+          </Div>
+        );
       }
     }
 
@@ -73,16 +69,19 @@ export default function describeSimulateError({
     });
 
     wrap()
-      .withOverride(() => getAdapter(), 'createRenderer', () => {
-        const adapter = getAdapter();
-        const original = adapter.createRenderer;
-        return function deleteSimulateError() {
-          // eslint-disable-next-line prefer-rest-params
-          const renderer = original.apply(this, arguments);
-          delete renderer.simulateError;
-          return renderer;
-        };
-      })
+      .withOverride(
+        () => getAdapter(),
+        'createRenderer',
+        () => {
+          const adapter = getAdapter();
+          const original = adapter.createRenderer;
+          return function deleteSimulateError() {
+            const renderer = original.apply(this, arguments);
+            delete renderer.simulateError;
+            return renderer;
+          };
+        },
+      )
       .it('throws when the adapter does not support simulateError', () => {
         const wrapper = WrapRendered(<Nested />);
         expect(() => wrapper.simulateError()).to.throw(
@@ -95,7 +94,9 @@ export default function describeSimulateError({
       let hierarchy;
       beforeEach(() => {
         const wrapper = WrapRendered(<Nested />);
-        const stub = sinon.stub().callsFake((_, __, e) => { throw e; });
+        const stub = sinon.stub().callsFake((_, __, e) => {
+          throw e;
+        });
         wrapper[sym('__renderer__')].simulateError = stub;
         const error = new Error('hi');
         expect(() => wrapper.simulateError(error)).to.throw(error);

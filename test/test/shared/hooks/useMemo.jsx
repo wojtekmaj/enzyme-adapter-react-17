@@ -1,18 +1,11 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  describeIf,
-} from '../../_helpers';
+import { describeIf } from '../../_helpers';
 
-import {
-  useMemo,
-} from '../../_helpers/react-compat';
+import { useMemo } from '../../_helpers/react-compat';
 
-export default function describeUseMemo({
-  hasHooks,
-  Wrap,
-}) {
+export default function describeUseMemo({ hasHooks, Wrap }) {
   describeIf(hasHooks, 'hooks: useMemo', () => {
     function RendersNull() {
       return null;
@@ -22,9 +15,7 @@ export default function describeUseMemo({
       function ComponentUsingMemoHook(props) {
         const { count } = props;
         const memoized = useMemo(() => ({ result: count * 2 }), [count]);
-        return (
-          <RendersNull memoized={memoized} />
-        );
+        return <RendersNull memoized={memoized} />;
       }
       const wrapper = Wrap(<ComponentUsingMemoHook count={1} />);
       const initialValue = wrapper.find(RendersNull).prop('memoized');
@@ -37,9 +28,7 @@ export default function describeUseMemo({
       function ComponentUsingMemoHook(props) {
         const { count, relatedProp } = props;
         const memoized = useMemo(() => ({ result: count * 2 }), [count, relatedProp]);
-        return (
-          <RendersNull memoized={memoized} relatedProp={relatedProp} />
-        );
+        return <RendersNull memoized={memoized} relatedProp={relatedProp} />;
       }
       const wrapper = Wrap(<ComponentUsingMemoHook relatedProp="456" count={1} />);
       const initialValue = wrapper.find(RendersNull).prop('memoized');

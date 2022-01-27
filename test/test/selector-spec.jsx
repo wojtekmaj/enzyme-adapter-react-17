@@ -1,16 +1,10 @@
 import React from 'react';
 import { expect } from 'chai';
 import wrap from 'mocha-wrap';
-import {
-  mount,
-  shallow,
-} from 'enzyme';
+import { mount, shallow } from 'enzyme';
 
 import './_helpers/setupAdapters';
-import {
-  describeIf,
-  itIf,
-} from './_helpers';
+import { describeIf, itIf } from './_helpers';
 
 const tests = [
   {
@@ -36,7 +30,7 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
     });
 
     it('universal selector *', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div className="top-div">
             <span>inside top div</span>
@@ -44,78 +38,78 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
 
           <div className="bottom-div" />
           <span />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('*')).to.have.lengthOf(5);
     });
 
     it('* + *', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div className="top-div">
             <span>inside top div</span>
           </div>
           <div className="bottom-div" />
           <span />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('* + *')).to.have.lengthOf(2);
     });
 
     it('.top-div ~ *', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div className="top-div">
             <span>inside top div</span>
           </div>
           <div className="bottom-div" />
           <span />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('.top-div ~ *')).to.have.lengthOf(2);
     });
 
     it('* > span', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div className="top-div">
             <span>inside top div</span>
           </div>
           <div className="bottom-div" />
           <span />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('* > span')).to.have.lengthOf(2);
     });
 
     it('* .top-div *', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div className="top-div">
             <span>inside top div</span>
           </div>
           <div className="bottom-div" />
           <span id="bottom-span" />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('* .top-div *')).to.have.lengthOf(1);
     });
 
     it('#wrap-div > *', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div id="wrap-div">
           <div className="top-div">
             <span>inside top div</span>
           </div>
           <div className="bottom-div" />
           <span id="bottom-span" />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('#wrap-div > *')).to.have.lengthOf(3);
     });
@@ -126,15 +120,15 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
           return <span>Hello world</span>;
         }
       }
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div id="wrap-div">
           <div className="top-div">
             <ExampleComponent />
           </div>
           <div className="bottom-div" />
           <ExampleComponent />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('* > ExampleComponent')).to.have.lengthOf(2);
       if (name === 'shallow') {
@@ -146,7 +140,7 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
     });
 
     it('simple descendent', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div className="top-div">
             <span>inside top div</span>
@@ -154,8 +148,8 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
 
           <div className="bottom-div" />
           <span />
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('span')).to.have.lengthOf(2);
       expect(wrapper.find('.top-div span')).to.have.lengthOf(1);
@@ -163,7 +157,7 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
     });
 
     it('nested descendent', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div className="my-div">
             <h1>heading</h1>
@@ -174,15 +168,15 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
             </div>
           </div>
           <h1>heading</h1>
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('h1')).to.have.lengthOf(3);
       expect(wrapper.find('.my-div h1')).to.have.lengthOf(2);
     });
 
     it('deep descendent', () => {
-      const htmlWrapper = renderMethod((
+      const htmlWrapper = renderMethod(
         <div>
           <div>
             <div className="inner">
@@ -194,8 +188,8 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
             </div>
           </div>
           <h1>heading</h1>
-        </div>
-      ));
+        </div>,
+      );
 
       expect(htmlWrapper.find('h1')).to.have.lengthOf(2);
       expect(htmlWrapper.find('div .inner span .way-inner h1')).to.have.lengthOf(1);
@@ -209,7 +203,7 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
         }
       }
 
-      const complexWrapper = renderMethod((
+      const complexWrapper = renderMethod(
         <div>
           <div>
             <ExampleComponent>
@@ -220,15 +214,16 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
             <nav />
             <main />
           </ExampleComponent>
-        </div>
-      ));
+        </div>,
+      );
 
       expect(complexWrapper.find('div ExampleComponent')).to.have.lengthOf(2);
       expect(complexWrapper.find('div div ExampleComponent')).to.have.lengthOf(1);
       if (name === 'shallow') {
         expect(complexWrapper.find('div ExampleComponent nav')).to.have.lengthOf(1);
         expect(complexWrapper.find('div ExampleComponent main')).to.have.lengthOf(2);
-      } else { // shallow does not render the contents of components
+      } else {
+        // shallow does not render the contents of components
         expect(complexWrapper.find('div ExampleComponent span')).to.have.lengthOf(2);
         expect(complexWrapper.find('div div ExampleComponent span')).to.have.lengthOf(1);
         expect(complexWrapper.find('div span')).to.have.lengthOf(2);
@@ -237,7 +232,7 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
     });
 
     it('direct descendent', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div className="container">
             <div className="to-find">Direct</div>
@@ -246,8 +241,8 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
             </div>
           </div>
           <div className="to-find">Outside</div>
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('.to-find')).to.have.lengthOf(3);
       const descendent = wrapper.find('.container > .to-find');
@@ -256,13 +251,13 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
     });
 
     it('simple adjacent', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div className="to-find" />
           <div className="sibling">Adjacent</div>
           <div className="sibling">Not Adjacent</div>
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('.sibling')).to.have.lengthOf(2);
       const toFind = wrapper.find('.to-find + .sibling');
@@ -271,19 +266,23 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
     });
 
     it('simple adjacent with arrays', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div className="to-find" />
-          {[<div key="0" className="sibling">Adjacent</div>]}
-        </div>
-      ));
+          {[
+            <div key="0" className="sibling">
+              Adjacent
+            </div>,
+          ]}
+        </div>,
+      );
       const toFind = wrapper.find('.to-find + .sibling');
       expect(toFind).to.have.lengthOf(1);
       expect(toFind.text()).to.equal('Adjacent');
     });
 
     it('nested adjacent', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div className="to-find" />
           <div className="sibling">Adjacent</div>
@@ -295,8 +294,8 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
             </div>
             <div className="to-find">Not Adjacent</div>
           </div>
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('.to-find')).to.have.lengthOf(3);
       const toFind = wrapper.find('.to-find + .sibling');
@@ -305,7 +304,7 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
     });
 
     it('simple general siblings', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <span className="to-find" />
           <span />
@@ -314,14 +313,14 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
           <div>
             <span />
           </div>
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('.to-find ~ span')).to.have.lengthOf(3);
     });
 
     it('nested general siblings', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <span>Top</span>
           <span />
@@ -333,8 +332,8 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
               <span />
             </div>
           </div>
-        </div>
-      ));
+        </div>,
+      );
 
       const spans = wrapper.find('span');
       const siblings = wrapper.find('span ~ span');
@@ -348,71 +347,71 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
     });
 
     it('not() pseudo selector', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <span className="bar">first</span>
           <span />
           <span className="foo" />
           <span />
           <span />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('span:not(.foo, .bar)')).to.have.lengthOf(3);
     });
 
     it(':empty pseudo selector', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <span className="bar">first</span>
           <span />
           <span className="foo" />
           <span />
           <span />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('.foo:empty')).to.have.lengthOf(1);
       expect(wrapper.find('.bar:empty')).to.have.lengthOf(0);
     });
 
     it('first-child pseudo', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <span>first</span>
           <span />
           <span />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('span:first-child').text()).to.equal('first');
     });
 
     it('last-child pseudo', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <span />
           <span />
           <span>last</span>
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('span:last-child').text()).to.equal('last');
     });
 
     describeIf(name !== 'mount', ':focus pseudo selector', () => {
       // TODO: remove this withGlobal once withDOM is fixed
-      wrap().withGlobal('document', () => {}).it('throws', () => {
-        const wrapper = renderMethod((
-          <input type="text" />
-        ));
-        const inputNode = wrapper.find('input');
+      wrap()
+        .withGlobal('document', () => {})
+        .it('throws', () => {
+          const wrapper = renderMethod(<input type="text" />);
+          const inputNode = wrapper.find('input');
 
-        expect(() => inputNode.is(':focus')).to.throw('Enzyme::Selector does not support the ":focus" pseudo-element without a global `document`.');
-      });
+          expect(() => inputNode.is(':focus')).to.throw(
+            'Enzyme::Selector does not support the ":focus" pseudo-element without a global `document`.',
+          );
+        });
     });
 
     describeIf(name === 'mount', ':focus pseudo selector', () => {
       it('works in mount with directly focused DOM node', () => {
-        const wrapper = renderMethod((
-          <input type="text" />
-        ));
+        const wrapper = renderMethod(<input type="text" />);
         const inputNode = wrapper.find('input');
 
         expect(inputNode.is(':focus')).to.equal(false);
@@ -426,15 +425,11 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
       it('works on component in mount', () => {
         class ClassComponent extends React.Component {
           render() {
-            return (
-              <input type="text" />
-            );
+            return <input type="text" />;
           }
         }
 
-        const wrapper = renderMethod((
-          <ClassComponent />
-        ));
+        const wrapper = renderMethod(<ClassComponent />);
 
         expect(wrapper.find('ClassComponent:focus')).to.have.lengthOf(0);
 
@@ -447,9 +442,7 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
       it('works on nested component in mount', () => {
         class InnerComponent extends React.Component {
           render() {
-            return (
-              <input type="text" />
-            );
+            return <input type="text" />;
           }
         }
         class WrapComponent extends React.Component {
@@ -457,9 +450,7 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
             return <InnerComponent />;
           }
         }
-        const wrapper = renderMethod((
-          <WrapComponent />
-        ));
+        const wrapper = renderMethod(<WrapComponent />);
 
         expect(wrapper.find('InnerComponent:focus')).to.have.lengthOf(0);
         expect(wrapper.find('WrapComponent:focus')).to.have.lengthOf(0);
@@ -486,16 +477,20 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
 
     it('throws for unsupported pseudo-element selectors', () => {
       const wrapper = renderMethod(<div className="foo" />);
-      expect(() => wrapper.find('div::after')).to.throw('Enzyme::Selector does not support the "after" pseudo-element or pseudo-class selectors.');
+      expect(() => wrapper.find('div::after')).to.throw(
+        'Enzyme::Selector does not support the "after" pseudo-element or pseudo-class selectors.',
+      );
     });
 
     it('throws for unsupported pseudo-class selectors', () => {
       const wrapper = renderMethod(<div className="foo" />);
-      expect(() => wrapper.find('div:hover')).to.throw('Enzyme::Selector does not support the "hover" pseudo-element or pseudo-class selectors.');
+      expect(() => wrapper.find('div:hover')).to.throw(
+        'Enzyme::Selector does not support the "hover" pseudo-element or pseudo-class selectors.',
+      );
     });
 
     it('.foo + div > span', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div className="foo" />
           <div>
@@ -504,20 +499,20 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
           <div>
             <span />
           </div>
-        </div>
-      ));
+        </div>,
+      );
 
       expect(wrapper.find('.foo + div > span')).to.have.lengthOf(1);
     });
 
     it('.foo + .foo + .foo', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div className="foo">foo1</div>
           <div className="foo">foo2</div>
           <div className="foo">foo3</div>
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('.foo + .foo')).to.have.lengthOf(2);
       expect(wrapper.find('.foo + .foo').at(0).text()).to.equal('foo2');
       expect(wrapper.find('.foo + .foo').at(1).text()).to.equal('foo3');
@@ -525,14 +520,14 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
     });
 
     it('attribute names with numbers', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div data-foo-1={1} />
           <div data-foo-1={1} />
           <div data-foo-2={2} />
           <div data-foo-2="2" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('[data-foo-1=1]')).to.have.lengthOf(2);
       expect(wrapper.find('[data-foo-1="1"]')).to.have.lengthOf(0);
       expect(wrapper.find('[data-foo-2=2]')).to.have.lengthOf(1);
@@ -540,14 +535,14 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
     });
 
     it('hyphens', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div className="-foo" />
           <div className="foo- -bar-" type="foo" />
           <div id="bar" className="-foo" />
           <span className="-foo" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('.-foo')).to.have.lengthOf(3);
       expect(wrapper.find('.foo-')).to.have.lengthOf(1);
       expect(wrapper.find('[type="foo"].foo-')).to.have.lengthOf(1);
@@ -558,14 +553,14 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
     });
 
     it('hyphens', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div className="-foo" />
           <div className="foo- -bar-" type="foo" />
           <div id="bar" className="-foo" />
           <span className="-foo" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('.-foo')).to.have.lengthOf(3);
       expect(wrapper.find('.foo-')).to.have.lengthOf(1);
       expect(wrapper.find('[type="foo"].foo-')).to.have.lengthOf(1);
@@ -576,43 +571,43 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
     });
 
     it('spaces in attribute values', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div type="foo bar" />
           <div type="foo.bar" />
           <div type="foobar" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('[type="foo bar"]')).to.have.lengthOf(1);
     });
 
     it('dots in attribute values', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div type="foo.bar" />
           <div type="foo bar" />
           <div type="foobar" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('[type="foo.bar"]')).to.have.lengthOf(1);
     });
 
     it('brackets in attribute values', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <div type="foo[1]" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('[type="foo[1]"]')).to.have.lengthOf(1);
     });
 
     it('URLs in attribute values', () => {
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <a href="https://www.foo.com" />
           <a href="foo.com" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('a[href="https://www.foo.com"]')).to.have.lengthOf(1);
       expect(wrapper.find('a[href="foo.com"]')).to.have.lengthOf(1);
     });
@@ -630,12 +625,12 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
         }
       }
       Bar.displayName = 'Wrapped(Twice(Bar))';
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <Foo />
           <Bar />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find('Wrapped(Foo)')).to.have.lengthOf(1);
       expect(wrapper.find('Wrapped(Twice(Bar))')).to.have.lengthOf(1);
     });
@@ -760,13 +755,13 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
 
     itIf(name === 'mount', 'works with an element constructor', () => {
       /* eslint-env browser */
-      const wrapper = renderMethod((
+      const wrapper = renderMethod(
         <div>
           <span />
           <button type="button" />
           <img alt="" />
-        </div>
-      ));
+        </div>,
+      );
       expect(wrapper.find(HTMLButtonElement)).to.have.lengthOf(1);
     });
   });

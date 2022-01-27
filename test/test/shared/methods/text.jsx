@@ -3,19 +3,11 @@ import { expect } from 'chai';
 
 import { render } from 'enzyme';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 
-import {
-  Fragment,
-  memo,
-} from '../../_helpers/react-compat';
+import { Fragment, memo } from '../../_helpers/react-compat';
 
-export default function describeText({
-  Wrap,
-  isShallow,
-}) {
+export default function describeText({ Wrap, isShallow }) {
   describe('.text()', () => {
     const matchesRender = function matchesRender(node) {
       const actual = Wrap(node).text();
@@ -24,9 +16,7 @@ export default function describeText({
     };
 
     it('handles simple text nodes', () => {
-      const wrapper = Wrap((
-        <div>some text</div>
-      ));
+      const wrapper = Wrap(<div>some text</div>);
       expect(wrapper.text()).to.equal('some text');
     });
 
@@ -34,47 +24,37 @@ export default function describeText({
       class Foo extends React.Component {
         render() {
           const { items } = this.props;
-          return (
-            <div>
-              {items.map((x) => x)}
-            </div>
-          );
+          return <div>{items.map((x) => x)}</div>;
         }
       }
       matchesRender(<Foo items={['abc', 'def', 'hij']} />);
-      matchesRender((
-        <Foo
-          items={[
-            <i key={1}>abc</i>,
-            <i key={2}>def</i>,
-            <i key={3}>hij</i>,
-          ]}
-        />
-      ));
+      matchesRender(<Foo items={[<i key={1}>abc</i>, <i key={2}>def</i>, <i key={3}>hij</i>]} />);
     });
 
     context('composite components', () => {
       class Foo extends React.Component {
-        render() { return <div>foo</div>; }
+        render() {
+          return <div>foo</div>;
+        }
       }
 
       itIf(isShallow, 'renders dumbly', () => {
-        const wrapper = Wrap((
+        const wrapper = Wrap(
           <div>
             <Foo />
             <div>test</div>
-          </div>
-        ));
+          </div>,
+        );
         expect(wrapper.text()).to.equal('<Foo />test');
       });
 
       itIf(!isShallow, 'renders smartly', () => {
-        const wrapper = Wrap((
+        const wrapper = Wrap(
           <div>
             <Foo />
             <div>test</div>
-          </div>
-        ));
+          </div>,
+        );
         expect(wrapper.text()).to.equal('footest');
       });
     });
@@ -87,19 +67,11 @@ export default function describeText({
       /* eslint no-multiple-empty-lines: 0 */
       const Space = (
         <div>
-          <div> test  </div>
-          <div>
-            Hello
-
-
-            World
-          </div>
+          <div> test </div>
           <div>Hello World</div>
-          <div>
-            Hello
-            World
-          </div>
-          <div>Hello     World</div>
+          <div>Hello World</div>
+          <div>Hello World</div>
+          <div>Hello World</div>
           <div>&nbsp;</div>
           <div>&nbsp;&nbsp;</div>
         </div>
@@ -113,15 +85,14 @@ export default function describeText({
     it('handles non-breaking spaces correctly', () => {
       class Foo extends React.Component {
         render() {
-          return (
-            <div>
-              &nbsp; &nbsp;
-            </div>
-          );
+          return <div>&nbsp; &nbsp;</div>;
         }
       }
       const wrapper = Wrap(<Foo />);
-      const charCodes = wrapper.text().split('').map((x) => x.charCodeAt(0));
+      const charCodes = wrapper
+        .text()
+        .split('')
+        .map((x) => x.charCodeAt(0));
       expect(charCodes).to.eql([
         0x00a0, // non-breaking space
         0x20, // normal space
@@ -131,44 +102,30 @@ export default function describeText({
 
     describe('stateless function components (SFCs)', () => {
       it('handles nodes with mapped children', () => {
-        const Foo = ({ items }) => (
-          <div>
-            {items.map((x) => x)}
-          </div>
-        );
+        const Foo = ({ items }) => <div>{items.map((x) => x)}</div>;
         matchesRender(<Foo items={['abc', 'def', 'hij']} />);
-        matchesRender((
-          <Foo
-            items={[
-              <i key={1}>abc</i>,
-              <i key={2}>def</i>,
-              <i key={3}>hij</i>,
-            ]}
-          />
-        ));
+        matchesRender(<Foo items={[<i key={1}>abc</i>, <i key={2}>def</i>, <i key={3}>hij</i>]} />);
       });
 
-      const FooSFC = () => (
-        <div>foo</div>
-      );
+      const FooSFC = () => <div>foo</div>;
 
       itIf(isShallow, 'renders composite components dumbly', () => {
-        const wrapper = Wrap((
+        const wrapper = Wrap(
           <div>
             <FooSFC />
             <div>test</div>
-          </div>
-        ));
+          </div>,
+        );
         expect(wrapper.text()).to.equal('<FooSFC />test');
       });
 
       itIf(!isShallow, 'renders composite components smartly', () => {
-        const wrapper = Wrap((
+        const wrapper = Wrap(
           <div>
             <FooSFC />
             <div>test</div>
-          </div>
-        ));
+          </div>,
+        );
         expect(wrapper.text()).to.equal('footest');
       });
     });
@@ -182,17 +139,21 @@ export default function describeText({
 
     describe('text content with curly braces', () => {
       it('handles literal strings', () => {
-        const wrapper = Wrap(<div><div>{'{}'}</div></div>);
+        const wrapper = Wrap(
+          <div>
+            <div>{'{}'}</div>
+          </div>,
+        );
         expect(wrapper.text()).to.equal('{}');
       });
 
       // FIXME: fix for shallow
       itIf(!isShallow, 'handles innerHTML', () => {
-        const wrapper = Wrap((
+        const wrapper = Wrap(
           <div>
             <div dangerouslySetInnerHTML={{ __html: '{ some text }' }} />
-          </div>
-        ));
+          </div>,
+        );
         expect(wrapper.text()).to.equal('{ some text }');
       });
     });
@@ -211,8 +172,12 @@ export default function describeText({
 
       const FragmentConstExample = () => (
         <Fragment>
-          <div><span>Foo</span></div>
-          <div><span>Bar</span></div>
+          <div>
+            <span>Foo</span>
+          </div>
+          <div>
+            <span>Bar</span>
+          </div>
         </Fragment>
       );
 
@@ -263,24 +228,12 @@ export default function describeText({
       class Dumb extends React.Component {
         render() {
           const { number } = this.props;
-          return (
-            <span>
-              It’s number
-              {' '}
-              {String(number)}
-            </span>
-          );
+          return <span>It’s number {String(number)}</span>;
         }
       }
 
       function DumbSFC({ number }) {
-        return (
-          <span>
-            It’s number
-            {' '}
-            {String(number)}
-          </span>
-        );
+        return <span>It’s number {String(number)}</span>;
       }
 
       function areEqual(props, nextProps) {
@@ -333,7 +286,11 @@ export default function describeText({
       });
 
       it('<DumbMemoNoCompare /> - should only re-render when prop identity changes', () => {
-        const obj = { toString() { return 5; } };
+        const obj = {
+          toString() {
+            return 5;
+          },
+        };
 
         const tree = Wrap(<DumbMemoNoCompare number={obj} />);
 
@@ -344,13 +301,23 @@ export default function describeText({
 
         expect(tree.text()).to.equal('It’s number 5');
 
-        tree.setProps({ number: { toString() { return 15; } } });
+        tree.setProps({
+          number: {
+            toString() {
+              return 15;
+            },
+          },
+        });
 
         expect(tree.text()).to.equal('It’s number 15');
       });
 
       it('<DumbSFCMemoNoCompare /> - should only re-render when prop identity changes', () => {
-        const obj = { toString() { return 5; } };
+        const obj = {
+          toString() {
+            return 5;
+          },
+        };
 
         const tree = Wrap(<DumbSFCMemoNoCompare number={obj} />);
 
@@ -361,7 +328,13 @@ export default function describeText({
 
         expect(tree.text()).to.equal('It’s number 5');
 
-        tree.setProps({ number: { toString() { return 15; } } });
+        tree.setProps({
+          number: {
+            toString() {
+              return 15;
+            },
+          },
+        });
 
         expect(tree.text()).to.equal('It’s number 15');
       });

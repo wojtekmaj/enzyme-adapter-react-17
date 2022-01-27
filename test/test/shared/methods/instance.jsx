@@ -1,19 +1,15 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 
-export default function describeInstance({
-  Wrap,
-  WrapperName,
-  isShallow,
-}) {
+export default function describeInstance({ Wrap, WrapperName, isShallow }) {
   describe('.instance()', () => {
     it('returns the component instance', () => {
       class Foo extends React.Component {
-        render() { return <div />; }
+        render() {
+          return <div />;
+        }
       }
 
       const wrapper = Wrap(<Foo />);
@@ -58,7 +54,13 @@ export default function describeInstance({
 
     itIf(isShallow, 'throws if called on something other than the root node', () => {
       class Foo extends React.Component {
-        render() { return <div><a /></div>; }
+        render() {
+          return (
+            <div>
+              <a />
+            </div>
+          );
+        }
       }
 
       const wrapper = Wrap(<Foo />);

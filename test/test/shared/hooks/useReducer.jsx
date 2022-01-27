@@ -5,10 +5,7 @@ import { describeIf } from '../../_helpers';
 
 import { useReducer } from '../../_helpers/react-compat';
 
-export default function describeUseReducer({
-  hasHooks,
-  Wrap,
-}) {
+export default function describeUseReducer({ hasHooks, Wrap }) {
   describeIf(hasHooks, 'hooks: useReducer', () => {
     describe('with custom dispatch', () => {
       const initialState = [];

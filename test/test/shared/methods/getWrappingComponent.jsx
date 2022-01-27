@@ -2,15 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { expect } from 'chai';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 
-export default function describeGetWrappingComponent({
-  Wrap,
-  WrapperName,
-  isShallow,
-}) {
+export default function describeGetWrappingComponent({ Wrap, WrapperName, isShallow }) {
   class RendersNull extends React.Component {
     render() {
       return null;
@@ -71,12 +65,7 @@ export default function describeGetWrappingComponent({
 
     class MyComponent extends React.Component {
       render() {
-        const {
-          testContext,
-          renderMore,
-          renderStateTester,
-          explicitContext,
-        } = this.context;
+        const { testContext, renderMore, renderStateTester, explicitContext } = this.context;
 
         return (
           <div>
@@ -121,7 +110,9 @@ export default function describeGetWrappingComponent({
       const wrappingComponent = wrapper.getWrappingComponent();
       wrappingComponent.setProps({ renderMore: true });
       expect(wrapper.find(RendersNull).exists()).to.equal(true);
-      expect(wrapper.text()).to.equal(`Context says: Hello world! stop!${isShallow ? '<RendersNull />' : ''}`);
+      expect(wrapper.text()).to.equal(
+        `Context says: Hello world! stop!${isShallow ? '<RendersNull />' : ''}`,
+      );
     });
 
     it('updates the primary wrapper after a state update', () => {
@@ -134,7 +125,9 @@ export default function describeGetWrappingComponent({
       const wrappingComponent = wrapper.getWrappingComponent();
       wrappingComponent.setState({ renderStateTester: true });
       expect(wrapper.find(StateTester).exists()).to.equal(true);
-      expect(wrapper.text()).to.equal(`Context says: Hello world! stop!${isShallow ? '<StateTester />' : ''}`);
+      expect(wrapper.text()).to.equal(
+        `Context says: Hello world! stop!${isShallow ? '<StateTester />' : ''}`,
+      );
     });
 
     it('updates the wrappingComponent when the root is updated', () => {
@@ -173,17 +166,9 @@ export default function describeGetWrappingComponent({
       const Context = React.createContext();
       function WrappingComponent(props) {
         const { value, children } = props;
-        return (
-          <Context.Provider value={value}>
-            {children}
-          </Context.Provider>
-        );
+        return <Context.Provider value={value}>{children}</Context.Provider>;
       }
-      const wrapper = Wrap((
-        <Context.Consumer>
-          {(value) => <div>{value}</div>}
-        </Context.Consumer>
-      ), {
+      const wrapper = Wrap(<Context.Consumer>{(value) => <div>{value}</div>}</Context.Consumer>, {
         wrappingComponent: WrappingComponent,
         wrappingComponentProps: { value: 'hello!' },
       });

@@ -2,19 +2,16 @@ import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 
-export default function describeFilterWhere({
-  Wrap,
-  Wrapper,
-}) {
+export default function describeFilterWhere({ Wrap, Wrapper }) {
   describe('.filterWhere(predicate)', () => {
     it('filters only the nodes of the wrapper', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="foo bar" />
           <div className="foo baz" />
           <div className="foo bux" />
-        </div>
-      ));
+        </div>,
+      );
 
       const stub = sinon.stub();
       stub.onCall(0).returns(false);
@@ -27,13 +24,13 @@ export default function describeFilterWhere({
     });
 
     it('calls the predicate with the wrapped node as the first argument', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="foo bar" />
           <div className="foo baz" />
           <div className="foo bux" />
-        </div>
-      ));
+        </div>,
+      );
 
       const stub = sinon.stub();
       stub.returns(true);

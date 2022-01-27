@@ -2,17 +2,9 @@ import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 
-export default function describeHasClass({
-  Wrap,
-  WrapRendered,
-  WrapperName,
-  isShallow,
-  isMount,
-}) {
+export default function describeHasClass({ Wrap, WrapRendered, WrapperName, isShallow, isMount }) {
   describe('.hasClass(className)', () => {
     function FooSFC() {
       return <div className="foo bar baz some-long-string FoOo" />;
@@ -41,7 +33,9 @@ export default function describeHasClass({
 
       expect(stub).to.have.property('callCount', 1);
       const [args] = stub.args;
-      expect(args).to.eql([`It looks like you're calling \`${WrapperName}::hasClass()\` with a CSS selector. hasClass() expects a class name, not a CSS selector.`]);
+      expect(args).to.eql([
+        `It looks like you're calling \`${WrapperName}::hasClass()\` with a CSS selector. hasClass() expects a class name, not a CSS selector.`,
+      ]);
     });
 
     context('when using a DOM component', () => {

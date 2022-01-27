@@ -4,9 +4,11 @@ import { expect } from 'chai';
 
 describe('shallowEqual', () => {
   it('returns true for things that are SameValue', () => {
-    [{}, [], NaN, 42, 'foo', '', 0, Infinity, () => {}, /a/g, true, false, null, undefined].forEach((x) => {
-      expect(shallowEqual(x, x)).to.equal(true);
-    });
+    [{}, [], NaN, 42, 'foo', '', 0, Infinity, () => {}, /a/g, true, false, null, undefined].forEach(
+      (x) => {
+        expect(shallowEqual(x, x)).to.equal(true);
+      },
+    );
   });
 
   it('returns false if one is falsy and one is truthy', () => {
@@ -29,10 +31,12 @@ describe('shallowEqual', () => {
   });
 
   it('returns false if they have the same keys, with different values', () => {
-    [{}, [], NaN, 42, 'foo', '', 0, Infinity, () => {}, /a/g, true, false, null, undefined].forEach((x) => {
-      expect(shallowEqual({ a: x }, { a: {} })).to.equal(false);
-      expect(shallowEqual({ a: {} }, { a: x })).to.equal(false);
-    });
+    [{}, [], NaN, 42, 'foo', '', 0, Infinity, () => {}, /a/g, true, false, null, undefined].forEach(
+      (x) => {
+        expect(shallowEqual({ a: x }, { a: {} })).to.equal(false);
+        expect(shallowEqual({ a: {} }, { a: x })).to.equal(false);
+      },
+    );
   });
 
   it('returns false if an undefined key in one is absent in the other', () => {
@@ -41,9 +45,11 @@ describe('shallowEqual', () => {
   });
 
   it('returns true if they have the same keys, with the same values', () => {
-    [{}, [], NaN, 42, 'foo', '', 0, Infinity, () => {}, /a/g, true, false, null, undefined].forEach((x) => {
-      expect(shallowEqual({ a: x }, { a: x })).to.equal(true);
-      expect(shallowEqual({ a: x }, { a: x })).to.equal(true);
-    });
+    [{}, [], NaN, 42, 'foo', '', 0, Infinity, () => {}, /a/g, true, false, null, undefined].forEach(
+      (x) => {
+        expect(shallowEqual({ a: x }, { a: x })).to.equal(true);
+        expect(shallowEqual({ a: x }, { a: x })).to.equal(true);
+      },
+    );
   });
 });

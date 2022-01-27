@@ -1,19 +1,17 @@
 import React from 'react';
 import { expect } from 'chai';
 
-export default function describeGet({
-  Wrap,
-}) {
+export default function describeGet({ Wrap }) {
   describe('.get(index)', () => {
     it('gets the node at the specified index', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <div className="bar foo" />
           <div className="bar bax" />
           <div className="bar bux" />
           <div className="bar baz" />
-        </div>
-      ));
+        </div>,
+      );
       const bar = wrapper.find('.bar');
       expect(bar.get(0)).to.deep.equal(wrapper.find('.foo').getElement());
       expect(bar.get(1)).to.deep.equal(wrapper.find('.bax').getElement());
@@ -33,9 +31,7 @@ export default function describeGet({
         }
 
         render() {
-          return (
-            <div ref={this.setRef} className="foo" />
-          );
+          return <div ref={this.setRef} className="foo" />;
         }
       }
       const wrapper = Wrap(<Foo />);

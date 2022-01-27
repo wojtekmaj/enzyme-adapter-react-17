@@ -11,6 +11,7 @@
     "build": "babel --source-maps=both src -d build",
     "clean": "rimraf build",
     "lint": "eslint src/ --ext .jsx,.js",
+    "postinstall": "husky install",
     "prepack": "yarn clean && yarn build",
     "test": "yarn lint"
   },
@@ -47,8 +48,11 @@
     "@babel/runtime": "^7.15.0",
     "babel-preset-airbnb": "^4.5.0",
     "enzyme": "^3.0.0",
-    "eslint": "^7.15.0",
-    "eslint-config-wojtekmaj": "^0.5.0",
+    "eslint": "^8.5.0",
+    "eslint-config-wojtekmaj": "^0.6.5",
+    "husky": "^7.0.0",
+    "prettier": "^2.5.0",
+    "pretty-quick": "^3.1.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "rimraf": "^3.0.0"

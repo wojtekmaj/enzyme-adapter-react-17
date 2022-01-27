@@ -3,15 +3,10 @@ import PropTypes from 'prop-types';
 import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 import wrap from 'mocha-wrap';
-import {
-  mount,
-  ReactWrapper,
-} from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import mountEntry from 'enzyme/mount';
 import ReactWrapperEntry from 'enzyme/ReactWrapper';
-import {
-  withSetStateAllowed,
-} from 'enzyme/build/Utils';
+import { withSetStateAllowed } from 'enzyme/build/Utils';
 import getAdapter from 'enzyme/build/getAdapter';
 import { fakeDynamicImport } from '@wojtekmaj/enzyme-adapter-utils';
 
@@ -28,9 +23,7 @@ import {
   Profiler,
   Suspense,
 } from './_helpers/react-compat';
-import {
-  itIf,
-} from './_helpers';
+import { itIf } from './_helpers';
 import getLoadedLazyComponent from './_helpers/getLoadedLazyComponent';
 import describeMethods from './_helpers/describeMethods';
 import describeLifecycles from './_helpers/describeLifecycles';
@@ -138,28 +131,20 @@ describe('mount', () => {
     describe('wrapping invalid elements', () => {
       it('throws with combined dangerouslySetInnerHTML and children on host nodes', () => {
         /* eslint react/no-danger-with-children: 0 */
-        expect(() => mount((
-          <div dangerouslySetInnerHTML={{ __html: '{}' }}>child</div>
-        ))).to.throw(Error, 'Can only set one of `children` or `props.dangerouslySetInnerHTML`.');
+        expect(() => mount(<div dangerouslySetInnerHTML={{ __html: '{}' }}>child</div>)).to.throw(
+          Error,
+          'Can only set one of `children` or `props.dangerouslySetInnerHTML`.',
+        );
       });
 
       it('throws when mounting Portals', () => {
-        const portal = createPortal(
-          <div />,
-          { nodeType: 1 },
-        );
+        const portal = createPortal(<div />, { nodeType: 1 });
 
-        expect(() => mount(portal)).to.throw(
-          Error,
-          'ReactWrapper can only wrap valid elements',
-        );
+        expect(() => mount(portal)).to.throw(Error, 'ReactWrapper can only wrap valid elements');
       });
 
       it('throws when mounting plain text', () => {
-        expect(() => mount('Foo')).to.throw(
-          Error,
-          'ReactWrapper can only wrap valid elements',
-        );
+        expect(() => mount('Foo')).to.throw(Error, 'ReactWrapper can only wrap valid elements');
       });
 
       it('throws when mounting multiple elements', () => {
@@ -198,15 +183,19 @@ describe('mount', () => {
 
       const wrapper = mount(<Foo />);
       expect(wrapper.state()).to.equal(null);
-      expect(wrapper.debug()).to.equal(`
+      expect(wrapper.debug()).to.equal(
+        `
 <Foo>
   <div>
     object
     null
   </div>
 </Foo>
-      `.trim());
-      expect(() => wrapper.state('key')).to.throw('ReactWrapper::state("key") requires that `state` not be `null` or `undefined`');
+      `.trim(),
+      );
+      expect(() => wrapper.state('key')).to.throw(
+        'ReactWrapper::state("key") requires that `state` not be `null` or `undefined`',
+      );
     });
 
     describe('wrappingComponent', () => {
@@ -245,7 +234,9 @@ describe('mount', () => {
 
           return (
             <div>
-              <TestProvider value={contextValue} renderMore={renderMore}>{children}</TestProvider>
+              <TestProvider value={contextValue} renderMore={renderMore}>
+                {children}
+              </TestProvider>
             </div>
           );
         }
@@ -301,9 +292,7 @@ describe('mount', () => {
           const { value1, value2, children } = props;
           return (
             <Context1.Provider value={value1}>
-              <Context2.Provider value={value2}>
-                {children}
-              </Context2.Provider>
+              <Context2.Provider value={value2}>{children}</Context2.Provider>
             </Context1.Provider>
           );
         }
@@ -351,23 +340,28 @@ describe('mount', () => {
             return <div />;
           }
         }
-        expect(() => mount(<MyComponent />, {
-          wrappingComponent: BadWrapper,
-        })).to.throw('`wrappingComponent` must render its children!');
+        expect(() =>
+          mount(<MyComponent />, {
+            wrappingComponent: BadWrapper,
+          }),
+        ).to.throw('`wrappingComponent` must render its children!');
       });
 
       wrap()
-        .withOverrides(() => getAdapter(), () => ({
-          isCustomComponent: undefined,
-          RootFinder: undefined,
-          wrapWithWrappingComponent: undefined,
-          createMountRenderer: (...args) => {
-            const renderer = realCreateMountRenderer(...args);
-            delete renderer.getWrappingComponentRenderer;
-            renderer.getNode = () => null;
-            return renderer;
-          },
-        }))
+        .withOverrides(
+          () => getAdapter(),
+          () => ({
+            isCustomComponent: undefined,
+            RootFinder: undefined,
+            wrapWithWrappingComponent: undefined,
+            createMountRenderer: (...args) => {
+              const renderer = realCreateMountRenderer(...args);
+              delete renderer.getWrappingComponentRenderer;
+              renderer.getNode = () => null;
+              return renderer;
+            },
+          }),
+        )
         .describe('with an old adapter', () => {
           it('renders fine when wrappingComponent is not passed', () => {
             const wrapper = mount(<MyComponent />);
@@ -375,9 +369,11 @@ describe('mount', () => {
           });
 
           it('throws an error if wrappingComponent is passed', () => {
-            expect(() => mount(<MyComponent />, {
-              wrappingComponent: MyWrappingComponent,
-            })).to.throw('your adapter does not support `wrappingComponent`. Try upgrading it!');
+            expect(() =>
+              mount(<MyComponent />, {
+                wrappingComponent: MyWrappingComponent,
+              }),
+            ).to.throw('your adapter does not support `wrappingComponent`. Try upgrading it!');
           });
         });
     });
@@ -390,9 +386,11 @@ describe('mount', () => {
     }
 
     itIf(false, 'throws an error if wrappingComponent is passed', () => {
-      expect(() => mount(<div />, {
-        wrappingComponent: RendersChildren,
-      })).to.throw('your adapter does not support `wrappingComponent`. Try upgrading it!');
+      expect(() =>
+        mount(<div />, {
+          wrappingComponent: RendersChildren,
+        }),
+      ).to.throw('your adapter does not support `wrappingComponent`. Try upgrading it!');
     });
 
     describe('uses the isValidElementType from the Adapter to validate the prop type of Component', () => {
@@ -400,11 +398,17 @@ describe('mount', () => {
       const Bar = () => null;
       wrap()
         .withConsoleThrows()
-        .withOverride(() => getAdapter(), 'isValidElementType', () => (val) => val === Foo)
+        .withOverride(
+          () => getAdapter(),
+          'isValidElementType',
+          () => (val) => val === Foo,
+        )
         .it('with isValidElementType defined on the Adapter', () => {
           expect(() => {
             mount(<Bar />);
-          }).to.throw('Warning: Failed prop type: Component must be a valid element type!\n    in WrapperComponent');
+          }).to.throw(
+            'Warning: Failed prop type: Component must be a valid element type!\n    in WrapperComponent',
+          );
         });
     });
   });
@@ -438,7 +442,11 @@ describe('mount', () => {
       });
       const ComplexComponent = createClass({
         render() {
-          return <div><SimpleComponent /></div>;
+          return (
+            <div>
+              <SimpleComponent />
+            </div>
+          );
         },
       });
 
@@ -531,13 +539,17 @@ describe('mount', () => {
       it('finds elements through Context elements', () => {
         class Foo extends React.Component {
           render() {
-            return (
-              <Context.Consumer>{(value) => <span>{value}</span>}</Context.Consumer>
-            );
+            return <Context.Consumer>{(value) => <span>{value}</span>}</Context.Consumer>;
           }
         }
 
-        const wrapper = mount(<Context.Provider value="foo"><div><Foo /></div></Context.Provider>);
+        const wrapper = mount(
+          <Context.Provider value="foo">
+            <div>
+              <Foo />
+            </div>
+          </Context.Provider>,
+        );
 
         expect(wrapper.find('span').text()).to.equal('foo');
       });
@@ -555,9 +567,7 @@ describe('mount', () => {
       });
 
       it('can render a <Consumer /> as the root', () => {
-        const wrapper = mount(
-          <Context.Consumer>{(value) => <div>{value}</div>}</Context.Consumer>,
-        );
+        const wrapper = mount(<Context.Consumer>{(value) => <div>{value}</div>}</Context.Consumer>);
         expect(wrapper.text()).to.equal('hello');
 
         wrapper.setProps({
@@ -573,13 +583,13 @@ describe('mount', () => {
     });
 
     describe('forwarded ref Components', () => {
-      wrap().withConsoleThrows().it('mounts without complaint', () => {
-        const SomeComponent = forwardRef((props, ref) => (
-          <div {...props} ref={ref} />
-        ));
+      wrap()
+        .withConsoleThrows()
+        .it('mounts without complaint', () => {
+          const SomeComponent = forwardRef((props, ref) => <div {...props} ref={ref} />);
 
-        expect(() => mount(<SomeComponent />)).not.to.throw();
-      });
+          expect(() => mount(<SomeComponent />)).not.to.throw();
+        });
 
       it('finds elements through forwardedRef elements', () => {
         const testRef = () => {};
@@ -590,7 +600,11 @@ describe('mount', () => {
           </div>
         ));
 
-        const wrapper = mount(<div><SomeComponent ref={testRef} /></div>);
+        const wrapper = mount(
+          <div>
+            <SomeComponent ref={testRef} />
+          </div>,
+        );
 
         expect(wrapper.find('.child2')).to.have.lengthOf(1);
       });
@@ -601,7 +615,11 @@ describe('mount', () => {
             <span className="child1" />
           </div>
         ));
-        const Parent = () => <span><SomeComponent foo="hello" /></span>;
+        const Parent = () => (
+          <span>
+            <SomeComponent foo="hello" />
+          </span>
+        );
 
         const wrapper = mount(<Parent foo="hello" />);
         const results = wrapper.find(SomeComponent);
@@ -624,9 +642,7 @@ describe('mount', () => {
           }
         }
 
-        const BForwarded = forwardRef((props, ref) => (
-          <B {...props} forwardedRef={ref} />
-        ));
+        const BForwarded = forwardRef((props, ref) => <B {...props} forwardedRef={ref} />);
 
         const ref = createRef();
         mount(<BForwarded ref={ref} />);
@@ -636,9 +652,7 @@ describe('mount', () => {
 
     describe('stateless function components (SFCs)', () => {
       it('can pass in context', () => {
-        const SimpleComponent = (props, { name }) => (
-          <div>{name}</div>
-        );
+        const SimpleComponent = (props, { name }) => <div>{name}</div>;
         SimpleComponent.contextTypes = { name: PropTypes.string };
 
         const context = { name: 'foo' };
@@ -647,13 +661,13 @@ describe('mount', () => {
       });
 
       it('can pass context to the child of mounted component', () => {
-        const SimpleComponent = (props, { name }) => (
-          <div>{name}</div>
-        );
+        const SimpleComponent = (props, { name }) => <div>{name}</div>;
         SimpleComponent.contextTypes = { name: PropTypes.string };
 
         const ComplexComponent = () => (
-          <div><SimpleComponent /></div>
+          <div>
+            <SimpleComponent />
+          </div>
         );
 
         const childContextTypes = {
@@ -666,18 +680,14 @@ describe('mount', () => {
       });
 
       it('does not throw if context is passed in but contextTypes is missing', () => {
-        const SimpleComponent = (props, { name }) => (
-          <div>{name}</div>
-        );
+        const SimpleComponent = (props, { name }) => <div>{name}</div>;
 
         const context = { name: 'foo' };
         expect(() => mount(<SimpleComponent />, { context })).not.to.throw();
       });
 
       itIf(false, 'is introspectable through context API', () => {
-        const SimpleComponent = (props, { name }) => (
-          <div>{name}</div>
-        );
+        const SimpleComponent = (props, { name }) => <div>{name}</div>;
         SimpleComponent.contextTypes = { name: PropTypes.string };
 
         const context = { name: 'foo' };
@@ -704,18 +714,14 @@ describe('mount', () => {
     });
 
     it('supports findDOMNode with SFCs', () => {
-      const Foo = ({ foo }) => (
-        <div>{foo}</div>
-      );
+      const Foo = ({ foo }) => <div>{foo}</div>;
 
       const wrapper = mount(<Foo foo="qux" />);
       expect(wrapper.text()).to.equal('qux');
     });
 
     it('works with nested stateless', () => {
-      const TestItem = () => (
-        <div className="item">1</div>
-      );
+      const TestItem = () => <div className="item">1</div>;
       const Test = () => (
         <div className="box">
           <TestItem test="123" />
@@ -733,7 +739,11 @@ describe('mount', () => {
 
     describe('React.memo', () => {
       it('works with an SFC', () => {
-        const InnerComp = () => <div><span>Hello</span></div>;
+        const InnerComp = () => (
+          <div>
+            <span>Hello</span>
+          </div>
+        );
         const InnerFoo = ({ foo }) => (
           <div>
             <InnerComp />
@@ -769,7 +779,11 @@ describe('mount', () => {
       it('works with a class component', () => {
         class InnerComp extends React.Component {
           render() {
-            return <div><span>Hello</span></div>;
+            return (
+              <div>
+                <span>Hello</span>
+              </div>
+            );
           }
         }
 
@@ -816,12 +830,7 @@ describe('mount', () => {
     it('shows portals in mount debug tree', () => {
       const containerDiv = global.document.createElement('div');
       const Foo = () => (
-        <div>
-          {createPortal(
-            <div className="in-portal">InPortal</div>,
-            containerDiv,
-          )}
-        </div>
+        <div>{createPortal(<div className="in-portal">InPortal</div>, containerDiv)}</div>
       );
 
       const wrapper = mount(<Foo />);
@@ -841,10 +850,7 @@ describe('mount', () => {
       containerDiv.setAttribute('data-foo', 'bar');
       const Foo = () => (
         <div className="foo">
-          {createPortal(
-            <div className="in-portal">InPortal</div>,
-            containerDiv,
-          )}
+          {createPortal(<div className="in-portal">InPortal</div>, containerDiv)}
         </div>
       );
 
@@ -893,10 +899,7 @@ describe('mount', () => {
 
     it('has top level portals in debug tree', () => {
       const containerDiv = global.document.createElement('div');
-      const Foo = () => createPortal(
-        <div className="in-portal">InPortal</div>,
-        containerDiv,
-      );
+      const Foo = () => createPortal(<div className="in-portal">InPortal</div>, containerDiv);
 
       const wrapper = mount(<Foo />);
       expect(wrapper.debug()).to.equal(`<Foo>
@@ -944,7 +947,11 @@ describe('mount', () => {
     });
 
     it('finds Profiler element', () => {
-      const Parent = () => <span><SomeComponent foo="hello" /></span>;
+      const Parent = () => (
+        <span>
+          <SomeComponent foo="hello" />
+        </span>
+      );
 
       const wrapper = mount(<Parent foo="hello" />);
       const results = wrapper.find(SomeComponent);
@@ -1026,12 +1033,12 @@ describe('mount', () => {
   });
 
   it('supports fragments', () => {
-    const wrapper = mount((
+    const wrapper = mount(
       <Fragment>
         <p>hello</p>
         <span>boo</span>
-      </Fragment>
-    ));
+      </Fragment>,
+    );
 
     expect(wrapper).to.have.lengthOf(2);
   });
@@ -1136,26 +1143,20 @@ describe('mount', () => {
   describe('Suspense & lazy', () => {
     class DynamicComponent extends React.Component {
       render() {
-        return (
-          <div>Dynamic Component</div>
-        );
+        return <div>Dynamic Component</div>;
       }
     }
 
     class Fallback extends React.Component {
       render() {
-        return (
-          <div>Fallback</div>
-        );
+        return <div>Fallback</div>;
       }
     }
 
     it('finds Suspense and its children when no lazy component', () => {
       class Component extends React.Component {
         render() {
-          return (
-            <div>test</div>
-          );
+          return <div>test</div>;
         }
       }
 
@@ -1306,11 +1307,7 @@ describe('mount', () => {
 
         render() {
           const { id } = this.props;
-          return (
-            <div className={id}>
-              {id}
-            </div>
-          );
+          return <div className={id}>{id}</div>;
         }
       }
       const wrapper = mount(<Foo id="foo" />);
@@ -1422,7 +1419,11 @@ describe('mount', () => {
     });
 
     it('lets you read the value of an input', () => {
-      const wrapper = mount(<div><input value="0" /></div>);
+      const wrapper = mount(
+        <div>
+          <input value="0" />
+        </div>,
+      );
       const inputNode = wrapper.find('input').getDOMNode();
       expect(inputNode.value).to.equal('0');
     });
@@ -1430,15 +1431,21 @@ describe('mount', () => {
 
   describe('.ref(refName)', () => {
     class WithoutRef extends React.Component {
-      render() { return <div />; }
+      render() {
+        return <div />;
+      }
     }
 
     class WithRef extends React.Component {
-      render() { return <div ref="r" />; }
+      render() {
+        return <div ref="r" />;
+      }
     }
 
     class RendersWithRef extends React.Component {
-      render() { return <WithRef />; }
+      render() {
+        return <WithRef />;
+      }
     }
 
     it('throws when called on not the root', () => {
@@ -1463,9 +1470,15 @@ describe('mount', () => {
         render() {
           return (
             <div>
-              <span ref="firstRef" data-amount={2}>First</span>
-              <span ref="secondRef" data-amount={4}>Second</span>
-              <span ref="thirdRef" data-amount={8}>Third</span>
+              <span ref="firstRef" data-amount={2}>
+                First
+              </span>
+              <span ref="secondRef" data-amount={4}>
+                Second
+              </span>
+              <span ref="thirdRef" data-amount={8}>
+                Third
+              </span>
             </div>
           );
         }
@@ -1479,7 +1492,11 @@ describe('mount', () => {
   describe('.detach', () => {
     class Comp extends React.Component {
       render() {
-        return <div><span>hi</span></div>;
+        return (
+          <div>
+            <span>hi</span>
+          </div>
+        );
       }
     }
     it('throws on non-root', () => {
@@ -1508,7 +1525,7 @@ describe('mount', () => {
     it('attaches and stuff', () => {
       class Foo extends React.Component {
         render() {
-          return (<div className="in-foo" />);
+          return <div className="in-foo" />;
         }
       }
       const div = global.document.createElement('div');
@@ -1539,12 +1556,12 @@ describe('mount', () => {
     it('allows for multiple attaches/detaches on same node', () => {
       class Foo extends React.Component {
         render() {
-          return (<div className="in-foo" />);
+          return <div className="in-foo" />;
         }
       }
       class Bar extends React.Component {
         render() {
-          return (<section className="in-bar" />);
+          return <section className="in-bar" />;
         }
       }
       let wrapper;
@@ -1584,7 +1601,7 @@ describe('mount', () => {
     it('will attach to the body successfully', () => {
       class Bar extends React.Component {
         render() {
-          return (<section className="in-bar" />);
+          return <section className="in-bar" />;
         }
       }
       const wrapper = mount(<Bar />, { attachTo: document.body });
@@ -1746,7 +1763,6 @@ describe('mount', () => {
       }
 
       render() {
-        /* eslint-disable react/destructuring-assignment */
         return (
           <div>
             {this.state && this.state.showSpan && <span className="show-me" />}
@@ -1754,7 +1770,6 @@ describe('mount', () => {
             <Child callback={() => this.callbackSetState()} />
           </div>
         );
-        /* eslint-enable react/destructuring-assignment */
       }
     }
 
@@ -1783,7 +1798,11 @@ describe('mount', () => {
     class Child extends React.Component {
       render() {
         const { onClick } = this.props;
-        return <button type="button" onClick={onClick}>click</button>;
+        return (
+          <button type="button" onClick={onClick}>
+            click
+          </button>
+        );
       }
     }
 
@@ -1798,7 +1817,7 @@ describe('mount', () => {
 
         onIncrement() {
           this.setState({
-            count: this.state.count + 1, // eslint-disable-line react/destructuring-assignment
+            count: this.state.count + 1,
           });
         }
 
@@ -1827,7 +1846,11 @@ describe('mount', () => {
     class Child extends React.Component {
       render() {
         const { onClick } = this.props;
-        return <button type="button" onClick={onClick}>click</button>;
+        return (
+          <button type="button" onClick={onClick}>
+            click
+          </button>
+        );
       }
     }
 
@@ -1844,9 +1867,12 @@ describe('mount', () => {
 
           onIncrement() {
             setTimeout(() => {
-              this.setState({
-                count: this.state.count + 1, // eslint-disable-line react/destructuring-assignment
-              }, resolve);
+              this.setState(
+                {
+                  count: this.state.count + 1,
+                },
+                resolve,
+              );
             });
           }
 
@@ -1877,28 +1903,25 @@ describe('mount', () => {
         const mappedChildren = [];
         React.Children.forEach(children, (child, i) => {
           const clonedChild = React.cloneElement(child, {
-            key: i, // eslint-disable-line react/no-array-index-key
+            // eslint-disable-next-line react/no-array-index-key
+            key: i,
             onClick() {
               return child.props.name;
             },
           });
           mappedChildren.push(clonedChild);
         });
-        return (
-          <div>
-            {mappedChildren}
-          </div>
-        );
+        return <div>{mappedChildren}</div>;
       }
     }
 
     it('merges cloned element props', () => {
-      const wrapper = mount((
+      const wrapper = mount(
         <Foo>
           <span data-foo="1">1</span>
           <div data-bar="2">2</div>
-        </Foo>
-      ));
+        </Foo>,
+      );
 
       const children = wrapper.childAt(0).children();
       expect(children).to.have.lengthOf(2);

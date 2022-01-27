@@ -5,11 +5,7 @@ import sinon from 'sinon-sandbox';
 
 import getAdapter from 'enzyme/build/getAdapter';
 
-export default function describeRenderProp({
-  Wrap,
-  WrapRendered,
-  WrapperName,
-}) {
+export default function describeRenderProp({ Wrap, WrapRendered, WrapperName }) {
   wrap()
     .withConsoleThrows()
     .describe('.renderProp()', () => {
@@ -31,16 +27,34 @@ export default function describeRenderProp({
       }
 
       it('returns a wrapper around the node returned from the render prop', () => {
-        const wrapperA = Wrap(<div><Bar render={() => <div><Foo /></div>} /></div>);
+        const wrapperA = Wrap(
+          <div>
+            <Bar
+              render={() => (
+                <div>
+                  <Foo />
+                </div>
+              )}
+            />
+          </div>,
+        );
         const renderPropWrapperA = wrapperA.find(Bar).renderProp('render')();
         expect(renderPropWrapperA.find(Foo)).to.have.lengthOf(1);
 
-        const wrapperB = Wrap(<div><Bar render={() => <Foo />} /></div>);
+        const wrapperB = Wrap(
+          <div>
+            <Bar render={() => <Foo />} />
+          </div>,
+        );
         const renderPropWrapperB = wrapperB.find(Bar).renderProp('render')();
         expect(renderPropWrapperB.find(Foo)).to.have.lengthOf(1);
 
         const stub = sinon.stub().returns(<div />);
-        const wrapperC = Wrap(<div><Bar render={stub} /></div>);
+        const wrapperC = Wrap(
+          <div>
+            <Bar render={stub} />
+          </div>,
+        );
         stub.resetHistory();
         wrapperC.find(Bar).renderProp('render')('one', 'two');
         expect(stub.args).to.deep.equal([['one', 'two']]);
@@ -84,9 +98,23 @@ export default function describeRenderProp({
       });
 
       wrap()
-        .withOverride(() => getAdapter(), 'wrap', () => undefined)
+        .withOverride(
+          () => getAdapter(),
+          'wrap',
+          () => undefined,
+        )
         .it('throws with a react adapter that lacks a `.wrap`', () => {
-          const wrapper = Wrap(<div><Bar render={() => <div><Foo /></div>} /></div>);
+          const wrapper = Wrap(
+            <div>
+              <Bar
+                render={() => (
+                  <div>
+                    <Foo />
+                  </div>
+                )}
+              />
+            </div>,
+          );
           expect(() => wrapper.find(Bar).renderProp('render')).to.throw(RangeError);
         });
 
@@ -149,7 +177,9 @@ export default function describeRenderProp({
         it('throws with true', () => {
           const wrapper = Wrap(<MyComponent val={false} />);
 
-          expect(() => wrapper.find(ComponentWithRenderProp).renderProp('r')(true).Wrap()).to.throw();
+          expect(() =>
+            wrapper.find(ComponentWithRenderProp).renderProp('r')(true).Wrap(),
+          ).to.throw();
         });
       });
     });

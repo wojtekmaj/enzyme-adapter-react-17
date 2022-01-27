@@ -2,22 +2,11 @@ import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 
-import {
-  memo,
-  useEffect,
-  useState,
-} from '../../_helpers/react-compat';
+import { memo, useEffect, useState } from '../../_helpers/react-compat';
 
-export default function describeSimulate({
-  Wrap,
-  WrapperName,
-  isShallow,
-  isMount,
-}) {
+export default function describeSimulate({ Wrap, WrapperName, isShallow, isMount }) {
   // The shallow renderer in react 16 does not yet support batched updates. When it does,
   // we should be able to go un-skip all of the tests that are skipped with this flag.
   // FIXME: fix this
@@ -39,10 +28,7 @@ export default function describeSimulate({
         render() {
           const { count } = this.state;
           return (
-            <a
-              data-count={count}
-              onClick={this.incrementCount}
-            >
+            <a data-count={count} onClick={this.incrementCount}>
               foo
             </a>
           );
@@ -69,7 +55,7 @@ export default function describeSimulate({
       const spy = sinon.spy();
       class Clicker extends React.Component {
         render() {
-          return (<a onClick={spy}>foo</a>);
+          return <a onClick={spy}>foo</a>;
         }
       }
 
@@ -86,7 +72,7 @@ export default function describeSimulate({
     });
 
     describe('stateless function components (SFCs)', () => {
-      const ClickerSFC = ({ onClick }) => (<a onClick={onClick}>foo</a>);
+      const ClickerSFC = ({ onClick }) => <a onClick={onClick}>foo</a>;
 
       it('simulates events', () => {
         const spy = sinon.spy();
@@ -119,7 +105,11 @@ export default function describeSimulate({
         const clickSpy = sinon.spy();
         class Clicks extends React.Component {
           render() {
-            return (<a onClick={clickSpy} onDoubleClick={spy}>foo</a>);
+            return (
+              <a onClick={clickSpy} onDoubleClick={spy}>
+                foo
+              </a>
+            );
           }
         }
 
@@ -137,9 +127,7 @@ export default function describeSimulate({
           const spy = sinon.spy();
           class Mousetrap extends React.Component {
             render() {
-              return (
-                <a onMouseEnter={spy}>foo</a>
-              );
+              return <a onMouseEnter={spy}>foo</a>;
             }
           }
 
@@ -151,9 +139,7 @@ export default function describeSimulate({
 
         it('converts lowercase events to React camelcase in SFCs', () => {
           const spy = sinon.spy();
-          const MousetrapSFC = () => (
-            <a onMouseEnter={spy}>foo</a>
-          );
+          const MousetrapSFC = () => <a onMouseEnter={spy}>foo</a>;
 
           const wrapper = Wrap(<MousetrapSFC />);
 
@@ -167,9 +153,7 @@ export default function describeSimulate({
           const spy = sinon.spy();
           class Animator extends React.Component {
             render() {
-              return (
-                <a onAnimationIteration={spy}>foo</a>
-              );
+              return <a onAnimationIteration={spy}>foo</a>;
             }
           }
 
@@ -181,7 +165,7 @@ export default function describeSimulate({
 
         it('converts lowercase events to React camelcase in stateless components', () => {
           const spy = sinon.spy();
-          const AnimatorSFC = () => (<a onAnimationIteration={spy}>foo</a>);
+          const AnimatorSFC = () => <a onAnimationIteration={spy}>foo</a>;
 
           const wrapper = Wrap(<AnimatorSFC />);
 
@@ -195,7 +179,7 @@ export default function describeSimulate({
           const spy = sinon.spy();
           class Fingertrap extends React.Component {
             render() {
-              return (<a onGotPointerCapture={spy}>foo</a>);
+              return <a onGotPointerCapture={spy}>foo</a>;
             }
           }
 
@@ -207,7 +191,7 @@ export default function describeSimulate({
 
         it('converts lowercase events to React camelcase in stateless components', () => {
           const spy = sinon.spy();
-          const FingertrapSFC = () => (<a onGotPointerCapture={spy}>foo</a>);
+          const FingertrapSFC = () => <a onGotPointerCapture={spy}>foo</a>;
 
           const wrapper = Wrap(<FingertrapSFC />);
 
@@ -227,18 +211,14 @@ export default function describeSimulate({
         }
 
         onClick() {
-          // eslint-disable-next-line react/destructuring-assignment, react/no-access-state-in-setstate
           this.setState({ count: this.state.count + 1 });
-          // eslint-disable-next-line react/destructuring-assignment, react/no-access-state-in-setstate
           this.setState({ count: this.state.count + 1 });
         }
 
         render() {
           renderCount += 1;
           const { count } = this.state;
-          return (
-            <a onClick={this.onClick}>{count}</a>
-          );
+          return <a onClick={this.onClick}>{count}</a>;
         }
       }
 
@@ -258,13 +238,13 @@ export default function describeSimulate({
       let wrapper;
       beforeEach(() => {
         onClick = sinon.stub();
-        wrapper = Wrap((
+        wrapper = Wrap(
           <div className="div-elem">
             <span className="parent-elem" onClick={onClick}>
               <span className="child-elem">click me</span>
             </span>
-          </div>
-        ));
+          </div>,
+        );
       });
 
       itIf(!isShallow, 'child should fire onClick', () => {
@@ -323,7 +303,9 @@ export default function describeSimulate({
           const [counter, setCounter] = useState(0);
 
           return (
-            <button type="button" onClick={() => setCounter(counter + 1)}>{counter}</button>
+            <button type="button" onClick={() => setCounter(counter + 1)}>
+              {counter}
+            </button>
           );
         }
         const wrapper = Wrap(<ComponentUsingEffectHook />);

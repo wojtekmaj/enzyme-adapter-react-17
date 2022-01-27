@@ -1,13 +1,9 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  sym,
-} from 'enzyme/build/Utils';
+import { sym } from 'enzyme/build/Utils';
 
-export default function describeSingle({
-  Wrap,
-}) {
+export default function describeSingle({ Wrap }) {
   describe('#single()', () => {
     it('throws if run on multiple nodes', () => {
       const wrapper = Wrap(

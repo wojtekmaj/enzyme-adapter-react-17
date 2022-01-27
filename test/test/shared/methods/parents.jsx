@@ -1,21 +1,14 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  itIf,
-} from '../../_helpers';
+import { itIf } from '../../_helpers';
 
-import {
-  createClass,
-} from '../../_helpers/react-compat';
+import { createClass } from '../../_helpers/react-compat';
 
-export default function describeParents({
-  Wrap,
-  isShallow,
-}) {
+export default function describeParents({ Wrap, isShallow }) {
   describe('.parents([selector])', () => {
     it('returns an array of current node’s ancestors', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div className="bax">
           <div className="foo">
             <div className="bar">
@@ -25,8 +18,8 @@ export default function describeParents({
           <div className="qux">
             <div className="qoo" />
           </div>
-        </div>
-      ));
+        </div>,
+      );
 
       const parents = wrapper.find('.baz').parents();
 
@@ -37,15 +30,15 @@ export default function describeParents({
     });
 
     it('works for non-leaf nodes as well', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div className="bax">
           <div className="foo">
             <div className="bar">
               <div className="baz" />
             </div>
           </div>
-        </div>
-      ));
+        </div>,
+      );
 
       const parents = wrapper.find('.bar').parents();
 
@@ -55,15 +48,15 @@ export default function describeParents({
     });
 
     it('optionally allows a selector', () => {
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div className="bax foo">
           <div className="foo">
             <div className="bar">
               <div className="baz" />
             </div>
           </div>
-        </div>
-      ));
+        </div>,
+      );
 
       const parents = wrapper.find('.baz').parents('.foo');
 
@@ -125,11 +118,11 @@ export default function describeParents({
           return <div className="bar" />;
         },
       });
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div className="root">
           <Foo />
-        </div>
-      ));
+        </div>,
+      );
       const rootDiv = wrapper.find('.root');
       expect(rootDiv).to.have.lengthOf(1);
       expect(rootDiv.hasClass('root')).to.equal(true);
@@ -144,21 +137,17 @@ export default function describeParents({
       class CustomForm extends React.Component {
         render() {
           const { children } = this.props;
-          return (
-            <form>
-              {children}
-            </form>
-          );
+          return <form>{children}</form>;
         }
       }
 
-      const wrapper = Wrap((
+      const wrapper = Wrap(
         <div>
           <CustomForm>
             <input />
           </CustomForm>
-        </div>
-      ));
+        </div>,
+      );
 
       const formDown = wrapper.find('form');
       expect(formDown).to.have.lengthOf(1);

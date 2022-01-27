@@ -4,13 +4,14 @@ import jsdom from 'jsdom';
 import { get } from 'enzyme/build/configuration';
 import { configure, shallow, EnzymeAdapter } from 'enzyme';
 import inspect from 'object-inspect';
-import {
-  Portal,
-  Memo,
-} from 'react-is';
+import { Portal, Memo } from 'react-is';
 import PropTypes from 'prop-types';
 import wrap from 'mocha-wrap';
-import { fakeDynamicImport, wrapWithWrappingComponent, RootFinder } from '@wojtekmaj/enzyme-adapter-utils';
+import {
+  fakeDynamicImport,
+  wrapWithWrappingComponent,
+  RootFinder,
+} from '@wojtekmaj/enzyme-adapter-utils';
 
 import './_helpers/setupAdapters';
 import Adapter from './_helpers/adapter';
@@ -27,10 +28,7 @@ import {
   StrictMode,
   Suspense,
 } from './_helpers/react-compat';
-import {
-  itIf,
-  isMemo,
-} from './_helpers';
+import { itIf, isMemo } from './_helpers';
 
 const { adapter } = get();
 
@@ -48,7 +46,6 @@ function cleanNode(node) {
     node.instance = null;
   }
   if (node && node.props && node.props.children) {
-    // eslint-disable-next-line no-unused-vars
     const { children, ...props } = node.props;
     node.props = props;
   }
@@ -73,19 +70,31 @@ describe('Adapter', () => {
 
     it('fails to render when no adapter is configured', () => {
       configure({ adapter: undefined });
-      expect(() => shallow(<div />)).to.throw(Error, /Enzyme expects an adapter to be configured, but found none/);
+      expect(() => shallow(<div />)).to.throw(
+        Error,
+        /Enzyme expects an adapter to be configured, but found none/,
+      );
     });
 
     it('fails to render when an object that does not inherit from the base class is configured', () => {
-      expect(() => configure({ adapter: {} })).to.throw(Error, /configured enzyme adapter did not inherit from the EnzymeAdapter base class/);
+      expect(() => configure({ adapter: {} })).to.throw(
+        Error,
+        /configured enzyme adapter did not inherit from the EnzymeAdapter base class/,
+      );
     });
 
     it('fails to render when an adapter constructor is configured', () => {
-      expect(() => configure({ adapter: Adapter })).to.throw(Error, /you provided an adapter \*constructor\*/);
+      expect(() => configure({ adapter: Adapter })).to.throw(
+        Error,
+        /you provided an adapter \*constructor\*/,
+      );
     });
 
     it('fails to render when a non-adapter-constructor function is configured', () => {
-      expect(() => configure({ adapter() {} })).to.throw(Error, /an enzyme adapter must be an object instance; you provided a function/);
+      expect(() => configure({ adapter() {} })).to.throw(
+        Error,
+        /an enzyme adapter must be an object instance; you provided a function/,
+      );
     });
   });
 
@@ -155,33 +164,51 @@ describe('Adapter', () => {
     class BamBam extends React.Component {
       render() {
         const { children } = this.props;
-        return (<div>{children}</div>);
+        return <div>{children}</div>;
       }
     }
     class FooBar extends React.Component {
       render() {
         const { children } = this.props;
-        return (<BamBam>{children}</BamBam>);
+        return <BamBam>{children}</BamBam>;
       }
     }
     class One extends React.Component {
-      render() { return (<FooBar><span><FooBar /></span></FooBar>); }
+      render() {
+        return (
+          <FooBar>
+            <span>
+              <FooBar />
+            </span>
+          </FooBar>
+        );
+      }
     }
     class Two extends React.Component {
-      render() { return (<FooBar><span>2</span></FooBar>); }
+      render() {
+        return (
+          <FooBar>
+            <span>2</span>
+          </FooBar>
+        );
+      }
     }
     class Three extends React.Component {
-      render() { return (<FooBar><span><div /></span></FooBar>); }
+      render() {
+        return (
+          <FooBar>
+            <span>
+              <div />
+            </span>
+          </FooBar>
+        );
+      }
     }
     class Four extends React.Component {
       render() {
         return (
           <FooBar>
-            <span>
-              some string
-              4
-              another string
-            </span>
+            <span>some string 4 another string</span>
           </FooBar>
         );
       }
@@ -223,27 +250,25 @@ describe('Adapter', () => {
 
       cleanNode(node);
 
-      expect(prettyFormat(node)).to.equal(prettyFormat({
-        nodeType: 'class',
-        type: Foo,
-        props: {},
-        key: undefined,
-        ref: null,
-        instance: null,
-        rendered: {
-          nodeType: 'host',
-          type: 'div',
+      expect(prettyFormat(node)).to.equal(
+        prettyFormat({
+          nodeType: 'class',
+          type: Foo,
           props: {},
           key: undefined,
           ref: null,
           instance: null,
-          rendered: [
-            'hello',
-            '4',
-            'world',
-          ],
-        },
-      }));
+          rendered: {
+            nodeType: 'host',
+            type: 'div',
+            props: {},
+            key: undefined,
+            ref: null,
+            instance: null,
+            rendered: ['hello', '4', 'world'],
+          },
+        }),
+      );
     });
 
     it('treats null renders correctly', () => {
@@ -256,15 +281,17 @@ describe('Adapter', () => {
 
       cleanNode(node);
 
-      expect(prettyFormat(node)).to.equal(prettyFormat({
-        nodeType: 'class',
-        type: RendersNull,
-        props: {},
-        key: undefined,
-        ref: null,
-        instance: null,
-        rendered: null,
-      }));
+      expect(prettyFormat(node)).to.equal(
+        prettyFormat({
+          nodeType: 'class',
+          type: RendersNull,
+          props: {},
+          key: undefined,
+          ref: null,
+          instance: null,
+          rendered: null,
+        }),
+      );
     });
 
     it('renders react portals', () => {
@@ -272,49 +299,50 @@ describe('Adapter', () => {
       const options = { mode: 'mount' };
       const renderer = adapter.createRenderer(options);
       const innerDiv = <div className="Foo">Hello World!</div>;
-      const Foo = () => (
-        createPortal(
-          innerDiv,
-          document.body,
-        )
-      );
+      const Foo = () => createPortal(innerDiv, document.body);
 
       renderer.render(<Foo />);
 
       const node = renderer.getNode();
 
-      const { rendered: { props: { children } } } = node;
+      const {
+        rendered: {
+          props: { children },
+        },
+      } = node;
       expect(children).to.equal(innerDiv);
 
       cleanNode(node);
 
-      expect(prettyFormat(node)).to.equal(prettyFormat({
-        nodeType: 'function',
-        type: Foo,
-        props: {},
-        key: undefined,
-        ref: null,
-        instance: null,
-        rendered: {
-          nodeType: 'portal',
-          type: Portal,
-          props: {
-            containerInfo: document.body,
-          },
+      expect(prettyFormat(node)).to.equal(
+        prettyFormat({
+          nodeType: 'function',
+          type: Foo,
+          props: {},
           key: undefined,
           ref: null,
           instance: null,
           rendered: {
-            nodeType: 'host',
-            type: 'div',
-            props: { className: 'Foo' },
+            nodeType: 'portal',
+            type: Portal,
+            props: {
+              containerInfo: document.body,
+            },
             key: undefined,
             ref: null,
             instance: null,
-            rendered: ['Hello World!'],
+            rendered: {
+              nodeType: 'host',
+              type: 'div',
+              props: { className: 'Foo' },
+              key: undefined,
+              ref: null,
+              instance: null,
+              rendered: ['Hello World!'],
+            },
           },
-        },
-      }));
+        }),
+      );
     });
 
     it('shallow renders react portals', () => {
@@ -322,49 +350,50 @@ describe('Adapter', () => {
       const renderer = adapter.createRenderer(options);
       const innerDiv = <div className="Foo">Hello World!</div>;
       const containerDiv = { nodeType: 1 };
-      const Foo = () => (
-        createPortal(
-          innerDiv,
-          containerDiv,
-        )
-      );
+      const Foo = () => createPortal(innerDiv, containerDiv);
 
       renderer.render(<Foo />);
 
       const node = renderer.getNode();
 
-      const { rendered: { props: { children } } } = node;
+      const {
+        rendered: {
+          props: { children },
+        },
+      } = node;
       expect(children).to.equal(innerDiv);
 
       cleanNode(node);
 
-      expect(prettyFormat(node)).to.equal(prettyFormat({
-        nodeType: 'function',
-        type: Foo,
-        props: {},
-        key: undefined,
-        ref: null,
-        instance: null,
-        rendered: {
-          nodeType: 'portal',
-          type: Portal,
-          props: {
-            containerInfo: containerDiv,
-          },
+      expect(prettyFormat(node)).to.equal(
+        prettyFormat({
+          nodeType: 'function',
+          type: Foo,
+          props: {},
           key: undefined,
           ref: null,
           instance: null,
           rendered: {
-            nodeType: 'host',
-            type: 'div',
-            props: { className: 'Foo' },
+            nodeType: 'portal',
+            type: Portal,
+            props: {
+              containerInfo: containerDiv,
+            },
             key: undefined,
             ref: null,
             instance: null,
-            rendered: 'Hello World!',
+            rendered: {
+              nodeType: 'host',
+              type: 'div',
+              props: { className: 'Foo' },
+              key: undefined,
+              ref: null,
+              instance: null,
+              rendered: 'Hello World!',
+            },
           },
-        },
-      }));
+        }),
+      );
     });
 
     it('renders simple components returning host components', () => {
@@ -379,23 +408,25 @@ describe('Adapter', () => {
 
       cleanNode(node);
 
-      expect(prettyFormat(node)).to.equal(prettyFormat({
-        nodeType: 'function',
-        type: Qoo,
-        props: {},
-        key: undefined,
-        ref: null,
-        instance: null,
-        rendered: {
-          nodeType: 'host',
-          type: 'span',
-          props: { className: 'Qoo' },
+      expect(prettyFormat(node)).to.equal(
+        prettyFormat({
+          nodeType: 'function',
+          type: Qoo,
+          props: {},
           key: undefined,
           ref: null,
           instance: null,
-          rendered: ['Hello World!'],
-        },
-      }));
+          rendered: {
+            nodeType: 'host',
+            type: 'span',
+            props: { className: 'Qoo' },
+            key: undefined,
+            ref: null,
+            instance: null,
+            rendered: ['Hello World!'],
+          },
+        }),
+      );
     });
 
     it('renders simple components returning host components', () => {
@@ -404,9 +435,7 @@ describe('Adapter', () => {
 
       class Qoo extends React.Component {
         render() {
-          return (
-            <span className="Qoo">Hello World!</span>
-          );
+          return <span className="Qoo">Hello World!</span>;
         }
       }
 
@@ -416,23 +445,25 @@ describe('Adapter', () => {
 
       cleanNode(node);
 
-      expect(prettyFormat(node)).to.equal(prettyFormat({
-        nodeType: 'class',
-        type: Qoo,
-        props: {},
-        key: undefined,
-        ref: null,
-        instance: null,
-        rendered: {
-          nodeType: 'host',
-          type: 'span',
-          props: { className: 'Qoo' },
+      expect(prettyFormat(node)).to.equal(
+        prettyFormat({
+          nodeType: 'class',
+          type: Qoo,
+          props: {},
           key: undefined,
           ref: null,
           instance: null,
-          rendered: ['Hello World!'],
-        },
-      }));
+          rendered: {
+            nodeType: 'host',
+            type: 'span',
+            props: { className: 'Qoo' },
+            key: undefined,
+            ref: null,
+            instance: null,
+            rendered: ['Hello World!'],
+          },
+        }),
+      );
     });
 
     it('handles null rendering components', () => {
@@ -447,15 +478,17 @@ describe('Adapter', () => {
 
       cleanNode(node);
 
-      expect(prettyFormat(node)).to.equal(prettyFormat({
-        nodeType: 'class',
-        type: RendersNull,
-        props: {},
-        key: undefined,
-        ref: null,
-        instance: null,
-        rendered: null,
-      }));
+      expect(prettyFormat(node)).to.equal(
+        prettyFormat({
+          nodeType: 'class',
+          type: RendersNull,
+          props: {},
+          key: undefined,
+          ref: null,
+          instance: null,
+          rendered: null,
+        }),
+      );
     });
 
     it('renders complicated trees of composites and hosts', () => {
@@ -474,11 +507,7 @@ describe('Adapter', () => {
       class Bar extends React.Component {
         render() {
           const { special, children } = this.props;
-          return (
-            <Foo className={special ? 'special' : 'normal'}>
-              {children}
-            </Foo>
-          );
+          return <Foo className={special ? 'special' : 'normal'}>{children}</Foo>;
         }
       }
 
@@ -506,75 +535,75 @@ describe('Adapter', () => {
 
       cleanNode(tree);
 
-      expect(prettyFormat(tree)).to.equal(prettyFormat({
-        nodeType: 'class',
-        type: Bam,
-        props: {},
-        key: undefined,
-        ref: null,
-        instance: null,
-        rendered: {
+      expect(prettyFormat(tree)).to.equal(
+        prettyFormat({
           nodeType: 'class',
-          type: Bar,
-          props: { special: true },
+          type: Bam,
+          props: {},
           key: undefined,
           ref: null,
           instance: null,
           rendered: {
-            nodeType: 'function',
-            type: Foo,
-            props: { className: 'special' },
+            nodeType: 'class',
+            type: Bar,
+            props: { special: true },
             key: undefined,
             ref: null,
             instance: null,
             rendered: {
-              nodeType: 'host',
-              type: 'div',
-              props: { className: 'Foo special' },
+              nodeType: 'function',
+              type: Foo,
+              props: { className: 'special' },
               key: undefined,
               ref: null,
               instance: null,
-              rendered: [
-                {
-                  nodeType: 'host',
-                  type: 'span',
-                  props: { className: 'Foo2' },
-                  key: undefined,
-                  ref: null,
-                  instance: null,
-                  rendered: ['Literal'],
-                },
-                {
-                  nodeType: 'function',
-                  type: Qoo,
-                  props: {},
-                  key: undefined,
-                  ref: null,
-                  instance: null,
-                  rendered: {
+              rendered: {
+                nodeType: 'host',
+                type: 'div',
+                props: { className: 'Foo special' },
+                key: undefined,
+                ref: null,
+                instance: null,
+                rendered: [
+                  {
                     nodeType: 'host',
                     type: 'span',
-                    props: { className: 'Qoo' },
+                    props: { className: 'Foo2' },
                     key: undefined,
                     ref: null,
                     instance: null,
-                    rendered: ['Hello World!'],
+                    rendered: ['Literal'],
                   },
-                },
-              ],
+                  {
+                    nodeType: 'function',
+                    type: Qoo,
+                    props: {},
+                    key: undefined,
+                    ref: null,
+                    instance: null,
+                    rendered: {
+                      nodeType: 'host',
+                      type: 'span',
+                      props: { className: 'Qoo' },
+                      key: undefined,
+                      ref: null,
+                      instance: null,
+                      rendered: ['Hello World!'],
+                    },
+                  },
+                ],
+              },
             },
           },
-        },
-      }));
+        }),
+      );
     });
 
     it('renders complicated trees of composites and hosts', () => {
       // class returning host. no children props.
       class Qoo extends React.Component {
         render() {
-          return (
-            <span className="Qoo">Hello World!</span>
-          );
+          return <span className="Qoo">Hello World!</span>;
         }
       }
 
@@ -594,11 +623,7 @@ describe('Adapter', () => {
       class Bar extends React.Component {
         render() {
           const { special, children } = this.props;
-          return (
-            <Foo className={special ? 'special' : 'normal'}>
-              {children}
-            </Foo>
-          );
+          return <Foo className={special ? 'special' : 'normal'}>{children}</Foo>;
         }
       }
 
@@ -626,66 +651,68 @@ describe('Adapter', () => {
 
       cleanNode(tree);
 
-      expect(prettyFormat(tree)).to.equal(prettyFormat({
-        nodeType: 'class',
-        type: Bam,
-        props: {},
-        key: undefined,
-        ref: null,
-        instance: null,
-        rendered: {
+      expect(prettyFormat(tree)).to.equal(
+        prettyFormat({
           nodeType: 'class',
-          type: Bar,
-          props: { special: true },
+          type: Bam,
+          props: {},
           key: undefined,
           ref: null,
           instance: null,
           rendered: {
             nodeType: 'class',
-            type: Foo,
-            props: { className: 'special' },
+            type: Bar,
+            props: { special: true },
             key: undefined,
             ref: null,
             instance: null,
             rendered: {
-              nodeType: 'host',
-              type: 'div',
-              props: { className: 'Foo special' },
+              nodeType: 'class',
+              type: Foo,
+              props: { className: 'special' },
               key: undefined,
               ref: null,
               instance: null,
-              rendered: [
-                {
-                  nodeType: 'host',
-                  type: 'span',
-                  props: { className: 'Foo2' },
-                  key: undefined,
-                  ref: null,
-                  instance: null,
-                  rendered: ['Literal'],
-                },
-                {
-                  nodeType: 'class',
-                  type: Qoo,
-                  props: {},
-                  key: undefined,
-                  ref: null,
-                  instance: null,
-                  rendered: {
+              rendered: {
+                nodeType: 'host',
+                type: 'div',
+                props: { className: 'Foo special' },
+                key: undefined,
+                ref: null,
+                instance: null,
+                rendered: [
+                  {
                     nodeType: 'host',
                     type: 'span',
-                    props: { className: 'Qoo' },
+                    props: { className: 'Foo2' },
                     key: undefined,
                     ref: null,
                     instance: null,
-                    rendered: ['Hello World!'],
+                    rendered: ['Literal'],
                   },
-                },
-              ],
+                  {
+                    nodeType: 'class',
+                    type: Qoo,
+                    props: {},
+                    key: undefined,
+                    ref: null,
+                    instance: null,
+                    rendered: {
+                      nodeType: 'host',
+                      type: 'span',
+                      props: { className: 'Qoo' },
+                      key: undefined,
+                      ref: null,
+                      instance: null,
+                      rendered: ['Hello World!'],
+                    },
+                  },
+                ],
+              },
             },
           },
-        },
-      }));
+        }),
+      );
     });
   });
 
@@ -729,13 +756,15 @@ describe('Adapter', () => {
         throw new Error('Bar constructor should not be called');
       }
 
-      render() { // eslint-disable-line react/require-render-return
+      /* eslint-disable-next-line react/require-render-return */
+      render() {
         throw new Error('Bar render method should not be called');
       }
     }
 
     class Foo extends React.Component {
-      render() { // eslint-disable-line react/require-render-return
+      /* eslint-disable-next-line react/require-render-return */
+      render() {
         throw new Error('Foo render method should not be called');
       }
     }
@@ -762,51 +791,53 @@ describe('Adapter', () => {
 
     cleanNode(tree);
 
-    expect(prettyFormat(tree)).to.equal(prettyFormat({
-      nodeType: 'class',
-      type: Bam,
-      props: {},
-      key: undefined,
-      ref: null,
-      instance: null,
-      rendered: {
+    expect(prettyFormat(tree)).to.equal(
+      prettyFormat({
         nodeType: 'class',
-        type: Bar,
+        type: Bam,
         props: {},
         key: undefined,
         ref: null,
         instance: null,
-        rendered: [
-          {
-            nodeType: 'class',
-            type: Foo,
-            props: {},
-            key: undefined,
-            ref: null,
-            instance: null,
-            rendered: null,
-          },
-          {
-            nodeType: 'class',
-            type: Foo,
-            props: {},
-            key: undefined,
-            ref: null,
-            instance: null,
-            rendered: null,
-          },
-          {
-            nodeType: 'class',
-            type: Foo,
-            props: {},
-            key: undefined,
-            ref: null,
-            instance: null,
-            rendered: null,
-          },
-        ],
-      },
-    }));
+        rendered: {
+          nodeType: 'class',
+          type: Bar,
+          props: {},
+          key: undefined,
+          ref: null,
+          instance: null,
+          rendered: [
+            {
+              nodeType: 'class',
+              type: Foo,
+              props: {},
+              key: undefined,
+              ref: null,
+              instance: null,
+              rendered: null,
+            },
+            {
+              nodeType: 'class',
+              type: Foo,
+              props: {},
+              key: undefined,
+              ref: null,
+              instance: null,
+              rendered: null,
+            },
+            {
+              nodeType: 'class',
+              type: Foo,
+              props: {},
+              key: undefined,
+              ref: null,
+              instance: null,
+              rendered: null,
+            },
+          ],
+        },
+      }),
+    );
   });
 
   it('does not erroneously add a key when refs are present', () => {
@@ -816,7 +847,8 @@ describe('Adapter', () => {
         throw new Error('Inner constructor should not be called');
       }
 
-      render() { // eslint-disable-line react/require-render-return
+      /* eslint-disable-next-line react/require-render-return */
+      render() {
         throw new Error('Inner render method should not be called');
       }
     }
@@ -845,23 +877,25 @@ describe('Adapter', () => {
 
     cleanNode(tree);
 
-    expect(prettyFormat(tree)).to.equal(prettyFormat({
-      nodeType: 'class',
-      type: Outer,
-      props: {},
-      key: undefined,
-      ref: null,
-      instance: null,
-      rendered: {
+    expect(prettyFormat(tree)).to.equal(
+      prettyFormat({
         nodeType: 'class',
-        type: Inner,
+        type: Outer,
         props: {},
         key: undefined,
-        ref: tree.rendered.ref, // prettyFormat loses the reference to "ref"
+        ref: null,
         instance: null,
-        rendered: null,
-      },
-    }));
+        rendered: {
+          nodeType: 'class',
+          type: Inner,
+          props: {},
+          key: undefined,
+          ref: tree.rendered.ref, // prettyFormat loses the reference to "ref"
+          instance: null,
+          rendered: null,
+        },
+      }),
+    );
   });
 
   it('adds keys correctly to elements that have them', () => {
@@ -871,7 +905,8 @@ describe('Adapter', () => {
         throw new Error('Inner constructor should not be called');
       }
 
-      render() { // eslint-disable-line react/require-render-return
+      /* eslint-disable-next-line react/require-render-return */
+      render() {
         throw new Error('Inner render method should not be called');
       }
     }
@@ -891,23 +926,25 @@ describe('Adapter', () => {
 
     cleanNode(tree);
 
-    expect(prettyFormat(tree)).to.equal(prettyFormat({
-      nodeType: 'class',
-      type: Outer,
-      props: {},
-      key: undefined,
-      ref: null,
-      instance: null,
-      rendered: {
+    expect(prettyFormat(tree)).to.equal(
+      prettyFormat({
         nodeType: 'class',
-        type: Inner,
+        type: Outer,
         props: {},
-        key: 'foo',
+        key: undefined,
         ref: null,
         instance: null,
-        rendered: null,
-      },
-    }));
+        rendered: {
+          nodeType: 'class',
+          type: Inner,
+          props: {},
+          key: 'foo',
+          ref: null,
+          instance: null,
+          rendered: null,
+        },
+      }),
+    );
   });
 
   it('adds null keys to elements correctly', () => {
@@ -917,7 +954,8 @@ describe('Adapter', () => {
         throw new Error('Inner constructor should not be called');
       }
 
-      render() { // eslint-disable-line react/require-render-return
+      /* eslint-disable-next-line react/require-render-return */
+      render() {
         throw new Error('Inner render method should not be called');
       }
     }
@@ -937,23 +975,25 @@ describe('Adapter', () => {
 
     cleanNode(tree);
 
-    expect(prettyFormat(tree)).to.equal(prettyFormat({
-      nodeType: 'class',
-      type: Outer,
-      props: {},
-      key: undefined,
-      ref: null,
-      instance: null,
-      rendered: {
+    expect(prettyFormat(tree)).to.equal(
+      prettyFormat({
         nodeType: 'class',
-        type: Inner,
+        type: Outer,
         props: {},
-        key: 'null',
+        key: undefined,
         ref: null,
         instance: null,
-        rendered: null,
-      },
-    }));
+        rendered: {
+          nodeType: 'class',
+          type: Inner,
+          props: {},
+          key: 'null',
+          ref: null,
+          instance: null,
+          rendered: null,
+        },
+      }),
+    );
   });
 
   describe('determines valid element types', () => {
@@ -965,7 +1005,9 @@ describe('Adapter', () => {
 
     it('supports custom components', () => {
       class Component extends React.Component {
-        render() { return null; }
+        render() {
+          return null;
+        }
       }
 
       expect(adapter.isValidElementType(Component)).to.equal(true);
@@ -980,7 +1022,7 @@ describe('Adapter', () => {
     });
 
     it('supports Context', () => {
-      const Context = createContext({ });
+      const Context = createContext({});
       expect(adapter.isValidElementType(Context.Consumer)).to.equal(true);
       expect(adapter.isValidElementType(Context.Provider)).to.equal(true);
     });
@@ -1002,7 +1044,10 @@ describe('Adapter', () => {
       wrappingComponent: WrappingComponent,
       wrappingComponentProps: { foo: 'bar' },
     };
-    const { RootFinder: ReturnedRootFinder, node: wrappedNode } = adapter.wrapWithWrappingComponent(node, options);
+    const { RootFinder: ReturnedRootFinder, node: wrappedNode } = adapter.wrapWithWrappingComponent(
+      node,
+      options,
+    );
     expect(ReturnedRootFinder).to.equal(RootFinder);
     expect(wrappedNode).to.eql(wrapWithWrappingComponent(React.createElement, node, options));
   });
@@ -1018,10 +1063,14 @@ describe('Adapter', () => {
 
     it('supports custom components', () => {
       class Component extends React.Component {
-        render() { return null; }
+        render() {
+          return null;
+        }
       }
       class Something extends React.Component {
-        render() { return null; }
+        render() {
+          return null;
+        }
       }
       Something.displayName = 'MyComponent';
 
@@ -1049,8 +1098,9 @@ describe('Adapter', () => {
 
     it('supports forward refs', () => {
       const ForwaredRef = forwardRef(() => null);
-      // eslint-disable-next-line prefer-arrow-callback
-      const NamedForwardedRef = forwardRef(function Named() { return null; });
+      const NamedForwardedRef = forwardRef(function Named() {
+        return null;
+      });
 
       expect(getDisplayName(<ForwaredRef />)).to.equal('ForwardRef');
       expect(getDisplayName(<NamedForwardedRef />)).to.equal('ForwardRef(Named)');
@@ -1068,7 +1118,7 @@ describe('Adapter', () => {
       expect(getDisplayName(<Profiler />)).to.equal('Profiler');
     });
 
-    itIf((true && false), 'supports ConcurrentMode', () => {
+    itIf(true && false, 'supports ConcurrentMode', () => {
       expect(getDisplayName(<ConcurrentMode />)).to.equal('ConcurrentMode');
     });
 
@@ -1139,13 +1189,7 @@ describe('Adapter', () => {
       foo: 'foo',
     };
     const location = 'Adapter-spec';
-    const hierarchy = [
-      <A />,
-      <div />,
-      <span />,
-      <B />,
-      <C />,
-    ];
+    const hierarchy = [<A />, <div />, <span />, <B />, <C />];
 
     beforeEach(() => {
       renderer = adapter.createRenderer({ mode: 'shallow' });
@@ -1155,7 +1199,8 @@ describe('Adapter', () => {
     wrap()
       .withConsoleThrows()
       .it('checks prop types', () => {
-        expect(() => renderer.checkPropTypes(typeSpecs, values, location, hierarchy)).to.throw(`
+        expect(() => renderer.checkPropTypes(typeSpecs, values, location, hierarchy)).to.throw(
+          `
 Warning: Failed Adapter-spec type: Invalid Adapter-spec \`foo\` of type \`string\` supplied to \`Root\`, expected \`number\`.
     in A (created by B)
     in div (created by B)
@@ -1164,7 +1209,8 @@ Warning: Failed Adapter-spec type: Invalid Adapter-spec \`foo\` of type \`string
     in C (created by Root)
     in Root (created by WrapperComponent)
     in WrapperComponent
-        `.trim());
+        `.trim(),
+        );
       });
   });
 

@@ -3,15 +3,9 @@ import PropTypes from 'prop-types';
 import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 
-import {
-  createClass,
-} from '../../_helpers/react-compat';
+import { createClass } from '../../_helpers/react-compat';
 
-export default function describeSetContext({
-  Wrap,
-  WrapperName,
-  isShallow,
-}) {
+export default function describeSetContext({ Wrap, WrapperName, isShallow }) {
   describe('.setContext(newContext)', () => {
     const SimpleComponent = createClass({
       contextTypes: {
@@ -53,9 +47,7 @@ export default function describeSetContext({
     });
 
     describe('stateless functional components', () => {
-      const SFC = (props, { name }) => (
-        <div>{name}</div>
-      );
+      const SFC = (props, { name }) => <div>{name}</div>;
       SFC.contextTypes = { name: PropTypes.string };
 
       it('sets context for a component multiple times', () => {
@@ -95,31 +87,26 @@ export default function describeSetContext({
         foo: PropTypes.string,
       };
 
-      const wrapper = Wrap(
-        <Foo />,
-        {
-          context: { foo: 'bar' },
-        },
-      );
+      const wrapper = Wrap(<Foo />, {
+        context: { foo: 'bar' },
+      });
 
       wrapper.setContext(updatedProps);
 
-      expect(spy.args).to.deep.equal([
-        ['render'],
-        ['componentWillReceiveProps'],
-        ['render'],
-      ]);
+      expect(spy.args).to.deep.equal([['render'], ['componentWillReceiveProps'], ['render']]);
       expect(wrapper.context('foo')).to.equal(updatedProps.foo);
 
-      expect(wrapper.debug()).to.equal(isShallow
-        ? `<div>
+      expect(wrapper.debug()).to.equal(
+        isShallow
+          ? `<div>
   baz
 </div>`
-        : `<Foo>
+          : `<Foo>
   <div>
     baz
   </div>
-</Foo>`);
+</Foo>`,
+      );
     });
 
     it('calls componentWillReceiveProps and UNSAFE_componentWillReceiveProps when context is updated', () => {
@@ -130,7 +117,7 @@ export default function describeSetContext({
           spy('componentWillReceiveProps');
         }
 
-        UNSAFE_componentWillReceiveProps() { // eslint-disable-line camelcase
+        UNSAFE_componentWillReceiveProps() {
           spy('UNSAFE_componentWillReceiveProps');
         }
 
@@ -144,12 +131,9 @@ export default function describeSetContext({
         foo: PropTypes.string,
       };
 
-      const wrapper = Wrap(
-        <Foo />,
-        {
-          context: { foo: 'bar' },
-        },
-      );
+      const wrapper = Wrap(<Foo />, {
+        context: { foo: 'bar' },
+      });
 
       wrapper.setContext(updatedProps);
 
@@ -161,15 +145,17 @@ export default function describeSetContext({
       ]);
       expect(wrapper.context('foo')).to.equal(updatedProps.foo);
 
-      expect(wrapper.debug()).to.equal(isShallow
-        ? `<div>
+      expect(wrapper.debug()).to.equal(
+        isShallow
+          ? `<div>
   baz
 </div>`
-        : `<Foo>
+          : `<Foo>
   <div>
     baz
   </div>
-</Foo>`);
+</Foo>`,
+      );
     });
   });
 }

@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactDOMServer from 'react-dom/server';
@@ -120,11 +119,8 @@ function checkIsSuspenseAndCloneElement(el, { suspenseFallback }) {
     children = replaceLazyWithFallback(children, fallback);
   }
 
-  const FakeSuspenseWrapper = (props) => React.createElement(
-    el.type,
-    { ...el.props, ...props },
-    children,
-  );
+  const FakeSuspenseWrapper = (props) =>
+    React.createElement(el.type, { ...el.props, ...props }, children);
   return React.createElement(FakeSuspenseWrapper, null, children);
 }
 
@@ -357,7 +353,9 @@ function getEmptyStateValue() {
 
 function wrapAct(fn) {
   let returnVal;
-  TestUtils.act(() => { returnVal = fn(); });
+  TestUtils.act(() => {
+    returnVal = fn();
+  });
   return returnVal;
 }
 
@@ -377,9 +375,9 @@ function makeFakeElement(type) {
 }
 
 function isStateful(Component) {
-  return Component.prototype && (
-    Component.prototype.isReactComponent
-    || Array.isArray(Component.__reactAutoBindPairs) // fallback for createClass components
+  return (
+    Component.prototype &&
+    (Component.prototype.isReactComponent || Array.isArray(Component.__reactAutoBindPairs)) // fallback for createClass components
   );
 }
 
@@ -473,10 +471,8 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
           return elInstance && elInstance.componentDidCatch;
         };
 
-        const {
-          instance: catchingInstance,
-          type: catchingType,
-        } = nodeHierarchy.find(isErrorBoundary) || {};
+        const { instance: catchingInstance, type: catchingType } =
+          nodeHierarchy.find(isErrorBoundary) || {};
 
         simulateError(
           error,
@@ -535,9 +531,8 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
         if (isStateful(Component)) {
           wrappedComponent = class extends Component {};
           if (compare) {
-            wrappedComponent.prototype.shouldComponentUpdate = (nextProps) => (
-              !compare(this.props, nextProps)
-            );
+            wrappedComponent.prototype.shouldComponentUpdate = (nextProps) =>
+              !compare(this.props, nextProps);
           } else {
             wrappedComponent.prototype.isPureReactComponent = true;
           }
@@ -545,10 +540,9 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
           let memoized = sentinel;
           let prevProps;
           wrappedComponent = function wrappedComponentFn(props, ...args) {
-            const shouldUpdate = memoized === sentinel || (compare
-              ? !compare(prevProps, props)
-              : !shallowEqual(prevProps, props)
-            );
+            const shouldUpdate =
+              memoized === sentinel ||
+              (compare ? !compare(prevProps, props) : !shallowEqual(prevProps, props));
             if (shouldUpdate) {
               memoized = Component({ ...Component.defaultProps, ...props }, ...args);
               prevProps = props;
@@ -556,11 +550,9 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
             return memoized;
           };
         }
-        Object.assign(
-          wrappedComponent,
-          Component,
-          { displayName: adapter.displayNameOfNode({ type: Component }) },
-        );
+        Object.assign(wrappedComponent, Component, {
+          displayName: adapter.displayNameOfNode({ type: Component }),
+        });
         lastComponent = Component;
       }
       return wrappedComponent;
@@ -572,7 +564,6 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
       if (has(Component, 'defaultProps')) {
         if (lastComponent !== Component) {
           wrappedComponent = Object.assign(
-            // eslint-disable-next-line new-cap
             (props, ...args) => Component({ ...Component.defaultProps, ...props }, ...args),
             Component,
             { displayName: adapter.displayNameOfNode({ type: Component }) },
@@ -602,29 +593,20 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
     };
 
     return {
-      // eslint-disable-next-line consistent-return
-      render(el, unmaskedContext, {
-        providerValues = new Map(),
-      } = {}) {
+      render(el, unmaskedContext, { providerValues = new Map() } = {}) {
         cachedNode = el;
         if (typeof el.type === 'string') {
           isDOM = true;
         } else if (isContextProvider(el)) {
           providerValues.set(el.type, el.props.value);
-          const MockProvider = Object.assign(
-            (props) => props.children,
-            el.type,
-          );
+          const MockProvider = Object.assign((props) => props.children, el.type);
           return withSetStateAllowed(() => renderElement({ ...el, type: MockProvider }));
         } else if (isContextConsumer(el)) {
           const Provider = adapter.getProviderFromConsumer(el.type);
           const value = providerValues.has(Provider)
             ? providerValues.get(Provider)
             : getProviderDefaultValue(Provider);
-          const MockConsumer = Object.assign(
-            (props) => props.children(value),
-            el.type,
-          );
+          const MockConsumer = Object.assign((props) => props.children(value), el.type);
           return withSetStateAllowed(() => renderElement({ ...el, type: MockConsumer }));
         } else {
           isDOM = false;
@@ -641,42 +623,41 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
           if (isMemo(el.type)) {
             const { type: InnerComp, compare } = el.type;
 
-            return withSetStateAllowed(() => renderElement(
-              { ...el, type: wrapPureComponent(InnerComp, compare) },
-              context,
-            ));
+            return withSetStateAllowed(() =>
+              renderElement({ ...el, type: wrapPureComponent(InnerComp, compare) }, context),
+            );
           }
 
           const isComponentStateful = isStateful(Component);
 
           if (!isComponentStateful && typeof Component === 'function') {
-            return withSetStateAllowed(() => renderElement(
-              { ...renderedEl, type: wrapFunctionalComponent(Component) },
-              context,
-            ));
+            return withSetStateAllowed(() =>
+              renderElement({ ...renderedEl, type: wrapFunctionalComponent(Component) }, context),
+            );
           }
 
           if (isComponentStateful) {
             if (
-              renderer._instance
-              && el.props === renderer._instance.props
-              && !shallowEqual(context, renderer._instance.context)
+              renderer._instance &&
+              el.props === renderer._instance.props &&
+              !shallowEqual(context, renderer._instance.context)
             ) {
               const { restore } = spyMethod(
                 renderer,
                 '_updateClassComponent',
-                (originalMethod) => function _updateClassComponent(...args) {
-                  const { props } = renderer._instance;
-                  const clonedProps = { ...props };
-                  renderer._instance.props = clonedProps;
+                (originalMethod) =>
+                  function _updateClassComponent(...args) {
+                    const { props } = renderer._instance;
+                    const clonedProps = { ...props };
+                    renderer._instance.props = clonedProps;
 
-                  const result = originalMethod.apply(renderer, args);
+                    const result = originalMethod.apply(renderer, args);
 
-                  renderer._instance.props = props;
-                  restore();
+                    renderer._instance.props = props;
+                    restore();
 
-                  return result;
-                },
+                    return result;
+                  },
               );
             }
 
@@ -698,7 +679,6 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
                       writable: true,
                     });
                   }
-                  return true;
                 },
               });
             }
@@ -754,12 +734,8 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
         // return ReactDOM.unstable_batchedUpdates(fn);
       },
       checkPropTypes(typeSpecs, values, location, hierarchy) {
-        return checkPropTypes(
-          typeSpecs,
-          values,
-          location,
-          displayNameOfNode(cachedNode),
-          () => getComponentStack(hierarchy.concat([cachedNode])),
+        return checkPropTypes(typeSpecs, values, location, displayNameOfNode(cachedNode), () =>
+          getComponentStack(hierarchy.concat([cachedNode])),
         );
       },
     };
@@ -767,7 +743,9 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
 
   createStringRenderer(options) {
     if (has(options, 'suspenseFallback')) {
-      throw new TypeError('`suspenseFallback` should not be specified in options of string renderer');
+      throw new TypeError(
+        '`suspenseFallback` should not be specified in options of string renderer',
+      );
     }
     return {
       render(el, context) {
@@ -786,12 +764,14 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
 
   // Provided a bag of options, return an `EnzymeRenderer`. Some options can be implementation
   // specific, like `attach` etc. for React, but not part of this interface explicitly.
-  // eslint-disable-next-line class-methods-use-this
   createRenderer(options) {
     switch (options.mode) {
-      case EnzymeAdapter.MODES.MOUNT: return this.createMountRenderer(options);
-      case EnzymeAdapter.MODES.SHALLOW: return this.createShallowRenderer(options);
-      case EnzymeAdapter.MODES.STRING: return this.createStringRenderer(options);
+      case EnzymeAdapter.MODES.MOUNT:
+        return this.createMountRenderer(options);
+      case EnzymeAdapter.MODES.SHALLOW:
+        return this.createShallowRenderer(options);
+      case EnzymeAdapter.MODES.STRING:
+        return this.createStringRenderer(options);
       default:
         throw new Error(`Enzyme Internal Error: Unrecognized mode: ${options.mode}`);
     }
@@ -804,14 +784,12 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
   // converts an RSTNode to the corresponding JSX Pragma Element. This will be needed
   // in order to implement the `Wrapper.mount()` and `Wrapper.shallow()` methods, but should
   // be pretty straightforward for people to implement.
-  // eslint-disable-next-line class-methods-use-this
   nodeToElement(node) {
     if (!node || typeof node !== 'object') return null;
     const { type } = node;
     return React.createElement(unmemoType(type), propsWithKeysAndRef(node));
   }
 
-  // eslint-disable-next-line class-methods-use-this
   matchesElementType(node, matchingType) {
     if (!node) {
       return node;
@@ -842,12 +820,18 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
     // newer node types may be undefined, so only test if the nodeType exists
     if (nodeType) {
       switch (nodeType) {
-        case ConcurrentMode || NaN: return 'ConcurrentMode';
-        case Fragment || NaN: return 'Fragment';
-        case StrictMode || NaN: return 'StrictMode';
-        case Profiler || NaN: return 'Profiler';
-        case Portal || NaN: return 'Portal';
-        case Suspense || NaN: return 'Suspense';
+        case ConcurrentMode || NaN:
+          return 'ConcurrentMode';
+        case Fragment || NaN:
+          return 'Fragment';
+        case StrictMode || NaN:
+          return 'StrictMode';
+        case Profiler || NaN:
+          return 'Profiler';
+        case Portal || NaN:
+          return 'Portal';
+        case Suspense || NaN:
+          return 'Suspense';
         default:
       }
     }
@@ -855,8 +839,10 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
     const $$typeofType = type && type.$$typeof;
 
     switch ($$typeofType) {
-      case ContextConsumer || NaN: return 'ContextConsumer';
-      case ContextProvider || NaN: return 'ContextProvider';
+      case ContextConsumer || NaN:
+        return 'ContextConsumer';
+      case ContextProvider || NaN:
+        return 'ContextProvider';
       case Memo || NaN: {
         const nodeName = displayNameOfNode(node);
         return typeof nodeName === 'string' ? nodeName : `Memo(${adapter.displayNameOfNode(type)})`;
@@ -871,7 +857,8 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
       case Lazy || NaN: {
         return 'lazy';
       }
-      default: return displayNameOfNode(node);
+      default:
+        return displayNameOfNode(node);
     }
   }
 
@@ -889,12 +876,13 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
 
   isCustomComponent(type) {
     const fakeElement = makeFakeElement(type);
-    return !!type && (
-      typeof type === 'function'
-      || isForwardRef(fakeElement)
-      || isContextProvider(fakeElement)
-      || isContextConsumer(fakeElement)
-      || isSuspense(fakeElement)
+    return (
+      !!type &&
+      (typeof type === 'function' ||
+        isForwardRef(fakeElement) ||
+        isContextProvider(fakeElement) ||
+        isContextConsumer(fakeElement) ||
+        isSuspense(fakeElement))
     );
   }
 
@@ -913,7 +901,8 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
     // React stores references to the Provider on a Consumer differently across versions.
     if (Consumer) {
       let Provider;
-      if (Consumer._context) { // check this first, to avoid a deprecation warning
+      if (Consumer._context) {
+        // check this first, to avoid a deprecation warning
         ({ Provider } = Consumer._context);
       } else if (Consumer.Provider) {
         ({ Provider } = Consumer);

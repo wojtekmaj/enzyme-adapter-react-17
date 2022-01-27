@@ -1,20 +1,11 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import {
-  itWithData,
-  generateEmptyRenderData,
-} from '../../_helpers';
+import { itWithData, generateEmptyRenderData } from '../../_helpers';
 
-import {
-  createClass,
-} from '../../_helpers/react-compat';
+import { createClass } from '../../_helpers/react-compat';
 
-export default function describeIsEmptyRender({
-  Wrap,
-  WrapRendered,
-  isShallow,
-}) {
+export default function describeIsEmptyRender({ Wrap, WrapRendered, isShallow }) {
   describe('.isEmptyRender()', () => {
     class RenderChildren extends React.Component {
       render() {
@@ -53,51 +44,51 @@ export default function describeIsEmptyRender({
 
     describe('nested nodes', () => {
       it(`returns ${!isShallow} for nested elements that return null`, () => {
-        const wrapper = Wrap((
+        const wrapper = Wrap(
           <RenderChildren>
             <RenderNull />
-          </RenderChildren>
-        ));
+          </RenderChildren>,
+        );
 
         expect(wrapper.isEmptyRender()).to.equal(!isShallow);
       });
 
       it('returns false for multiple nested elements that all return null', () => {
-        const wrapper = Wrap((
+        const wrapper = Wrap(
           <RenderChildren>
             <div />
-          </RenderChildren>
-        ));
+          </RenderChildren>,
+        );
 
         expect(wrapper.isEmptyRender()).to.equal(false);
       });
 
       it('returns false for multiple nested elements where one fringe returns a non null value', () => {
-        const wrapper = Wrap((
+        const wrapper = Wrap(
           <RenderChildren>
             <div>Hello</div>
-          </RenderChildren>
-        ));
+          </RenderChildren>,
+        );
 
         expect(wrapper.isEmptyRender()).to.equal(false);
       });
 
       it('returns false for multiple nested elements that all return null', () => {
-        const wrapper = Wrap((
+        const wrapper = Wrap(
           <RenderChildren>
             <RenderNull />
             <RenderChildren>
               <RenderNull />
               <div />
             </RenderChildren>
-          </RenderChildren>
-        ));
+          </RenderChildren>,
+        );
 
         expect(wrapper.isEmptyRender()).to.equal(false);
       });
 
       it('returns false for multiple nested elements where one fringe returns a non null value', () => {
-        const wrapper = Wrap((
+        const wrapper = Wrap(
           <RenderChildren>
             <RenderNull />
             <RenderChildren>
@@ -113,14 +104,14 @@ export default function describeIsEmptyRender({
                 <div>Hello</div>
               </RenderChildren>
             </RenderChildren>
-          </RenderChildren>
-        ));
+          </RenderChildren>,
+        );
 
         expect(wrapper.isEmptyRender()).to.equal(false);
       });
 
       it(`returns ${!isShallow} for multiple nested elements where all values are null`, () => {
-        const wrapper = Wrap((
+        const wrapper = Wrap(
           <RenderChildren>
             <RenderNull />
             <RenderChildren>
@@ -135,8 +126,8 @@ export default function describeIsEmptyRender({
                 <RenderNull />
               </RenderChildren>
             </RenderChildren>
-          </RenderChildren>
-        ));
+          </RenderChildren>,
+        );
 
         expect(wrapper.isEmptyRender()).to.equal(!isShallow);
       });
