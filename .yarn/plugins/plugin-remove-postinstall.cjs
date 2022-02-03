@@ -1,9 +1,9 @@
 module.exports = {
-  name: 'plugin-remove-workspaces-field',
+  name: 'plugin-remove-postinstall',
   factory: () => ({
     hooks: {
       beforeWorkspacePacking(workspace, rawManifest) {
-        delete rawManifest.workspaces;
+        delete rawManifest.scripts.postinstall;
       },
     },
   }),
