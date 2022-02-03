@@ -1,4 +1,4 @@
 {
-  "presets": [["airbnb", { "transformRuntime": false }]],
+  "presets": ["@babel/env", "@babel/react"],
   "sourceMaps": "both"
 }
