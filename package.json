@@ -35,7 +35,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@wojtekmaj/enzyme-adapter-utils": "^0.1.2",
+    "@wojtekmaj/enzyme-adapter-utils": "^0.1.4",
     "enzyme-shallow-equal": "^1.0.0",
     "has": "^1.0.0",
     "prop-types": "^15.7.0",
