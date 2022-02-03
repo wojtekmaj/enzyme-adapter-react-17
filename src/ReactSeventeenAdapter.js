@@ -330,12 +330,6 @@ function replaceLazyWithFallback(node, fallback) {
   };
 }
 
-const eventOptions = {
-  animation: true,
-  pointerEvents: true,
-  auxClick: true,
-};
-
 function getEmptyStateValue() {
   // this handles a bug in React 16.0 - 16.2
   // see https://github.com/facebook/react/commit/39be83565c65f9c522150e52375167568a2a1459
@@ -485,7 +479,7 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
         );
       },
       simulateEvent(node, event, mock) {
-        const mappedEvent = mapNativeEventNames(event, eventOptions);
+        const mappedEvent = mapNativeEventNames(event);
         const eventFn = TestUtils.Simulate[mappedEvent];
         if (!eventFn) {
           throw new TypeError(`ReactWrapper::simulate() event '${event}' does not exist`);
@@ -718,7 +712,7 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
         );
       },
       simulateEvent(node, event, ...args) {
-        const handler = node.props[propFromEvent(event, eventOptions)];
+        const handler = node.props[propFromEvent(event)];
         if (handler) {
           withSetStateAllowed(() => {
             // TODO(lmr): create/use synthetic events

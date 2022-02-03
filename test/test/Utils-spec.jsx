@@ -426,32 +426,14 @@ describe('Utils', () => {
     it('works', () => {
       expect(propFromEvent('click')).to.equal('onClick');
       expect(propFromEvent('mouseenter')).to.equal('onMouseEnter');
-    });
-
-    describe('conditionally supported events', () => {
-      it('transforms animation events when supported', () => {
-        expect(propFromEvent('animationiteration', { animation: false })).to.equal(
-          'onAnimationiteration',
-        );
-        expect(propFromEvent('animationiteration', { animation: true })).to.equal(
-          'onAnimationIteration',
-        );
-      });
-
-      it('transforms pointer events when supported', () => {
-        expect(propFromEvent('pointerover', { pointerEvents: false })).to.equal('onPointerover');
-        expect(propFromEvent('pointerover', { pointerEvents: true })).to.equal('onPointerOver');
-      });
-
-      it('transforms aux click events when supported', () => {
-        expect(propFromEvent('auxclick', { auxClick: false })).to.equal('onAuxclick');
-        expect(propFromEvent('auxclick', { auxClick: true })).to.equal('onAuxClick');
-      });
+      expect(propFromEvent('animationiteration')).to.equal('onAnimationIteration');
+      expect(propFromEvent('pointerover')).to.equal('onPointerOver');
+      expect(propFromEvent('auxclick')).to.equal('onAuxClick');
     });
   });
 
   describe('mapNativeEventNames', () => {
-    describe('given an event that isn‘t a mapped', () => {
+    describe('given an event that isn‘t mapped', () => {
       it('returns the original event', () => {
         const result = mapNativeEventNames('click');
         expect(result).to.equal('click');
@@ -467,25 +449,9 @@ describe('Utils', () => {
 
     describe('given a native lowercase event', () => {
       it('transforms it into the React capitalised event', () => {
-        const result = mapNativeEventNames('dragenter');
-        expect(result).to.equal('dragEnter');
-      });
-    });
-
-    describe('conditionally supported events', () => {
-      it('ignores unsupported events', () => {
-        const result = mapNativeEventNames('animationiteration');
-        expect(result).to.equal('animationiteration');
-      });
-
-      it('transforms animation events when supported', () => {
-        const result = mapNativeEventNames('animationiteration', { animation: true });
-        expect(result).to.equal('animationIteration');
-      });
-
-      it('transforms pointer events when supported', () => {
-        const result = mapNativeEventNames('pointerover', { pointerEvents: true });
-        expect(result).to.equal('pointerOver');
+        expect(mapNativeEventNames('dragenter')).to.equal('dragEnter');
+        expect(mapNativeEventNames('animationiteration')).to.equal('animationIteration');
+        expect(mapNativeEventNames('pointerover')).to.equal('pointerOver');
       });
     });
   });
