@@ -1,7 +1,56 @@
-// Extracted from https://github.com/facebook/react/blob/7bdf93b17a35a5d8fcf0ceae0bf48ed5e6b16688/src/renderers/shared/fiber/ReactFiberTreeReflection.js#L104-L228
+// Extracted from https://github.com/facebook/react/blob/a724a3b578dce77d427bef313102a4d0e978d9b4/packages/react-reconciler/src/ReactFiberTreeReflection.js
+
+const HostRoot = 3;
+
+const Placement = 0b0000000000000000000000010;
+const Hydrating = 0b0000000000001000000000000;
+const NoFlags = 0b0000000000000000000000000;
+
+function getNearestMountedFiber(fiber) {
+  let node = fiber;
+  let nearestMounted = fiber;
+  if (!fiber.alternate) {
+    // If there is no alternate, this might be a new tree that isn't inserted
+    // yet. If it is, then it will have a pending insertion effect on it.
+    let nextNode = node;
+    do {
+      node = nextNode;
+      if ((node.flags & (Placement | Hydrating)) !== NoFlags) {
+        // This is an insertion or in-progress hydration. The nearest possible
+        // mounted fiber is the parent but we need to continue to figure out
+        // if that one is still mounted.
+        nearestMounted = node.return;
+      }
+      nextNode = node.return;
+    } while (nextNode);
+  } else {
+    while (node.return) {
+      node = node.return;
+    }
+  }
+  if (node.tag === HostRoot) {
+    // TODO: Check if this was a nested HostRoot when used with
+    // renderContainerIntoSubtree.
+    return nearestMounted;
+  }
+  // If we didn't hit the root, that means that we're in an disconnected tree
+  // that has been unmounted.
+  return null;
+}
+
 function findCurrentFiberUsingSlowPath(fiber) {
-  const { alternate } = fiber;
+  const alternate = fiber.alternate;
   if (!alternate) {
+    // If there is no alternate, then we only need to check if it is mounted.
+    const nearestMounted = getNearestMountedFiber(fiber);
+
+    if (nearestMounted === null) {
+      throw new Error('Unable to find node on an unmounted component.');
+    }
+
+    if (nearestMounted !== fiber) {
+      return null;
+    }
     return fiber;
   }
   // If we have two possible branches, we'll walk backwards up to the root
@@ -12,9 +61,22 @@ function findCurrentFiberUsingSlowPath(fiber) {
   // eslint-disable-next-line no-constant-condition
   while (true) {
     const parentA = a.return;
-    const parentB = parentA ? parentA.alternate : null;
-    if (!parentA || !parentB) {
+    if (parentA === null) {
       // We're at the root.
+      break;
+    }
+    const parentB = parentA.alternate;
+    if (parentB === null) {
+      // There is no alternate. This is an unusual case. Currently, it only
+      // happens when a Suspense component is hidden. An extra fragment fiber
+      // is inserted in between the Suspense fiber and its children. Skip
+      // over this extra fragment fiber and proceed to the next parent.
+      const nextParent = parentA.return;
+      if (nextParent !== null) {
+        a = b = nextParent;
+        continue;
+      }
+      // If there's no parent, we're at the root.
       break;
     }
 
@@ -22,7 +84,7 @@ function findCurrentFiberUsingSlowPath(fiber) {
     // assume that the child is current. This happens when we bailout on low
     // priority: the bailed out fiber's child reuses the current child.
     if (parentA.child === parentB.child) {
-      let { child } = parentA;
+      let child = parentA.child;
       while (child) {
         if (child === a) {
           // We've determined that A is the current branch.
@@ -34,6 +96,7 @@ function findCurrentFiberUsingSlowPath(fiber) {
         }
         child = child.sibling;
       }
+
       // We should never have an alternate for any mounting node. So the only
       // way this could possibly happen is if this was unmounted, if at all.
       throw new Error('Unable to find node on an unmounted component.');
@@ -53,7 +116,7 @@ function findCurrentFiberUsingSlowPath(fiber) {
       //
       // Search parent A's child set
       let didFindChild = false;
-      let { child } = parentA;
+      let child = parentA.child;
       while (child) {
         if (child === a) {
           didFindChild = true;
@@ -71,7 +134,7 @@ function findCurrentFiberUsingSlowPath(fiber) {
       }
       if (!didFindChild) {
         // Search parent B's child set
-        ({ child } = parentB);
+        child = parentB.child;
         while (child) {
           if (child === a) {
             didFindChild = true;
@@ -87,6 +150,7 @@ function findCurrentFiberUsingSlowPath(fiber) {
           }
           child = child.sibling;
         }
+
         if (!didFindChild) {
           throw new Error(
             'Child was not found in either parent set. This indicates a bug ' +
@@ -95,7 +159,21 @@ function findCurrentFiberUsingSlowPath(fiber) {
         }
       }
     }
+
+    if (a.alternate !== b) {
+      throw new Error(
+        "Return fibers should always be each others' alternates. " +
+          'This error is likely caused by a bug in React. Please file an issue.',
+      );
+    }
   }
+
+  // If the root is not a host container, we're in a disconnected tree. I.e.
+  // unmounted.
+  if (a.tag !== HostRoot) {
+    throw new Error('Unable to find node on an unmounted component.');
+  }
+
   if (a.stateNode.current === a) {
     // We've determined that A is the current branch.
     return fiber;
