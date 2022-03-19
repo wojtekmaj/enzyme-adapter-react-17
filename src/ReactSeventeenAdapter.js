@@ -799,7 +799,8 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
   nodeToHostNode(node, supportsArray = false) {
     const nodes = nodeToHostNode(node);
     if (Array.isArray(nodes) && !supportsArray) {
-      return nodes[0];
+      // get the first non-null node
+      return nodes.filter(Boolean)[0];
     }
     return nodes;
   }
