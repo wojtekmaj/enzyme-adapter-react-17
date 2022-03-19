@@ -320,5 +320,22 @@ export default function describeSimulate({ Wrap, WrapperName, isShallow, isMount
         expect(effectSpy).to.have.property('callCount', 2);
       });
     });
+
+    it('works with components that return null children', () => {
+      class NullChildren extends React.Component {
+        render() {
+          return (
+            <>
+              <></>
+              <button type="button" />
+            </>
+          );
+        }
+      }
+
+      const wrapper = Wrap(<NullChildren />);
+
+      wrapper.simulate('click');
+    });
   });
 }
