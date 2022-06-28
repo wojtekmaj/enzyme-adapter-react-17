@@ -1,9 +1,13 @@
 require('raf/polyfill');
 
-const { jsdom } = require('jsdom');
+const { JSDOM } = require('jsdom');
 
-global.document = jsdom('');
-global.window = global.document.defaultView;
+const jsdom = new JSDOM('', { url: 'http://localhost' });
+
+global.window = jsdom.window;
+global.document = jsdom.window.document;
+global.HTMLElement = window.HTMLElement;
+global.HTMLButtonElement = window.HTMLButtonElement;
 Object.keys(global.document.defaultView).forEach((property) => {
   if (typeof global[property] === 'undefined') {
     global[property] = global.document.defaultView[property];

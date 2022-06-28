@@ -1,6 +1,6 @@
 import React from 'react';
 import { expect } from 'chai';
-import jsdom from 'jsdom';
+import { JSDOM } from 'jsdom';
 import { get } from 'enzyme/build/configuration';
 import { configure, shallow, EnzymeAdapter } from 'enzyme';
 import inspect from 'object-inspect';
@@ -136,11 +136,12 @@ describe('Adapter', () => {
   describe('mounted render', () => {
     function hydratedTreeMatchesUnhydrated(element, hydrate = false) {
       const markup = renderToString(element);
-      const dom = jsdom.jsdom(`<div id="root">${markup}</div>`);
+      const jsdom = new JSDOM(`<div id="root">${markup}</div>`);
+      const document = jsdom.window.document;
 
       const rendererA = adapter.createRenderer({
         mode: 'mount',
-        [hydrate ? 'hydrateIn' : 'attachTo']: dom.querySelector('#root'),
+        [hydrate ? 'hydrateIn' : 'attachTo']: document.querySelector('#root'),
       });
 
       rendererA.render(element);
@@ -295,7 +296,8 @@ describe('Adapter', () => {
     });
 
     it('renders react portals', () => {
-      const document = jsdom.jsdom();
+      const jsdom = new JSDOM();
+      const document = jsdom.window.document;
       const options = { mode: 'mount' };
       const renderer = adapter.createRenderer(options);
       const innerDiv = <div className="Foo">Hello World!</div>;
