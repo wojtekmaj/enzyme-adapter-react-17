@@ -39,8 +39,8 @@
     "enzyme-shallow-equal": "^1.0.0",
     "has": "^1.0.0",
     "prop-types": "^15.7.0",
-    "react-is": "^17.0.0",
-    "react-test-renderer": "^17.0.0"
+    "react-is": "^17.0.0 || ^18.0.0",
+    "react-test-renderer": "^17.0.0 || ^18.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.15.0",
@@ -54,14 +54,14 @@
     "husky": "^7.0.0",
     "prettier": "^2.5.0",
     "pretty-quick": "^3.1.0",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0",
     "rimraf": "^3.0.0"
   },
   "peerDependencies": {
     "enzyme": "^3.0.0",
-    "react": "^17.0.0-0",
-    "react-dom": "^17.0.0-0"
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
   },
   "resolutions": {
     "semver@7.0.0": "^7.0.0"
