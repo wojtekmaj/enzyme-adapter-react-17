@@ -9,7 +9,8 @@
     "clean": "rimraf build",
     "lint": "eslint . --ext .jsx,.js",
     "mocha": "yarn build && mocha --recursive build",
-    "test": "yarn lint"
+    "prettier": "prettier --check .",
+    "test": "yarn lint && yarn prettier"
   },
   "keywords": [
     "javascript",

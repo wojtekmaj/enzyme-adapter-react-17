@@ -13,7 +13,8 @@
     "lint": "eslint src/ --ext .jsx,.js",
     "postinstall": "husky install",
     "prepack": "yarn clean && yarn build",
-    "test": "yarn lint"
+    "prettier": "prettier --check .",
+    "test": "yarn lint && yarn prettier"
   },
   "keywords": [
     "javascript",
