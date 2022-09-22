@@ -13,7 +13,7 @@
     "lint": "eslint src/ --ext .jsx,.js",
     "postinstall": "husky install",
     "prepack": "yarn clean && yarn build",
-    "prettier": "prettier --check .",
+    "prettier": "prettier --check . --cache",
     "test": "yarn lint && yarn prettier"
   },
   "keywords": [
@@ -53,7 +53,7 @@
     "eslint": "^8.5.0",
     "eslint-config-wojtekmaj": "^0.6.5",
     "husky": "^8.0.0",
-    "prettier": "^2.5.0",
+    "prettier": "^2.7.0",
     "pretty-quick": "^3.1.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",

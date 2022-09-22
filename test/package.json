@@ -9,7 +9,7 @@
     "clean": "rimraf build",
     "lint": "eslint . --ext .jsx,.js",
     "mocha": "yarn build && mocha --recursive build",
-    "prettier": "prettier --check .",
+    "prettier": "prettier --check . --cache",
     "test": "yarn lint && yarn prettier"
   },
   "keywords": [
@@ -59,7 +59,7 @@
     "@babel/core": "^7.15.0",
     "eslint": "^8.5.0",
     "eslint-config-wojtekmaj": "^0.6.5",
-    "prettier": "^2.5.0",
+    "prettier": "^2.7.0",
     "rimraf": "^3.0.0"
   },
   "repository": {

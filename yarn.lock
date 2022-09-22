@@ -1519,7 +1519,7 @@ __metadata:
     eslint-config-wojtekmaj: ^0.6.5
     has: ^1.0.0
     husky: ^8.0.0
-    prettier: ^2.5.0
+    prettier: ^2.7.0
     pretty-quick: ^3.1.0
     prop-types: ^15.7.0
     react: ^17.0.0
@@ -2628,7 +2628,7 @@ __metadata:
     mocha: ^9.2.0
     mocha-wrap: ^2.1.0
     object-inspect: ^1.11.0
-    prettier: ^2.5.0
+    prettier: ^2.7.0
     prop-types: ^15.7.0
     raf: ^3.4.1
     react: ^17.0.0
@@ -4957,12 +4957,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.5.0":
-  version: 2.5.1
-  resolution: "prettier@npm:2.5.1"
+"prettier@npm:^2.7.0":
+  version: 2.7.1
+  resolution: "prettier@npm:2.7.1"
   bin:
     prettier: bin-prettier.js
-  checksum: 21b9408476ea1c544b0e45d51ceb94a84789ff92095abb710942d780c862d0daebdb29972d47f6b4d0f7ebbfb0ffbf56cc2cfa3e3e9d1cca54864af185b15b66
+  checksum: 55a4409182260866ab31284d929b3cb961e5fdb91fe0d2e099dac92eaecec890f36e524b4c19e6ceae839c99c6d7195817579cdffc8e2c80da0cb794463a748b
   languageName: node
   linkType: hard
 
