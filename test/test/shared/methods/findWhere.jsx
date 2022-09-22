@@ -207,7 +207,7 @@ export default function describeFindWhere({
     it('returns props object when props() is called', () => {
       const content = 'blah';
       const wrapper = WrapRendered(<HasDataFoo data={content} />);
-      expect(wrapper.props()).to.deep.equal({ 'data-foo': content, children: 'Test Component' });
+      expect(wrapper.props()).to.deep.equal({ 'data-foo': content, 'children': 'Test Component' });
     });
 
     it('returns shallow rendered string when debug() is called', () => {
@@ -279,7 +279,7 @@ export default function describeFindWhere({
 
         const content = 'blah';
         const wrapper = WrapRendered(<SFC data={content} />);
-        expect(wrapper.props()).to.deep.equal({ 'data-foo': content, children: 'Test SFC' });
+        expect(wrapper.props()).to.deep.equal({ 'data-foo': content, 'children': 'Test SFC' });
       });
 
       it('returns shallow rendered string when debug() is called', () => {
