@@ -10,7 +10,7 @@
   "scripts": {
     "build": "babel --source-maps=both src -d build",
     "clean": "rimraf build",
-    "lint": "eslint src/ --ext .jsx,.js",
+    "lint": "eslint src --ext .jsx,.js",
     "postinstall": "husky install",
     "prepack": "yarn clean && yarn build",
     "prettier": "prettier --check . --cache",
