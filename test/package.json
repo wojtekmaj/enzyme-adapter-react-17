@@ -51,7 +51,7 @@
     "react-dom": "^17.0.0",
     "react-is": "^17.0.0",
     "semver": "^7.3.5",
-    "sinon": "^13.0.0",
+    "sinon": "^14.0.1",
     "sinon-sandbox": "^2.0.0"
   },
   "devDependencies": {

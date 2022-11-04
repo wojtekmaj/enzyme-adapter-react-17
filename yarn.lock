@@ -2752,7 +2752,7 @@ __metadata:
     react-is: ^17.0.0
     rimraf: ^3.0.0
     semver: ^7.3.5
-    sinon: ^13.0.0
+    sinon: ^14.0.1
     sinon-sandbox: ^2.0.0
   languageName: unknown
   linkType: soft
@@ -5715,9 +5715,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sinon@npm:^13.0.0":
-  version: 13.0.2
-  resolution: "sinon@npm:13.0.2"
+"sinon@npm:^14.0.1":
+  version: 14.0.1
+  resolution: "sinon@npm:14.0.1"
   dependencies:
     "@sinonjs/commons": ^1.8.3
     "@sinonjs/fake-timers": ^9.1.2
@@ -5725,7 +5725,7 @@ __metadata:
     diff: ^5.0.0
     nise: ^5.1.1
     supports-color: ^7.2.0
-  checksum: 237f21c8c4a8b31574c71b1b9f4c0f74a63dde5c0e86bd116effa4ce63c52467bd45fb4034a8fa32656a7919d9b19fc7b108ca9e1e6e3144f3735da96dad2877
+  checksum: 55dd8dc9f33bf714fcd4cf9af5b67a3ba854da9e94d4be70bfbc13fa1113db03bdccec21fe1ded1dbf750a21f35be9727c779178ac981e55eeac9245acfdaa74
   languageName: node
   linkType: hard
 
