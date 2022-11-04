@@ -5,8 +5,6 @@ import inspect from 'object-inspect';
 
 import { debugNodes } from 'enzyme/build/Debug';
 
-import { is } from '../../_helpers/version';
-
 import { createClass, memo, useCallback } from '../../_helpers/react-compat';
 
 export default function describeDebug({ Wrap, WrapRendered, isShallow }) {
@@ -256,7 +254,7 @@ export default function describeDebug({ Wrap, WrapRendered, isShallow }) {
 
           // TODO: remove this ternary, pick either variant
           // see https://github.com/enzymejs/enzyme/issues/2471 for details
-          const Name = isWithout || is('~16.6') ? 'Memo(LazyC)' : 'LazyC';
+          const Name = isWithout ? 'Memo(LazyC)' : 'LazyC';
 
           it(`produces the expected tree ${
             isWithout ? 'without' : 'with'

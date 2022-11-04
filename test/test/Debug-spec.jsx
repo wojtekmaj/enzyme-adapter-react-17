@@ -10,7 +10,6 @@ import { spaces, indent, debugNode, debugNodes, typeName } from 'enzyme/build/De
 import './_helpers/setupAdapters';
 import { forwardRef } from './_helpers/react-compat';
 import { describeIf, itIf } from './_helpers';
-import { is } from './_helpers/version';
 
 const { adapter } = get();
 

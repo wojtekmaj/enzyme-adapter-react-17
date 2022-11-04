@@ -12,9 +12,6 @@ import {
   describeIf,
   itIf,
 } from '../../_helpers';
-import {
-  is,
-} from '../../_helpers/version';
 
 import {
   useCallback,

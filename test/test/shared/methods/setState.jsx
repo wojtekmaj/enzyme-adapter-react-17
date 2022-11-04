@@ -6,10 +6,6 @@ import wrap from 'mocha-wrap';
 import getAdapter from 'enzyme/build/getAdapter';
 
 import { itIf } from '../../_helpers';
-import { is } from '../../_helpers/version';
-
-// some React versions pass undefined as an argument of setState callback.
-const CALLING_SETSTATE_CALLBACK_WITH_UNDEFINED = is('^15.5');
 
 export default function describeSetState({ Wrap, WrapperName, isShallow }) {
   describe('.setState(newState[, callback])', () => {
@@ -85,7 +81,7 @@ export default function describeSetState({ Wrap, WrapperName, isShallow }) {
           expect(this).to.equal(wrapper.instance());
           expect(this.state).to.eql({ id: 'bar' });
           expect(wrapper.find('div').prop('className')).to.equal('bar');
-          expect(args).to.eql(CALLING_SETSTATE_CALLBACK_WITH_UNDEFINED ? [undefined] : []);
+          expect(args).to.eql([]);
           resolve();
         });
       });

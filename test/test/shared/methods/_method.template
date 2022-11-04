@@ -18,9 +18,6 @@ import {
 } from '../../_helpers';
 import realArrowFunction from '../../_helpers/realArrowFunction';
 import { getElementPropSelector, getWrapperPropSelector } from '../../_helpers/selectors';
-import {
-  is,
-} from '../../_helpers/version';
 
 import {
   createClass,
