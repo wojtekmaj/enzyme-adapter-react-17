@@ -79,7 +79,7 @@ export default function describeText({ Wrap, isShallow }) {
 
       const wrapper = Wrap(Space);
 
-      expect(wrapper.text()).to.equal(' test  Hello WorldHello WorldHello WorldHello     World   ');
+      expect(wrapper.text()).to.equal(' test Hello WorldHello WorldHello WorldHello World   ');
     });
 
     it('handles non-breaking spaces correctly', () => {

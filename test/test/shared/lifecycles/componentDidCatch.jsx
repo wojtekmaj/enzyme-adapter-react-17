@@ -176,16 +176,16 @@ export default function describeCDC({ Wrap, isShallow }) {
           expect(actualError).to.satisfy(properErrorMessage);
           expect(info).to.deep.equal({
             componentStack: `
-    in Thrower (created by ErrorBoundary)
-    in span (created by ErrorBoundary)${
+    at Thrower (created by ErrorBoundary)
+    at span (created by ErrorBoundary)${
       hasFragments
         ? ''
         : `
-    in main (created by ErrorBoundary)`
+    at main (created by ErrorBoundary)`
     }
-    in div (created by ErrorBoundary)
-    in ErrorBoundary (created by WrapperComponent)
-    in WrapperComponent`,
+    at div (created by ErrorBoundary)
+    at ErrorBoundary (created by WrapperComponent)
+    at WrapperComponent`,
           });
         });
 
@@ -204,17 +204,17 @@ export default function describeCDC({ Wrap, isShallow }) {
           expect(actualError).to.satisfy(properErrorMessage);
           expect(info).to.deep.equal({
             componentStack: `
-    in Thrower (created by ErrorBoundary)
-    in span (created by ErrorBoundary)${
+    at Thrower (created by ErrorBoundary)
+    at span (created by ErrorBoundary)${
       hasFragments
         ? ''
         : `
-    in main (created by ErrorBoundary)`
+    at main (created by ErrorBoundary)`
     }
-    in div (created by ErrorBoundary)
-    in ErrorBoundary (created by ErrorSFC)
-    in ErrorSFC (created by WrapperComponent)
-    in WrapperComponent`,
+    at div (created by ErrorBoundary)
+    at ErrorBoundary (created by ErrorSFC)
+    at ErrorSFC (created by WrapperComponent)
+    at WrapperComponent`,
           });
         });
       });

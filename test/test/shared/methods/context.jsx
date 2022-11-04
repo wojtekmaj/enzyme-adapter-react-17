@@ -48,7 +48,9 @@ export default function describeContext({ Wrap, WrapperName, isShallow }) {
       const wrapper = Wrap(<SimpleComponentSFC />, { context });
       expect(() => wrapper.context()).to.throw(
         Error,
-        `${WrapperName}::context() can only be called on wrapped nodes that have a non-null instance`,
+        isShallow
+          ? `${WrapperName}::context() can only be called on wrapped nodes that have a non-null instance`
+          : `${WrapperName}::context() can only be called on components with instances`,
       );
     });
 

@@ -407,7 +407,8 @@ describe('mount', () => {
           expect(() => {
             mount(<Bar />);
           }).to.throw(
-            'Warning: Failed prop type: Component must be a valid element type!\n    in WrapperComponent',
+            `Warning: Failed prop type: Component must be a valid element type!
+    at WrapperComponent`,
           );
         });
     });
