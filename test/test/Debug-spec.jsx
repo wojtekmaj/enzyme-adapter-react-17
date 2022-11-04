@@ -106,7 +106,7 @@ describe('debug', () => {
       );
     });
 
-    // FIXME: Fails for enzyme-adapter-react-16, and for @wojtekmaj/enzyme-adapter-react-17 too
+    // FIXME: Fails for @wojtekmaj/enzyme-adapter-react-17
     it.skip('renders symbol props', () => {
       expect(debugElement(<div symbol={Symbol.iterator} other={Symbol('foo')} />)).to.equal(
         '<div symbol={[Symbol(Symbol.iterator)]} other={[Symbol(foo)]} />',
