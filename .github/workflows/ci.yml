@@ -113,7 +113,5 @@ jobs:
         run: yarn build
 
       - name: Run tests
-        # Until the tests don't pass fully, this flag must be turned on
-        continue-on-error: true
         run: yarn mocha
         working-directory: test
