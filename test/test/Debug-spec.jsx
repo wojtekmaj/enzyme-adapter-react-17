@@ -76,7 +76,7 @@ describe('debug', () => {
     });
 
   describe('spaces(n)', () => {
-    it('returnsn spaces', () => {
+    it('returns n spaces', () => {
       expect(spaces(4)).to.equal('    ');
       expect(spaces(2)).to.equal('  ');
       expect(spaces(0)).to.equal('');
