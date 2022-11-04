@@ -96,9 +96,13 @@ describe('Utils', () => {
     });
 
     it('tests deepEquality with object props', () => {
-      expect(nodeEqual(<div foo={{ a: 1, b: 2 }} />, <div foo={{ a: 1, b: 2 }} />)).to.equal(true);
+      expect(
+        nodeEqual(<div data-foo={{ a: 1, b: 2 }} />, <div data-foo={{ a: 1, b: 2 }} />),
+      ).to.equal(true);
 
-      expect(nodeEqual(<div foo={{ a: 2, b: 2 }} />, <div foo={{ a: 1, b: 2 }} />)).to.equal(false);
+      expect(
+        nodeEqual(<div data-foo={{ a: 2, b: 2 }} />, <div data-foo={{ a: 1, b: 2 }} />),
+      ).to.equal(false);
     });
 
     describe('children props', () => {
@@ -340,13 +344,13 @@ describe('Utils', () => {
     });
 
     it('tests deepEquality with object props', () => {
-      expect(nodeMatches(<div foo={{ a: 1, b: 2 }} />, <div foo={{ a: 1, b: 2 }} />)).to.equal(
-        true,
-      );
+      expect(
+        nodeMatches(<div data-foo={{ a: 1, b: 2 }} />, <div data-foo={{ a: 1, b: 2 }} />),
+      ).to.equal(true);
 
-      expect(nodeMatches(<div foo={{ a: 2, b: 2 }} />, <div foo={{ a: 1, b: 2 }} />)).to.equal(
-        false,
-      );
+      expect(
+        nodeMatches(<div data-foo={{ a: 2, b: 2 }} />, <div data-foo={{ a: 1, b: 2 }} />),
+      ).to.equal(false);
     });
 
     describe('children props', () => {
@@ -417,7 +421,7 @@ describe('Utils', () => {
           ),
         ).to.equal(true);
 
-        expect(nodeMatches(<div foo="" />, <div foo={0} />)).to.equal(false);
+        expect(nodeMatches(<div data-foo="" />, <div data-foo={0} />)).to.equal(false);
 
         expect(nodeMatches(<div />, <div>{0}</div>)).to.equal(false);
       });

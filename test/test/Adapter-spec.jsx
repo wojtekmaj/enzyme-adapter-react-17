@@ -1151,13 +1151,13 @@ describe('Adapter', () => {
 
   describe('.wrap()', () => {
     it('returns a valid element', () => {
-      const element = <div a="b" c="d" />;
+      const element = <div data-a="b" data-c="d" />;
       const wrapped = adapter.wrap(element);
       expect(adapter.isValidElement(wrapped)).to.equal(true);
     });
 
     it('renders the children provided', () => {
-      const element = <div a="b" c="d" />;
+      const element = <div data-a="b" data-c="d" />;
       const wrapped = adapter.wrap(element);
       expect(wrapped.props).to.contain.keys({ children: element });
     });

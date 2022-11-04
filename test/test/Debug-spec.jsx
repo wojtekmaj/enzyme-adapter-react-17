@@ -107,9 +107,9 @@ describe('debug', () => {
 
     // FIXME: Fails for @wojtekmaj/enzyme-adapter-react-17
     it.skip('renders symbol props', () => {
-      expect(debugElement(<div symbol={Symbol.iterator} other={Symbol('foo')} />)).to.equal(
-        '<div symbol={[Symbol(Symbol.iterator)]} other={[Symbol(foo)]} />',
-      );
+      expect(
+        debugElement(<div data-symbol={Symbol.iterator} data-other={Symbol('foo')} />),
+      ).to.equal('<div data-symbol={[Symbol(Symbol.iterator)]} data-other={[Symbol(foo)]} />');
     });
 
     it('renders children on newline and indented', () => {
@@ -273,9 +273,9 @@ describe('debug', () => {
     });
 
     it('renders boxed primitives as the primitive', () => {
-      expect(debugElement(<div a={Object('foo')} b={Object(3)} c={Object(true)} />)).to.equal(
-        '<div a="foo" b={3} c={true} />',
-      );
+      expect(
+        debugElement(<div data-a={Object('foo')} data-b={Object(3)} data-c={Object(true)} />),
+      ).to.equal('<div data-a="foo" data-b={3} data-c={true} />');
     });
   });
 
