@@ -3,7 +3,7 @@ import { expect } from 'chai';
 
 import { itWithData, generateEmptyRenderData, itIf } from '../../_helpers';
 
-import { createClass } from '../../_helpers/react-compat';
+import { createClass, memo } from '../../_helpers/react-compat';
 
 export default function describeIsEmptyRender({ Wrap, WrapRendered, isShallow }) {
   describe('.isEmptyRender()', () => {
@@ -165,6 +165,13 @@ export default function describeIsEmptyRender({ Wrap, WrapRendered, isShallow })
       const elements = wrapper.find(RenderNull);
       expect(elements).to.have.lengthOf(3);
       expect(elements.isEmptyRender()).to.equal(false);
+    });
+
+    it('works on a memoized functional component', () => {
+      const Component = memo(() => null);
+      const wrapper = Wrap(<Component />);
+      expect(wrapper.debug()).to.equal(isShallow ? '' : '<Memo() />');
+      expect(wrapper.isEmptyRender()).to.equal(true);
     });
   });
 }
