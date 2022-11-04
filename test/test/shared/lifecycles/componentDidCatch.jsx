@@ -46,12 +46,13 @@ export default function describeCDC({ Wrap, isShallow }) {
         }
 
         render() {
+          const { ThrowerComponent } = this.props;
           const { didThrow, throws } = this.state;
           return (
             <div>
               <MaybeFragment>
                 <span>
-                  <Thrower throws={throws} />
+                  <ThrowerComponent throws={throws} />
                   <div>{didThrow ? 'HasThrown' : 'HasNotThrown'}</div>
                 </span>
               </MaybeFragment>
@@ -59,6 +60,10 @@ export default function describeCDC({ Wrap, isShallow }) {
           );
         }
       }
+
+      ErrorBoundary.defaultProps = {
+        ThrowerComponent: Thrower,
+      };
 
       function ErrorSFC(props) {
         return <ErrorBoundary {...props} />;
@@ -102,6 +107,37 @@ export default function describeCDC({ Wrap, isShallow }) {
         expect(info).to.deep.equal({
           componentStack: `
     in Thrower (created by ErrorBoundary)
+    in span (created by ErrorBoundary)${
+      hasFragments
+        ? ''
+        : `
+    in main (created by ErrorBoundary)`
+    }
+    in div (created by ErrorBoundary)
+    in ErrorBoundary (created by WrapperComponent)
+    in WrapperComponent`,
+        });
+      });
+
+      it('catches a simulated error on memo() component', () => {
+        const MemoThrower = React.memo(Thrower);
+        const spy = sinon.spy();
+        const wrapper = Wrap(<ErrorBoundary spy={spy} ThrowerComponent={MemoThrower} />);
+
+        expect(spy).to.have.property('callCount', 0);
+
+        expect(() => wrapper.find(Thrower).simulateError(errorToThrow)).not.to.throw();
+
+        expect(spy).to.have.property('callCount', 1);
+
+        expect(spy.args).to.be.an('array').and.have.lengthOf(1);
+        const [[actualError, info]] = spy.args;
+        expect(() => {
+          throw actualError;
+        }).to.throw(errorToThrow);
+        expect(info).to.deep.equal({
+          componentStack: `
+    in Memo(Thrower) (created by ErrorBoundary)
     in span (created by ErrorBoundary)${
       hasFragments
         ? ''
