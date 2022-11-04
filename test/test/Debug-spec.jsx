@@ -2,7 +2,6 @@ import { expect } from 'chai';
 import React from 'react';
 import wrap from 'mocha-wrap';
 import sinon from 'sinon-sandbox';
-import hasSymbols from 'has-symbols';
 
 import { mount, shallow } from 'enzyme';
 import { get } from 'enzyme/build/configuration';
@@ -109,7 +108,7 @@ describe('debug', () => {
     });
 
     // FIXME: Fails for enzyme-adapter-react-16, and for @wojtekmaj/enzyme-adapter-react-17 too
-    itIf.skip(hasSymbols(), 'renders symbol props', () => {
+    it.skip('renders symbol props', () => {
       expect(debugElement(<div symbol={Symbol.iterator} other={Symbol('foo')} />)).to.equal(
         '<div symbol={[Symbol(Symbol.iterator)]} other={[Symbol(foo)]} />',
       );
