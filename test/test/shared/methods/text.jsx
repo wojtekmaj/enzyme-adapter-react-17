@@ -239,10 +239,10 @@ export default function describeText({ Wrap, isShallow }) {
         return nextProps.number > 10 && nextProps.number < 20;
       }
 
-      const DumbMemo = memo && memo(Dumb, areEqual);
-      const DumbMemoNoCompare = memo && memo(Dumb);
-      const DumbSFCMemo = memo && memo(DumbSFC, areEqual);
-      const DumbSFCMemoNoCompare = memo && memo(DumbSFC);
+      const DumbMemo = memo(Dumb, areEqual);
+      const DumbMemoNoCompare = memo(Dumb);
+      const DumbSFCMemo = memo(DumbSFC, areEqual);
+      const DumbSFCMemoNoCompare = memo(DumbSFC);
 
       it('<Dumb /> - should always re-render', () => {
         const tree = Wrap(<Dumb number={5} />);

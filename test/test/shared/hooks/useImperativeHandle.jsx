@@ -16,7 +16,7 @@ export default function describeUseImperativeHandle({ Wrap, isShallow }) {
       return <div />;
     }
 
-    const FancyComputer = forwardRef && forwardRef(Computer);
+    const FancyComputer = forwardRef(Computer);
 
     class ParentComputer extends React.Component {
       componentDidMount() {

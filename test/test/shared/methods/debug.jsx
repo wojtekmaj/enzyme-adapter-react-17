@@ -70,19 +70,15 @@ export default function describeDebug({ Wrap, WrapRendered, isShallow }) {
         }
         SFCwithDisplayName.displayName = 'SFC!';
 
-        const SFCMemo = memo && memo(SFC);
-        const SFCwithDisplayNameMemo = memo && memo(SFCwithDisplayName);
+        const SFCMemo = memo(SFC);
+        const SFCwithDisplayNameMemo = memo(SFCwithDisplayName);
 
-        const SFCMemoWithDisplayName =
-          memo &&
-          Object.assign(memo(SFC), {
-            displayName: 'SFCMemoWithDisplayName!',
-          });
-        const SFCMemoWitDoubleDisplayName =
-          memo &&
-          Object.assign(memo(SFCwithDisplayName), {
-            displayName: 'SFCMemoWitDoubleDisplayName!',
-          });
+        const SFCMemoWithDisplayName = Object.assign(memo(SFC), {
+          displayName: 'SFCMemoWithDisplayName!',
+        });
+        const SFCMemoWitDoubleDisplayName = Object.assign(memo(SFCwithDisplayName), {
+          displayName: 'SFCMemoWitDoubleDisplayName!',
+        });
 
         // FIXME: Fails for @wojtekmaj/enzyme-adapter-react-17
         it.skip('displays the expected display names', () => {
@@ -120,7 +116,7 @@ export default function describeDebug({ Wrap, WrapRendered, isShallow }) {
           b: 2,
           c: 3,
         };
-        const MemoAdd = memo && memo(Add);
+        const MemoAdd = memo(Add);
 
         it('applies defaultProps to the component', () => {
           const wrapper = WrapRendered(<Add />);
@@ -187,7 +183,7 @@ export default function describeDebug({ Wrap, WrapRendered, isShallow }) {
               </div>
             );
           }
-          const BodyMemo = memo && memo(Body);
+          const BodyMemo = memo(Body);
 
           it('shows everything when not memoized', () => {
             const wrapper = WrapRendered(<Body imageToShow={1} switchImage={() => {}} />);
@@ -230,24 +226,20 @@ export default function describeDebug({ Wrap, WrapRendered, isShallow }) {
           );
         }
 
-        const ComponentWithDefaultProps =
-          React.memo &&
-          Object.assign(React.memo(LazyC), {
-            defaultProps: {
-              type: 'block',
-            },
-            propTypes: {
-              type: PropTypes.oneOf(['block', 'inline']),
-            },
-          });
+        const ComponentWithDefaultProps = Object.assign(React.memo(LazyC), {
+          defaultProps: {
+            type: 'block',
+          },
+          propTypes: {
+            type: PropTypes.oneOf(['block', 'inline']),
+          },
+        });
 
-        const ComponentWithoutDefaultProps =
-          React.memo &&
-          Object.assign(React.memo(LazyC), {
-            propTypes: {
-              type: PropTypes.oneOf(['block', 'inline']),
-            },
-          });
+        const ComponentWithoutDefaultProps = Object.assign(React.memo(LazyC), {
+          propTypes: {
+            type: PropTypes.oneOf(['block', 'inline']),
+          },
+        });
 
         [ComponentWithDefaultProps, ComponentWithoutDefaultProps].forEach((C) => {
           const isWithout = C === ComponentWithoutDefaultProps;

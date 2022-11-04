@@ -42,9 +42,9 @@ export default function describeIs({ Wrap, WrapRendered }) {
         return <div />;
       }
     }
-    const Memoized = memo && memo(RendersDiv);
-    const ForwardRef = forwardRef && forwardRef(() => <RendersDiv />);
-    const MemoForwardRef = memo && memo(() => <ForwardRef />);
+    const Memoized = memo(RendersDiv);
+    const ForwardRef = forwardRef(() => <RendersDiv />);
+    const MemoForwardRef = memo(() => <ForwardRef />);
 
     class RendersChildren extends React.Component {
       render() {

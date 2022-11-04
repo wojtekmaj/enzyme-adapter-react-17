@@ -1706,9 +1706,8 @@ describe('shallow', () => {
     });
 
     describe('forwardRef Elements', () => {
-      const ForwardRefWrapsRendersDOM = forwardRef && forwardRef(() => <WrapsRendersDOM />);
-      const NestedForwarRefsWrapsRendersDom =
-        forwardRef && forwardRef(() => <ForwardRefWrapsRendersDOM />);
+      const ForwardRefWrapsRendersDOM = forwardRef(() => <WrapsRendersDOM />);
+      const NestedForwarRefsWrapsRendersDom = forwardRef(() => <ForwardRefWrapsRendersDOM />);
 
       if (forwardRef) {
         NestedForwarRefsWrapsRendersDom.contextTypes = { foo: PropTypes.string };
@@ -1746,7 +1745,7 @@ describe('shallow', () => {
     describe('memo', () => {
       const App = () => <div>Guest</div>;
 
-      const AppMemoized = memo && Object.assign(memo(App), { displayName: 'AppMemoized' });
+      const AppMemoized = Object.assign(memo(App), { displayName: 'AppMemoized' });
 
       const RendersApp = () => <App />;
       const RendersAppMemoized = () => <AppMemoized />;
