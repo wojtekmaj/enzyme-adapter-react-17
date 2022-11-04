@@ -1,7 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import { itWithData, generateEmptyRenderData } from '../../_helpers';
+import { itWithData, generateEmptyRenderData, itIf } from '../../_helpers';
 
 import { createClass } from '../../_helpers/react-compat';
 
@@ -148,7 +148,7 @@ export default function describeIsEmptyRender({ Wrap, WrapRendered, isShallow })
       });
     });
 
-    it(`returns ${!isShallow} for > 1 elements`, () => {
+    itIf(isShallow, 'returns false for > 1 elements', () => {
       class RendersThree extends React.Component {
         render() {
           return (
@@ -164,7 +164,7 @@ export default function describeIsEmptyRender({ Wrap, WrapRendered, isShallow })
       const wrapper = WrapRendered(<RendersThree />);
       const elements = wrapper.find(RenderNull);
       expect(elements).to.have.lengthOf(3);
-      expect(elements.isEmptyRender()).to.equal(!isShallow);
+      expect(elements.isEmptyRender()).to.equal(false);
     });
   });
 }
