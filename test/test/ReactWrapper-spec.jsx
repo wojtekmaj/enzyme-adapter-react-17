@@ -22,6 +22,8 @@ import {
   memo,
   Profiler,
   Suspense,
+  useState,
+  useEffect,
 } from './_helpers/react-compat';
 import { itIf } from './_helpers';
 import getLoadedLazyComponent from './_helpers/getLoadedLazyComponent';
@@ -1290,6 +1292,38 @@ describe('mount', () => {
         </Suspense>
       );
       expect(() => mount(<SuspenseComponent />, { suspenseFallback: false })).to.throw();
+    });
+
+    it('avoids a TypeError', () => {
+      const Component2 = lazy(() => Promise.resolve({ default: () => <div /> }));
+
+      function Component() {
+        const [alreadyRun, setAlreadyRun] = useState(false);
+
+        useEffect(() => {
+          setAlreadyRun(true);
+        }, []);
+
+        if (!alreadyRun) {
+          return null;
+        }
+
+        return <Component2 />;
+      }
+
+      const wrapper = mount(
+        <Suspense fallback={<div>loading</div>}>
+          <Component />
+        </Suspense>,
+      );
+      expect(wrapper.debug()).to.equal(
+        `<Suspense fallback={{...}}>
+  <Component />
+  <div>
+    loading
+  </div>
+</Suspense>`,
+      );
     });
   });
 
