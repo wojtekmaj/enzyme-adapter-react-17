@@ -76,8 +76,8 @@ export default function describeDebug({ Wrap, WrapRendered, isShallow }) {
         const SFCMemoWithDisplayName = Object.assign(memo(SFC), {
           displayName: 'SFCMemoWithDisplayName!',
         });
-        const SFCMemoWitDoubleDisplayName = Object.assign(memo(SFCwithDisplayName), {
-          displayName: 'SFCMemoWitDoubleDisplayName!',
+        const SFCMemoWithDoubleDisplayName = Object.assign(memo(SFCwithDisplayName), {
+          displayName: 'SFCMemoWithDoubleDisplayName!',
         });
 
         // FIXME: Fails for @wojtekmaj/enzyme-adapter-react-17
@@ -90,7 +90,7 @@ export default function describeDebug({ Wrap, WrapRendered, isShallow }) {
               <SFCMemo />
               <SFCwithDisplayNameMemo />
               <SFCMemoWithDisplayName />
-              <SFCMemoWitDoubleDisplayName />
+              <SFCMemoWithDoubleDisplayName />
             </div>,
           );
           expect(wrapper.debug()).to.equal(`<div>
