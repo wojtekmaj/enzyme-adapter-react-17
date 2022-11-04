@@ -7,9 +7,9 @@ const Adapter = require('./adapter');
 
 Enzyme.configure({ adapter: new Adapter() });
 
-/* eslint-disable no-console */
-
+// eslint-disable-next-line no-console
 const origWarn = console.warn;
+// eslint-disable-next-line no-console
 const origError = console.error;
 wrap.register(function withConsoleThrows() {
   return this.withOverrides(

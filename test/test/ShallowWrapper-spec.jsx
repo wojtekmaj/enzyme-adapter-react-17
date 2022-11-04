@@ -76,7 +76,7 @@ describe('shallow', () => {
 
     describe('wrapping invalid elements', () => {
       it('throws with combined dangerouslySetInnerHTML and children on host nodes', () => {
-        /* eslint react/no-danger-with-children: 0 */
+        // eslint-disable-next-line react/no-danger-with-children
         expect(() => shallow(<div dangerouslySetInnerHTML={{ __html: '{}' }}>child</div>)).to.throw(
           Error,
           'Can only set one of `children` or `props.dangerouslySetInnerHTML`.',

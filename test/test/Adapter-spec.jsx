@@ -758,14 +758,14 @@ describe('Adapter', () => {
         throw new Error('Bar constructor should not be called');
       }
 
-      /* eslint-disable-next-line react/require-render-return */
+      // eslint-disable-next-line react/require-render-return
       render() {
         throw new Error('Bar render method should not be called');
       }
     }
 
     class Foo extends React.Component {
-      /* eslint-disable-next-line react/require-render-return */
+      // eslint-disable-next-line react/require-render-return
       render() {
         throw new Error('Foo render method should not be called');
       }
@@ -849,7 +849,7 @@ describe('Adapter', () => {
         throw new Error('Inner constructor should not be called');
       }
 
-      /* eslint-disable-next-line react/require-render-return */
+      // eslint-disable-next-line react/require-render-return
       render() {
         throw new Error('Inner render method should not be called');
       }
@@ -907,7 +907,7 @@ describe('Adapter', () => {
         throw new Error('Inner constructor should not be called');
       }
 
-      /* eslint-disable-next-line react/require-render-return */
+      // eslint-disable-next-line react/require-render-return
       render() {
         throw new Error('Inner render method should not be called');
       }
@@ -956,7 +956,7 @@ describe('Adapter', () => {
         throw new Error('Inner constructor should not be called');
       }
 
-      /* eslint-disable-next-line react/require-render-return */
+      // eslint-disable-next-line react/require-render-return
       render() {
         throw new Error('Inner render method should not be called');
       }

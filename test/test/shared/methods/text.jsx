@@ -64,7 +64,6 @@ export default function describeText({ Wrap, isShallow }) {
     });
 
     it('handles spaces the same between shallow and mount', () => {
-      /* eslint no-multiple-empty-lines: 0 */
       const Space = (
         <div>
           <div> test </div>

@@ -9,7 +9,6 @@ import { spaces, indent, debugNode, debugNodes, typeName } from 'enzyme/build/De
 
 import './_helpers/setupAdapters';
 import { forwardRef } from './_helpers/react-compat';
-import { describeIf, itIf } from './_helpers';
 
 const { adapter } = get();
 
@@ -842,7 +841,6 @@ describe('debug', () => {
     it('handles function children', () => {
       class Abomination extends React.Component {
         render() {
-          /* eslint no-unused-vars: 0, func-names: 0, react/no-children-prop: 0 */
           return (
             <div>
               {function Foo() {
@@ -851,8 +849,11 @@ describe('debug', () => {
               <span />
               {(arrow) => arrow('function')}
               {[1, 2, NaN]}
-              {function (anonymous) {}}
+              {function () {
+                /* anonymous */
+              }}
               {{ a: 'b' }}
+              {/* eslint-disable-next-line react/no-children-prop */}
               <span children={{ c: 'd' }} />
             </div>
           );
@@ -895,7 +896,7 @@ describe('debug', () => {
         </span>
       );
 
-      NamedComponent = forwardRef((props, ref) => <div />);
+      NamedComponent = forwardRef((/* props, ref */) => <div />);
       NamedComponent.displayName = 'a named forward ref!';
       ParentOfNamed = () => <NamedComponent />;
     });

@@ -278,8 +278,9 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
     });
 
     it('throws when `dangerouslySetInnerHTML` and `children` are combined on host elements', () => {
-      /* eslint react/no-danger-with-children: 0 */
+      // eslint-disable-next-line react/no-danger-with-children
       expect(() => elementToTree(<div dangerouslySetInnerHTML="hi">nope</div>)).to.throw();
+      // eslint-disable-next-line react/no-danger-with-children
       expect(() => elementToTree(<Target dangerouslySetInnerHTML="hi">yep</Target>)).not.to.throw();
     });
   });

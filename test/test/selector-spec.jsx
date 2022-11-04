@@ -754,7 +754,6 @@ tests.forEach(({ describeMethod, name, renderMethod }) => {
     });
 
     itIf(name === 'mount', 'works with an element constructor', () => {
-      /* eslint-env browser */
       const wrapper = renderMethod(
         <div>
           <span />

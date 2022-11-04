@@ -179,7 +179,8 @@ describe('Utils', () => {
 
         expect(
           nodeEqual(
-            <div children={null} className="foo" />, // eslint-disable-line react/no-children-prop
+            // eslint-disable-next-line react/no-children-prop
+            <div children={null} className="foo" />,
             <div className="foo" />,
           ),
         ).to.equal(true);
@@ -410,7 +411,8 @@ describe('Utils', () => {
 
         expect(
           nodeMatches(
-            <div children={null} className="foo" />, // eslint-disable-line react/no-children-prop
+            // eslint-disable-next-line react/no-children-prop
+            <div children={null} className="foo" />,
             <div className="foo" />,
           ),
         ).to.equal(true);
