@@ -1176,8 +1176,7 @@ describe('mount', () => {
       expect(wrapper.find(Fallback)).to.have.lengthOf(0);
     });
 
-    // FIXME: Fails for @wojtekmaj/enzyme-adapter-react-17
-    it.skip('works with Suspense with multiple children', () => {
+    it('works with Suspense with multiple children', () => {
       const SuspenseComponent = () => (
         <Suspense fallback={<Fallback />}>
           <div />
