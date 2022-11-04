@@ -5,10 +5,9 @@
   "description": "JavaScript Testing utilities for React",
   "homepage": "https://enzymejs.github.io/enzyme/",
   "scripts": {
-    "build": "babel --source-maps=both test -d build",
     "clean": "rimraf build",
     "lint": "eslint . --ext .jsx,.js",
-    "mocha": "yarn build && mocha --recursive build",
+    "mocha": "mocha --require @babel/register --extension js,jsx --recursive test",
     "prettier": "prettier --check . --cache",
     "test": "yarn lint && yarn prettier"
   },
@@ -57,6 +56,7 @@
   "devDependencies": {
     "@babel/cli": "^7.15.0",
     "@babel/core": "^7.15.0",
+    "@babel/register": "^7.18.9",
     "eslint": "^8.26.0",
     "eslint-config-wojtekmaj": "^0.7.1",
     "prettier": "^2.7.0",
