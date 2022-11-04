@@ -1,12 +1,10 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import { describeIf } from '../../_helpers';
-
 import { useReducer } from '../../_helpers/react-compat';
 
-export default function describeUseReducer({ hasHooks, Wrap }) {
-  describeIf(hasHooks, 'hooks: useReducer', () => {
+export default function describeUseReducer({ Wrap }) {
+  describe('hooks: useReducer', () => {
     describe('with custom dispatch', () => {
       const initialState = [];
 

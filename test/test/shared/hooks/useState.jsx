@@ -1,12 +1,12 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import { describeIf, itIf } from '../../_helpers';
+import { itIf } from '../../_helpers';
 
 import { useState, useEffect, Fragment } from '../../_helpers/react-compat';
 
-export default function describeUseState({ hasHooks, Wrap, isShallow }) {
-  describeIf(hasHooks, 'hooks: useState', () => {
+export default function describeUseState({ Wrap, isShallow }) {
+  describe('hooks: useState', () => {
     function FooCounter({ initialCount: initial = 0 }) {
       const [count, setCount] = useState(+initial);
 

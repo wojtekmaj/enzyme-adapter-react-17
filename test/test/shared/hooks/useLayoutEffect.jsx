@@ -1,12 +1,12 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import { describeIf, itIf } from '../../_helpers';
+import { itIf } from '../../_helpers';
 
 import { useLayoutEffect, useState } from '../../_helpers/react-compat';
 
-export default function describeUseLayoutEffect({ hasHooks, Wrap, isShallow }) {
-  describeIf(hasHooks, 'hooks: useLayoutEffect', () => {
+export default function describeUseLayoutEffect({ Wrap, isShallow }) {
+  describe('hooks: useLayoutEffect', () => {
     function ComponentUsingLayoutEffectHook() {
       const [ctr, setCtr] = useState(0);
       useLayoutEffect(() => {

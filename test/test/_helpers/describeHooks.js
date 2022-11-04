@@ -7,7 +7,6 @@ export default function describeHooks({ Wrap, Wrapper }, ...hooks) {
 
   hooks.forEach((hook) => {
     require(`../shared/hooks/${hook}`).default({
-      hasHooks: true,
       Wrap,
       WrapRendered: isShallow ? Wrap : (...args) => Wrap(...args).children(),
       Wrapper,

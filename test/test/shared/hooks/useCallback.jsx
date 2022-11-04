@@ -1,12 +1,12 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import { describeIf, itIf } from '../../_helpers';
+import { itIf } from '../../_helpers';
 
 import { useCallback } from '../../_helpers/react-compat';
 
-export default function describeUseCallback({ hasHooks, Wrap, isShallow }) {
-  describeIf(hasHooks, 'hooks: useCallback', () => {
+export default function describeUseCallback({ Wrap, isShallow }) {
+  describe('hooks: useCallback', () => {
     function RendersNull() {
       return null;
     }

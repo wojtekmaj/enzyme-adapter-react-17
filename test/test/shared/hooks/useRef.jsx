@@ -1,12 +1,10 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import { describeIf } from '../../_helpers';
-
 import { useRef } from '../../_helpers/react-compat';
 
-export default function describeUseRef({ hasHooks, Wrap }) {
-  describeIf(hasHooks, 'hooks: useRef', () => {
+export default function describeUseRef({ Wrap }) {
+  describe('hooks: useRef', () => {
     function ComponentUsingRef() {
       const id = useRef(Math.floor(100 * Math.random()));
       return <div>{id.current}</div>;

@@ -6,8 +6,8 @@ import { describeIf } from '../../_helpers';
 
 import { useEffect, useState } from '../../_helpers/react-compat';
 
-export default function describeCustomHooks({ hasHooks, Wrap, isShallow }) {
-  describeIf(hasHooks, 'hooks: custom', () => {
+export default function describeCustomHooks({ Wrap, isShallow }) {
+  describe('hooks: custom', () => {
     describe('custom hook: useCounter', () => {
       function useCounter({ initialCount = 0, step = 1 } = {}) {
         const [count, setCount] = useState(initialCount);

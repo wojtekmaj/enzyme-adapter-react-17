@@ -5,8 +5,8 @@ import { describeIf, itIf } from '../../_helpers';
 
 import { useContext, useState, createContext } from '../../_helpers/react-compat';
 
-export default function describeUseContext({ hasHooks, Wrap, isShallow }) {
-  describeIf(hasHooks, 'hooks: useContext', () => {
+export default function describeUseContext({ Wrap, isShallow }) {
+  describe('hooks: useContext', () => {
     describe('simple example', () => {
       const initialTitle = 'initialTitle';
       const TitleContext = createContext && createContext(initialTitle);

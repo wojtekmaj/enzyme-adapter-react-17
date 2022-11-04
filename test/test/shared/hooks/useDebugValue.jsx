@@ -2,13 +2,11 @@ import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
-import { describeIf } from '../../_helpers';
-
 import { useDebugValue } from '../../_helpers/react-compat';
 
-export default function describeUseDebugValue({ hasHooks, Wrap }) {
+export default function describeUseDebugValue({ Wrap }) {
   // TODO: `useDebugValue`: test using react debug tools, verify it actually works, and try to add it to `.debug`
-  describeIf(hasHooks, 'hooks: useDebugValue', () => {
+  describe('hooks: useDebugValue', () => {
     function ComponentUsingDebugValue({ value }) {
       useDebugValue(`debug value: ${value}`);
 

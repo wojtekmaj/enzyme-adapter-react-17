@@ -25,7 +25,6 @@ import {
 } from '../../_helpers/react-compat';
 
 export default function describe$Hook({
-  hasHooks,
   Wrap,
   WrapRendered,
   Wrapper,
@@ -34,6 +33,6 @@ export default function describe$Hook({
   isMount,
   makeDOMElement,
 }) {
-  describeIf(hasHooks, 'hooks: $Hook', () => {
+  describe('hooks: $Hook', () => {
   });
 }

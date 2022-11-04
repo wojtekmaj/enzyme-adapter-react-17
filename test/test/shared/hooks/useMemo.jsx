@@ -1,12 +1,10 @@
 import React from 'react';
 import { expect } from 'chai';
 
-import { describeIf } from '../../_helpers';
-
 import { useMemo } from '../../_helpers/react-compat';
 
-export default function describeUseMemo({ hasHooks, Wrap }) {
-  describeIf(hasHooks, 'hooks: useMemo', () => {
+export default function describeUseMemo({ Wrap }) {
+  describe('hooks: useMemo', () => {
     function RendersNull() {
       return null;
     }
