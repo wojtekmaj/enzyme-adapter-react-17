@@ -331,21 +331,6 @@ function replaceLazyWithFallback(node, fallback) {
   };
 }
 
-function getEmptyStateValue() {
-  // this handles a bug in React 16.0 - 16.2
-  // see https://github.com/facebook/react/commit/39be83565c65f9c522150e52375167568a2a1459
-  // also see https://github.com/facebook/react/pull/11965
-
-  class EmptyState extends React.Component {
-    render() {
-      return null;
-    }
-  }
-  const testRenderer = new ShallowRenderer();
-  testRenderer.render(React.createElement(EmptyState));
-  return testRenderer._instance.state;
-}
-
 function wrapAct(fn) {
   let returnVal;
   TestUtils.act(() => {
@@ -631,52 +616,29 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
             );
           }
 
-          if (isComponentStateful) {
-            if (
-              renderer._instance &&
-              el.props === renderer._instance.props &&
-              !shallowEqual(context, renderer._instance.context)
-            ) {
-              const { restore } = spyMethod(
-                renderer,
-                '_updateClassComponent',
-                (originalMethod) =>
-                  function _updateClassComponent(...args) {
-                    const { props } = renderer._instance;
-                    const clonedProps = { ...props };
-                    renderer._instance.props = clonedProps;
+          if (
+            isComponentStateful &&
+            renderer._instance &&
+            el.props === renderer._instance.props &&
+            !shallowEqual(context, renderer._instance.context)
+          ) {
+            const { restore } = spyMethod(
+              renderer,
+              '_updateClassComponent',
+              (originalMethod) =>
+                function _updateClassComponent(...args) {
+                  const { props } = renderer._instance;
+                  const clonedProps = { ...props };
+                  renderer._instance.props = clonedProps;
 
-                    const result = originalMethod.apply(renderer, args);
+                  const result = originalMethod.apply(renderer, args);
 
-                    renderer._instance.props = props;
-                    restore();
+                  renderer._instance.props = props;
+                  restore();
 
-                    return result;
-                  },
-              );
-            }
-
-            // fix react bug; see implementation of `getEmptyStateValue`
-            const emptyStateValue = getEmptyStateValue();
-            if (emptyStateValue) {
-              Object.defineProperty(Component.prototype, 'state', {
-                configurable: true,
-                enumerable: true,
-                get() {
-                  return null;
+                  return result;
                 },
-                set(value) {
-                  if (value !== emptyStateValue) {
-                    Object.defineProperty(this, 'state', {
-                      configurable: true,
-                      enumerable: true,
-                      value,
-                      writable: true,
-                    });
-                  }
-                },
-              });
-            }
+            );
           }
           return withSetStateAllowed(() => renderElement(renderedEl, context));
         }
