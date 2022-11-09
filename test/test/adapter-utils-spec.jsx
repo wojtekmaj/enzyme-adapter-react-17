@@ -584,15 +584,7 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
       const getDerivedStateFromError = sinon.spy(() => stateUpdate);
       const catchingType = { getDerivedStateFromError };
 
-      simulateError(
-        error,
-        catchingInstance,
-        undefined,
-        hierarchy,
-        undefined,
-        undefined,
-        catchingType,
-      );
+      simulateError(error, catchingInstance, hierarchy, undefined, undefined, catchingType);
 
       expect(catchingInstance.setState).to.have.property('callCount', 1);
       const setStateCall = catchingInstance.setState.getCall(0);
@@ -639,15 +631,7 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
       };
       const catchingType = {};
 
-      simulateError(
-        error,
-        catchingInstance,
-        undefined,
-        hierarchy,
-        undefined,
-        undefined,
-        catchingType,
-      );
+      simulateError(error, catchingInstance, hierarchy, undefined, undefined, catchingType);
 
       expect(catchingInstance.setState).to.have.property('callCount', 0);
 
@@ -680,15 +664,7 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
       const getDerivedStateFromError = sinon.spy(() => stateUpdate);
       const catchingType = { getDerivedStateFromError };
 
-      simulateError(
-        error,
-        catchingInstance,
-        undefined,
-        hierarchy,
-        undefined,
-        undefined,
-        catchingType,
-      );
+      simulateError(error, catchingInstance, hierarchy, undefined, undefined, catchingType);
 
       expect(catchingInstance.setState).to.have.property('callCount', 1);
 

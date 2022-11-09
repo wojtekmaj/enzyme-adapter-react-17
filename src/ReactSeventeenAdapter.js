@@ -457,7 +457,6 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
         simulateError(
           error,
           catchingInstance,
-          rootNode,
           nodeHierarchy,
           nodeTypeFromType,
           adapter.displayNameOfNode.bind(adapter),
@@ -667,7 +666,6 @@ class ReactSeventeenAdapter extends EnzymeAdapter {
         simulateError(
           error,
           renderer._instance,
-          cachedNode,
           nodeHierarchy.concat(cachedNode),
           nodeTypeFromType,
           adapter.displayNameOfNode.bind(adapter),
