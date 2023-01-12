@@ -1972,9 +1972,9 @@ describe('mount', () => {
       expect(span.is('span')).to.equal(true);
       const spanProps = span.props();
       expect(spanProps).to.have.keys({
-        'children': 1,
+        children: 1,
         'data-foo': 1,
-        'onClick': spanProps.onClick,
+        onClick: spanProps.onClick,
       });
       expect(spanProps.onClick).to.be.a('function');
 
@@ -1982,9 +1982,9 @@ describe('mount', () => {
       expect(div.is('div')).to.equal(true);
       const divProps = div.props();
       expect(divProps).to.have.keys({
-        'children': 2,
+        children: 2,
         'data-bar': 2,
-        'onClick': divProps.onClick,
+        onClick: divProps.onClick,
       });
       expect(divProps.onClick).to.be.a('function');
     });

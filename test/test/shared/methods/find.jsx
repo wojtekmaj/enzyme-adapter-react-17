@@ -505,7 +505,7 @@ export default function describeFind({
           'data-more': [{ id: 1 }],
           'data-test': 'ref',
           'data-prop': true,
-          'onChange': testFunction,
+          onChange: testFunction,
         }),
       ).to.have.lengthOf(1);
     });
