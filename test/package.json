@@ -6,7 +6,7 @@
   "homepage": "https://enzymejs.github.io/enzyme/",
   "scripts": {
     "clean": "rimraf build",
-    "lint": "eslint . --ext .jsx,.js",
+    "lint": "eslint . --ext .js,.jsx",
     "mocha": "mocha --require @babel/register --extension js,jsx --recursive test",
     "prettier": "prettier --check . --cache",
     "test": "yarn lint && yarn prettier"
