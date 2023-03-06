@@ -254,7 +254,7 @@ describe('mount', () => {
                 {'Context says: '}
                 {testContext}
               </div>
-              {renderMore && <More />}
+              {renderMore ? <More /> : null}
             </div>
           );
         }
@@ -1807,7 +1807,7 @@ describe('mount', () => {
       render() {
         return (
           <div>
-            {this.state && this.state.showSpan && <span className="show-me" />}
+            {this.state && this.state.showSpan ? <span className="show-me" /> : null}
             <button type="button" className="async-btn" onClick={() => this.asyncSetState()} />
             <Child callback={() => this.callbackSetState()} />
           </div>

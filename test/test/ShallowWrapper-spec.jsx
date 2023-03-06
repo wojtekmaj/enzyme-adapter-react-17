@@ -220,8 +220,8 @@ describe('shallow', () => {
                 {testContext}
                 {explicitContext}
               </div>
-              {renderMore && <More />}
-              {renderStateTester && <StateTester />}
+              {renderMore ? <More /> : null}
+              {renderStateTester ? <StateTester /> : null}
             </div>
           );
         }
@@ -2494,7 +2494,7 @@ describe('shallow', () => {
       render() {
         return (
           <div>
-            {this.state && this.state.showSpan && <span className="show-me" />}
+            {this.state && this.state.showSpan ? <span className="show-me" /> : null}
             <button type="button" className="async-btn" onClick={() => this.asyncSetState()} />
             <Child callback={() => this.callbackSetState()} />
           </div>

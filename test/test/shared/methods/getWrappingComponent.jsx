@@ -74,8 +74,8 @@ export default function describeGetWrappingComponent({ Wrap, WrapperName, isShal
               {testContext}
               {explicitContext}
             </div>
-            {renderMore && <RendersNull />}
-            {renderStateTester && <StateTester />}
+            {renderMore ? <RendersNull /> : null}
+            {renderStateTester ? <StateTester /> : null}
           </div>
         );
       }

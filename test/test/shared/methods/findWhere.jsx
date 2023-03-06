@@ -174,7 +174,7 @@ export default function describeFindWhere({
             <div>
               <header>
                 <span />
-                {emptyString && <i />}
+                {emptyString ? <i /> : null}
               </header>
               <div>
                 <span data-foo={selector}>Test</span>
