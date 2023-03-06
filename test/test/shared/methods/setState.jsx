@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import sinon from 'sinon-sandbox';
 import wrap from 'mocha-wrap';
 
 import getAdapter from 'enzyme/build/getAdapter';
@@ -112,8 +111,8 @@ export default function describeSetState({ Wrap, WrapperName, isShallow }) {
 
     it('prevents the update if nextState is null or undefined', () => {
       const wrapper = Wrap(<HasIDState />);
-      const spy = sinon.spy(wrapper.instance(), 'componentDidUpdate');
-      const callback = sinon.spy();
+      const spy = vi.spyOn(wrapper.instance(), 'componentDidUpdate');
+      const callback = vi.fn();
       wrapper.setState(() => ({ id: 'bar' }), callback);
       expect(spy).to.have.property('callCount', 1);
       expect(callback).to.have.property('callCount', 1);
@@ -129,9 +128,9 @@ export default function describeSetState({ Wrap, WrapperName, isShallow }) {
 
     it('prevents an infinite loop if nextState is null or undefined from setState in CDU', () => {
       let payload;
-      const stub = sinon
-        .stub(HasIDState.prototype, 'componentDidUpdate')
-        .callsFake(function componentDidUpdate() {
+      const stub = vi
+        .spyOn(HasIDState.prototype, 'componentDidUpdate')
+        .mockImplementation(function componentDidUpdate() {
           this.setState(() => payload);
         });
 
@@ -163,7 +162,7 @@ export default function describeSetState({ Wrap, WrapperName, isShallow }) {
             return <div>{a}</div>;
           }
         }
-        const spy = sinon.spy(A.prototype, 'componentWillReceiveProps');
+        const spy = vi.spyOn(A.prototype, 'componentWillReceiveProps');
 
         const wrapper = Wrap(<A />, { disableLifecycleMethods: true });
 
@@ -199,7 +198,7 @@ export default function describeSetState({ Wrap, WrapperName, isShallow }) {
             return <div>{a + b}</div>;
           }
         }
-        const spy = sinon.spy(B.prototype, 'componentWillReceiveProps');
+        const spy = vi.spyOn(B.prototype, 'componentWillReceiveProps');
 
         const wrapper = Wrap(<B />, { disableLifecycleMethods: true });
 

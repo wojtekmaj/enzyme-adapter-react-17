@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import sinon from 'sinon-sandbox';
 
 import { getElementPropSelector, getWrapperPropSelector } from '../../_helpers/selectors';
 
@@ -18,17 +17,17 @@ export default function describeReduceRight({ Wrap, Wrapper }) {
           <div className="foo baz" />
         </div>,
       );
-      const spy = sinon.spy((n) => n + 1);
+      const spy = vi.fn((n) => n + 1);
 
       wrapper.find('.foo').reduceRight(spy, 0);
 
       expect(spy).to.have.property('callCount', 3);
-      expect(spy.args[0][1]).to.be.instanceOf(Wrapper);
-      expect(spy.args[0][1].hasClass('baz')).to.equal(true);
-      expect(spy.args[1][1]).to.be.instanceOf(Wrapper);
-      expect(spy.args[1][1].hasClass('bar')).to.equal(true);
-      expect(spy.args[2][1]).to.be.instanceOf(Wrapper);
-      expect(spy.args[2][1].hasClass('bax')).to.equal(true);
+      expect(spy.mock.calls[0][1]).to.be.instanceOf(Wrapper);
+      expect(spy.mock.calls[0][1].hasClass('baz')).to.equal(true);
+      expect(spy.mock.calls[1][1]).to.be.instanceOf(Wrapper);
+      expect(spy.mock.calls[1][1].hasClass('bar')).to.equal(true);
+      expect(spy.mock.calls[2][1]).to.be.instanceOf(Wrapper);
+      expect(spy.mock.calls[2][1].hasClass('bax')).to.equal(true);
     });
 
     it('accumulates a value', () => {

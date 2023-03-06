@@ -3131,7 +3131,6 @@ __metadata:
     react-is: ^17.0.0
     rimraf: ^3.0.0
     sinon: ^15.0.1
-    sinon-sandbox: ^2.0.0
     vitest: ^0.29.2
   languageName: unknown
   linkType: soft
@@ -6222,15 +6221,6 @@ __metadata:
   version: 3.0.7
   resolution: "signal-exit@npm:3.0.7"
   checksum: a2f098f247adc367dffc27845853e9959b9e88b01cb301658cfe4194352d8d2bb32e18467c786a7fe15f1d44b233ea35633d076d5e737870b7139949d1ab6318
-  languageName: node
-  linkType: hard
-
-"sinon-sandbox@npm:^2.0.0":
-  version: 2.0.6
-  resolution: "sinon-sandbox@npm:2.0.6"
-  peerDependencies:
-    sinon: ">=3.10.0"
-  checksum: 052c8e7549133e8e243d9e2a5f999e4fc63f3926f2490f508623490246d9f64be51175f2f4c4b39e407e38a43b874cfdeb8cb5665cea3f192ad8684d6ea66172
   languageName: node
   linkType: hard
 

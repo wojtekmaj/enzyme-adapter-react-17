@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import wrap from 'mocha-wrap';
-import sinon from 'sinon-sandbox';
 import { Portal } from 'react-is';
 
 import { render } from 'enzyme';

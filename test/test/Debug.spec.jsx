@@ -1,7 +1,6 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import React from 'react';
 import wrap from 'mocha-wrap';
-import sinon from 'sinon-sandbox';
 
 import { mount, shallow } from 'enzyme';
 import { get } from 'enzyme/build/configuration';
@@ -49,25 +48,25 @@ describe('debug', () => {
         .withOverride(
           () => adapter,
           'displayNameOfNode',
-          () => sinon.stub(),
+          () => vi.fn(),
         )
         .describe('when the adapter has a `displayNameOfNode` function', () => {
           it('calls it, and returns its return value', () => {
             const stub = adapter.displayNameOfNode;
             const sentinel = {};
-            stub.returns(sentinel);
+            stub.mockReturnValue(sentinel);
 
             const node = {};
             expect(typeName(node)).to.equal(sentinel);
 
             expect(stub).to.have.property('callCount', 1);
-            const { args } = stub.firstCall;
+            const args = stub.mock.calls[0];
             expect(args).to.eql([node]);
           });
 
           it('returns "Component" when `adapter.displayNameOfNode` returns something falsy', () => {
             const stub = adapter.displayNameOfNode;
-            stub.returns('');
+            stub.mockReturnValue('');
 
             expect(typeName()).to.equal('Component');
           });

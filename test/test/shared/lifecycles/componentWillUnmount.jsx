@@ -1,11 +1,10 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import sinon from 'sinon-sandbox';
 
 export default function describeCWU({ Wrap }) {
   describe('componentWillUnmount', () => {
     it('calls componentWillUnmount', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
       class Foo extends React.Component {
         componentWillUnmount() {
           spy('componentWillUnmount');
@@ -18,7 +17,7 @@ export default function describeCWU({ Wrap }) {
       }
       const wrapper = Wrap(<Foo />);
       wrapper.unmount();
-      expect(spy.args).to.deep.equal([['render'], ['componentWillUnmount']]);
+      expect(spy.mock.calls).to.deep.equal([['render'], ['componentWillUnmount']]);
     });
   });
 }

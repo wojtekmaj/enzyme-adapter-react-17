@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import sinon from 'sinon-sandbox';
 
 import { describeIf } from '../../_helpers';
 
@@ -108,27 +107,35 @@ export default function describeCustomHooks({ Wrap, isShallow }) {
       }
 
       it('work with native input', () => {
-        const spy = sinon.spy();
+        const spy = vi.fn();
         const wrapper = Wrap(<ControlledInputWithNativeInput searchSomething={spy} />);
         wrapper.find('input').invoke('onChange')({ target: { value: 'foo' } });
 
-        expect(spy.withArgs('foo')).to.have.property('callCount', 1);
+        expect(spy).toHaveBeenCalledTimes(2);
+        expect(spy).toHaveBeenCalledWith('');
+        expect(spy).toHaveBeenCalledWith('foo');
       });
 
       it('work with custom wrapped Input', () => {
-        const spy = sinon.spy();
+        const spy = vi.fn();
         const wrapper = Wrap(<ControlledInputWithEnhancedInput searchSomething={spy} />);
         const input = wrapper.find('Input');
         input.invoke('onChange')({ target: { value: 'foo' } });
-        expect(spy.withArgs('foo')).to.have.property('callCount', 1);
+
+        expect(spy).toHaveBeenCalledTimes(2);
+        expect(spy).toHaveBeenCalledWith('');
+        expect(spy).toHaveBeenCalledWith('foo');
       });
 
       it('work with custom wrapped input', () => {
-        const spy = sinon.spy();
+        const spy = vi.fn();
         const wrapper = Wrap(<ControlledInputWithEnhancedInput searchSomething={spy} />);
         const input = wrapper.find('input');
         input.invoke('onChange')({ target: { value: 'foo' } });
-        expect(spy.withArgs('foo')).to.have.property('callCount', 1);
+
+        expect(spy).toHaveBeenCalledTimes(2);
+        expect(spy).toHaveBeenCalledWith('');
+        expect(spy).toHaveBeenCalledWith('foo');
       });
     });
   });

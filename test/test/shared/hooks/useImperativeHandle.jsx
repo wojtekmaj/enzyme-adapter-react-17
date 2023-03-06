@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import sinon from 'sinon-sandbox';
 
 import { useImperativeHandle, useRef, forwardRef } from '../../_helpers/react-compat';
 
@@ -38,7 +37,7 @@ export default function describeUseImperativeHandle({ Wrap, isShallow }) {
     }
 
     it('able to call method with imperative handle', () => {
-      const compute = sinon.spy();
+      const compute = vi.fn();
       Wrap(<ParentComputer compute={compute} />);
 
       expect(compute).to.have.property('callCount', isShallow ? 0 : 1);

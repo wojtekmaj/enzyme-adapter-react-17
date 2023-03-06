@@ -1,6 +1,5 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import sinon from 'sinon-sandbox';
 
 import { describeIf, itIf } from '../../_helpers';
 import { useEffect, useState, Fragment } from '../../_helpers/react-compat';
@@ -158,7 +157,7 @@ export default function describeUseEffect({ Wrap, isShallow }) {
       }
 
       beforeEach(() => {
-        setDocumentTitle = sinon.stub();
+        setDocumentTitle = vi.fn();
       });
 
       it('on mount initial render', () => {
@@ -166,21 +165,21 @@ export default function describeUseEffect({ Wrap, isShallow }) {
 
         expect(wrapper.find('p').text()).to.eq(expectedCountString(0));
         expect(setDocumentTitle).to.have.property('callCount', 1);
-        expect(setDocumentTitle.args).to.deep.equal([[expectedCountString(0)]]);
+        expect(setDocumentTitle.mock.calls).to.deep.equal([[expectedCountString(0)]]);
       });
 
       it('on didupdate', () => {
         const wrapper = Wrap(<ClickCounterPage />);
 
         expect(setDocumentTitle).to.have.property('callCount', 1);
-        const [firstCall] = setDocumentTitle.args;
+        const [firstCall] = setDocumentTitle.mock.calls;
         expect(firstCall).to.deep.equal([expectedCountString(0)]);
         expect(wrapper.find('p').text()).to.equal(expectedCountString(0));
 
         wrapper.find('button').invoke('onClick')();
 
         expect(setDocumentTitle).to.have.property('callCount', 2);
-        const [, secondCall] = setDocumentTitle.args;
+        const [, secondCall] = setDocumentTitle.mock.calls;
         expect(secondCall).to.deep.equal([expectedCountString(1)]);
         expect(wrapper.find('p').text()).to.equal(expectedCountString(1));
 
@@ -188,7 +187,7 @@ export default function describeUseEffect({ Wrap, isShallow }) {
         wrapper.find('button').invoke('onClick')();
 
         expect(setDocumentTitle).to.have.property('callCount', 4);
-        const [, , , fourthCall] = setDocumentTitle.args;
+        const [, , , fourthCall] = setDocumentTitle.mock.calls;
         expect(fourthCall).to.deep.equal([expectedCountString(3)]);
         expect(wrapper.find('p').text()).to.equal(expectedCountString(3));
       });
@@ -199,8 +198,8 @@ export default function describeUseEffect({ Wrap, isShallow }) {
 
       beforeEach(() => {
         ChatAPI = {
-          subscribeToFriendStatus: sinon.stub(),
-          unsubscribeFromFriendStatus: sinon.stub(),
+          subscribeToFriendStatus: vi.fn(),
+          unsubscribeFromFriendStatus: vi.fn(),
         };
       });
 
@@ -234,12 +233,16 @@ export default function describeUseEffect({ Wrap, isShallow }) {
 </FriendStatus>`,
         );
         expect(wrapper.html()).to.eql('Loading...');
-        expect(ChatAPI.subscribeToFriendStatus.calledOnceWith(friend.id)).to.equal(true);
+        expect(ChatAPI.subscribeToFriendStatus).toHaveBeenCalledOnce();
+        expect(ChatAPI.subscribeToFriendStatus).toHaveBeenCalledWith(
+          friend.id,
+          expect.any(Function),
+        );
       });
 
       it('simulate status Change', () => {
         const wrapper = Wrap(<FriendStatus friend={friend} />);
-        const [[, simulateChange]] = ChatAPI.subscribeToFriendStatus.args;
+        const [[, simulateChange]] = ChatAPI.subscribeToFriendStatus.mock.calls;
 
         simulateChange({ isOnline: true });
 
@@ -254,7 +257,7 @@ export default function describeUseEffect({ Wrap, isShallow }) {
         wrapper.unmount();
 
         expect(ChatAPI.unsubscribeFromFriendStatus).to.have.property('callCount', 1);
-        const [[firstArg]] = ChatAPI.unsubscribeFromFriendStatus.args;
+        const [[firstArg]] = ChatAPI.unsubscribeFromFriendStatus.mock.calls;
         expect(firstArg).to.equal(friend.id);
       });
     });

@@ -1,7 +1,6 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
 import wrap from 'mocha-wrap';
-import sinon from 'sinon-sandbox';
 
 import getAdapter from 'enzyme/build/getAdapter';
 
@@ -72,7 +71,7 @@ export default function describeName({ Wrap, WrapRendered }) {
           .withOverride(
             () => getAdapter(),
             'displayNameOfNode',
-            () => sinon.stub(),
+            () => vi.fn(),
           )
           .describe('adapter has `displayNameOfNode`', () => {
             it('delegates to the adapter’s `displayNameOfNode`', () => {
@@ -83,14 +82,14 @@ export default function describeName({ Wrap, WrapRendered }) {
               }
               const stub = getAdapter().displayNameOfNode;
               const sentinel = {};
-              stub.returns(sentinel);
+              stub.mockReturnValue(sentinel);
 
               const wrapper = Wrap(<Foo />);
 
               expect(wrapper.name()).to.equal(sentinel);
 
               expect(stub).to.have.property('callCount', 1);
-              const { args } = stub.firstCall;
+              const args = stub.mock.calls[0];
               expect(args).to.eql([wrapper.getNodeInternal()]);
             });
           });

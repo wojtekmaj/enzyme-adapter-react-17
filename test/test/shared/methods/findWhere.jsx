@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import sinon from 'sinon-sandbox';
 import { Portal } from 'react-is';
 
 import { itIf } from '../../_helpers';
@@ -45,9 +44,9 @@ export default function describeFindWhere({
 
       const wrapper = WrapRendered(<EditableText />);
 
-      const stub = sinon.stub();
+      const stub = vi.fn();
       wrapper.findWhere(stub);
-      const passedNodeLengths = stub.getCalls().map(({ args: [firstArg] }) => firstArg.length);
+      const passedNodeLengths = stub.mock.calls.map(([firstArg]) => firstArg.length);
       expect(passedNodeLengths).to.eql([1]);
     });
 
@@ -60,18 +59,17 @@ export default function describeFindWhere({
         </div>,
       );
 
-      const stub = sinon.stub();
-      stub.returns(true);
-      const spy = sinon.spy(stub);
+      const spy = vi.fn();
+      spy.mockReturnValue(true);
       wrapper.findWhere(spy);
       expect(spy).to.have.property('callCount', 4);
-      expect(spy.args[0][0]).to.be.instanceOf(Wrapper);
-      expect(spy.args[1][0]).to.be.instanceOf(Wrapper);
-      expect(spy.args[2][0]).to.be.instanceOf(Wrapper);
-      expect(spy.args[3][0]).to.be.instanceOf(Wrapper);
-      expect(spy.args[1][0].hasClass('bar')).to.equal(true);
-      expect(spy.args[2][0].hasClass('baz')).to.equal(true);
-      expect(spy.args[3][0].hasClass('bux')).to.equal(true);
+      expect(spy.mock.calls[0][0]).to.be.instanceOf(Wrapper);
+      expect(spy.mock.calls[1][0]).to.be.instanceOf(Wrapper);
+      expect(spy.mock.calls[2][0]).to.be.instanceOf(Wrapper);
+      expect(spy.mock.calls[3][0]).to.be.instanceOf(Wrapper);
+      expect(spy.mock.calls[1][0].hasClass('bar')).to.equal(true);
+      expect(spy.mock.calls[2][0].hasClass('baz')).to.equal(true);
+      expect(spy.mock.calls[3][0].hasClass('bux')).to.equal(true);
     });
 
     it('finds nodes', () => {
@@ -332,10 +330,10 @@ export default function describeFindWhere({
         </section>,
       );
 
-      const stub = sinon.stub();
+      const stub = vi.fn();
       wrapper.findWhere(stub);
 
-      const passedNodes = stub.getCalls().map(({ args: [firstArg] }) => firstArg);
+      const passedNodes = stub.mock.calls.map(([firstArg]) => firstArg);
 
       const textContents = passedNodes.map((n) => [n.debug(), n.text()]);
       const expected = [
@@ -356,10 +354,10 @@ export default function describeFindWhere({
           {false}
         </section>,
       );
-      const stub = sinon.stub();
+      const stub = vi.fn();
       wrapper.findWhere(stub);
 
-      const passedNodes = stub.getCalls().map(({ args: [firstArg] }) => firstArg);
+      const passedNodes = stub.mock.calls.map(([firstArg]) => firstArg);
       const getElement = (n) => (isShallow ? n.getElement() : n.getDOMNode());
       const hasElements = passedNodes.map((n) => [n.debug(), getElement(n) && true]);
       const expected = [
@@ -382,9 +380,8 @@ export default function describeFindWhere({
           {false}
         </div>,
       );
-      const stub = sinon.stub();
-      stub.returns(true);
-      const spy = sinon.spy(stub);
+      const spy = vi.fn();
+      spy.mockReturnValue(true);
       wrapper.findWhere(spy);
       expect(spy).to.have.property('callCount', 2);
     });

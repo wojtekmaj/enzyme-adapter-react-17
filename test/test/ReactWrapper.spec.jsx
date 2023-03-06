@@ -1,7 +1,6 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import React from 'react';
 import PropTypes from 'prop-types';
-import sinon from 'sinon-sandbox';
 import wrap from 'mocha-wrap';
 import { mount, ReactWrapper } from 'enzyme';
 import mountEntry from 'enzyme/mount';
@@ -100,25 +99,25 @@ describe('mount', () => {
 
     describe('refs', () => {
       it('calls ref', () => {
-        const spy = sinon.spy();
+        const spy = vi.fn();
         mount(<div ref={spy} />);
         expect(spy).to.have.property('callCount', 1);
       });
 
       it('passes an HTML element to `ref` when root rendered', () => {
-        const spy = sinon.spy();
+        const spy = vi.fn();
         mount(<div ref={spy} />);
         expect(spy).to.have.property('callCount', 1);
 
         // sanity check
         expect(document.createElement('div')).to.be.instanceOf(HTMLElement);
 
-        const [[firstArg]] = spy.args;
+        const [[firstArg]] = spy.mock.calls;
         expect(firstArg).to.be.instanceOf(HTMLElement);
       });
 
       it('passes an HTML element to `ref` when sub-rendered', () => {
-        const spy = sinon.spy();
+        const spy = vi.fn();
         class Foo extends React.Component {
           render() {
             return <div ref={spy} />;
@@ -130,7 +129,7 @@ describe('mount', () => {
         // sanity check
         expect(document.createElement('div')).to.be.instanceOf(HTMLElement);
 
-        const [[firstArg]] = spy.args;
+        const [[firstArg]] = spy.mock.calls;
         expect(firstArg).to.be.instanceOf(HTMLElement);
       });
     });
@@ -982,7 +981,7 @@ describe('mount', () => {
     });
 
     it('recognizes render phases', () => {
-      const handleRender = sinon.spy();
+      const handleRender = vi.fn();
       function AnotherComponent() {
         return (
           <Profiler id="AnotherComponent" onRender={handleRender}>
@@ -993,11 +992,11 @@ describe('mount', () => {
 
       const wrapper = mount(<AnotherComponent />);
       expect(handleRender).to.have.property('callCount', 1);
-      expect(handleRender.args[0][1]).to.equal('mount');
+      expect(handleRender.mock.calls[0][1]).to.equal('mount');
 
       wrapper.setProps({ unusedProp: true });
       expect(handleRender).to.have.property('callCount', 2);
-      expect(handleRender.args[1][1]).to.equal('update');
+      expect(handleRender.mock.calls[1][1]).to.equal('update');
     });
 
     it('measures timings', () => {
@@ -1007,7 +1006,7 @@ describe('mount', () => {
        * which results in 0 duration for these simple examples most of the time.
        * With performance API it should test for greaterThan(0) instead of least(0)
        */
-      const handleRender = sinon.spy();
+      const handleRender = vi.fn();
       function AnotherComponent() {
         return (
           <Profiler id="AnotherComponent" onRender={handleRender}>
@@ -1018,7 +1017,7 @@ describe('mount', () => {
 
       const wrapper = mount(<AnotherComponent />);
       expect(handleRender).to.have.property('callCount', 1);
-      const [firstArgs] = handleRender.args;
+      const [firstArgs] = handleRender.mock.calls;
       if (typeof performance === 'undefined') {
         expect(firstArgs[2]).to.be.least(0);
         expect(firstArgs[3]).to.be.least(0);
@@ -1029,7 +1028,7 @@ describe('mount', () => {
 
       wrapper.setProps({ unusedProp: true });
       expect(handleRender).to.have.property('callCount', 2);
-      const [, secondArgs] = handleRender.args;
+      const [, secondArgs] = handleRender.mock.calls;
       if (typeof performance === 'undefined') {
         expect(secondArgs[2]).to.be.least(0);
         expect(secondArgs[3]).to.be.least(0);
@@ -1333,9 +1332,9 @@ describe('mount', () => {
 
   describe('.mount()', () => {
     it('calls componentWillUnmount()', () => {
-      const willMount = sinon.spy();
-      const didMount = sinon.spy();
-      const willUnmount = sinon.spy();
+      const willMount = vi.fn();
+      const didMount = vi.fn();
+      const willUnmount = vi.fn();
 
       class Foo extends React.Component {
         constructor(props) {

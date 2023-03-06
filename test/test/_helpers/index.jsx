@@ -1,8 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
 import { Memo } from 'react-is';
 import { compareNodeTypeOf } from '@wojtekmaj/enzyme-adapter-utils';
-import sinon from 'sinon-sandbox';
 
 /**
  * Simple wrapper around mocha describe which allows a boolean to be passed in first which
@@ -128,14 +127,14 @@ export function isMemo(type) {
 }
 
 export function argSpy() {
-  const spy = sinon.spy();
+  const spy = vi.fn();
   spy(1);
   return spy;
 }
 
 export function expectArgs(spy, counter, args) {
   spy(counter);
-  expect(spy.args).to.deep.equal([[counter], ...args, [counter]]);
-  spy.resetHistory();
+  expect(spy.mock.calls).to.deep.equal([[counter], ...args, [counter]]);
+  spy.mockReset();
   spy(counter + 1);
 }

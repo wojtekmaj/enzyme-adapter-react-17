@@ -1,7 +1,6 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import React from 'react';
 import PropTypes from 'prop-types';
-import sinon from 'sinon-sandbox';
 import wrap from 'mocha-wrap';
 import inspect from 'object-inspect';
 
@@ -814,8 +813,8 @@ describe('shallow', () => {
       let fooProviderSpy;
       let barProviderSpy;
       beforeEach(() => {
-        fooProviderSpy = sinon.spy(FooProvider.prototype, 'getChildContext');
-        barProviderSpy = sinon.spy(BarProvider.prototype, 'getChildContext');
+        fooProviderSpy = vi.spyOn(FooProvider.prototype, 'getChildContext');
+        barProviderSpy = vi.spyOn(BarProvider.prototype, 'getChildContext');
       });
       afterEach(() => {
         fooProviderSpy.restore();
@@ -985,7 +984,7 @@ describe('shallow', () => {
         }
 
         it('warns and works but provides no context, without childContextTypes', () => {
-          const stub = sinon.stub(console, 'warn');
+          const stub = vi.spyOn(console, 'warn');
           const wrapper = shallow(
             <Provider>
               <Receiver />
@@ -995,7 +994,7 @@ describe('shallow', () => {
   {}
 </div>`);
           expect(stub).to.have.property('callCount', 1);
-          expect(stub.args).to.eql([
+          expect(stub.mock.calls).to.eql([
             [
               'Provider.getChildContext(): childContextTypes must be defined in order to use getChildContext().',
             ],
@@ -1218,7 +1217,7 @@ describe('shallow', () => {
 
     // TODO: enable when Profiler is no longer unstable
     it.skip('recognizes render phases', () => {
-      const handleRender = sinon.spy();
+      const handleRender = vi.fn();
       function AnotherComponent() {
         return (
           <Profiler id="AnotherComponent" onRender={handleRender}>
@@ -1229,11 +1228,11 @@ describe('shallow', () => {
 
       const wrapper = shallow(<AnotherComponent />);
       expect(handleRender).to.have.property('callCount', 1);
-      expect(handleRender.args[0][1]).to.equal('mount');
+      expect(handleRender.mock.calls[0][1]).to.equal('mount');
 
       wrapper.setProps({ unusedProp: true });
       expect(handleRender).to.have.property('callCount', 2);
-      expect(handleRender.args[1][1]).to.equal('update');
+      expect(handleRender.mock.calls[1][1]).to.equal('update');
     });
 
     // TODO: enable when Profiler is no longer unstable
@@ -1244,7 +1243,7 @@ describe('shallow', () => {
        * which results in 0 duration for these simple examples most of the time.
        * With performance API it should test for greaterThan(0) instead of least(0)
        */
-      const handleRender = sinon.spy();
+      const handleRender = vi.fn();
       function AnotherComponent() {
         return (
           <Profiler id="AnotherComponent" onRender={handleRender}>
@@ -1255,7 +1254,7 @@ describe('shallow', () => {
 
       const wrapper = shallow(<AnotherComponent />);
       expect(handleRender).to.have.property('callCount', 1);
-      const [firstArgs] = handleRender.args;
+      const [firstArgs] = handleRender.mock.calls;
       if (typeof performance === 'undefined') {
         expect(firstArgs[2]).to.be.least(0);
         expect(firstArgs[3]).to.be.least(0);
@@ -1266,7 +1265,7 @@ describe('shallow', () => {
 
       wrapper.setProps({ unusedProp: true });
       expect(handleRender).to.have.property('callCount', 2);
-      const [, secondArgs] = handleRender.args;
+      const [, secondArgs] = handleRender.mock.calls;
       if (typeof performance === 'undefined') {
         expect(secondArgs[2]).to.be.least(0);
         expect(secondArgs[3]).to.be.least(0);
@@ -2157,7 +2156,7 @@ describe('shallow', () => {
       });
 
       describe('when disabled', () => {
-        const spy = sinon.spy();
+        const spy = vi.fn();
         class Foo extends React.Component {
           componentWillMount() {
             spy('componentWillMount');
@@ -2206,20 +2205,20 @@ describe('shallow', () => {
         };
 
         beforeEach(() => {
-          spy.resetHistory();
+          spy.mockReset();
         });
 
         it('does not call componentDidMount when mounting', () => {
           shallow(<Foo />, options);
-          expect(spy.args).to.deep.equal([['componentWillMount'], ['render']]);
+          expect(spy.mock.calls).to.deep.equal([['componentWillMount'], ['render']]);
         });
 
         it('calls expected methods when receiving new props', () => {
           const wrapper = shallow(<Foo />, options);
-          expect(spy.args).to.deep.equal([['componentWillMount'], ['render']]);
-          spy.resetHistory();
+          expect(spy.mock.calls).to.deep.equal([['componentWillMount'], ['render']]);
+          spy.mockReset();
           wrapper.setProps({ foo: 'foo' });
-          expect(spy.args).to.deep.equal([
+          expect(spy.mock.calls).to.deep.equal([
             ['componentWillReceiveProps'],
             ['shouldComponentUpdate'],
             ['componentWillUpdate'],
@@ -2230,12 +2229,12 @@ describe('shallow', () => {
         describe('setContext', () => {
           it('calls expected methods when receiving new context', () => {
             const wrapper = shallow(<Foo />, options);
-            expect(spy.args).to.deep.equal([['componentWillMount'], ['render']]);
-            spy.resetHistory();
+            expect(spy.mock.calls).to.deep.equal([['componentWillMount'], ['render']]);
+            spy.mockReset();
 
             wrapper.setContext({ foo: 'bar' });
 
-            expect(spy.args).to.deep.equal([
+            expect(spy.mock.calls).to.deep.equal([
               ['componentWillReceiveProps'],
               ['shouldComponentUpdate'],
               ['componentWillUpdate'],
@@ -2246,10 +2245,10 @@ describe('shallow', () => {
 
         itIf(false, 'calls expected methods for setState', () => {
           const wrapper = shallow(<Foo />, options);
-          expect(spy.args).to.deep.equal([['componentWillMount'], ['render']]);
-          spy.resetHistory();
+          expect(spy.mock.calls).to.deep.equal([['componentWillMount'], ['render']]);
+          spy.mockReset();
           wrapper.setState({ bar: 'bar' });
-          expect(spy.args).to.deep.equal([
+          expect(spy.mock.calls).to.deep.equal([
             ['shouldComponentUpdate'],
             ['componentWillUpdate'],
             ['render'],
@@ -2260,10 +2259,10 @@ describe('shallow', () => {
         // componentDidUpdate is not called in react 16
         it('calls expected methods for setState', () => {
           const wrapper = shallow(<Foo />, options);
-          expect(spy.args).to.deep.equal([['componentWillMount'], ['render']]);
-          spy.resetHistory();
+          expect(spy.mock.calls).to.deep.equal([['componentWillMount'], ['render']]);
+          spy.mockReset();
           wrapper.setState({ bar: 'bar' });
-          expect(spy.args).to.deep.equal([
+          expect(spy.mock.calls).to.deep.equal([
             ['shouldComponentUpdate'],
             ['componentWillUpdate'],
             ['render'],
@@ -2272,15 +2271,15 @@ describe('shallow', () => {
 
         it('calls expected methods when unmounting', () => {
           const wrapper = shallow(<Foo />, options);
-          expect(spy.args).to.deep.equal([['componentWillMount'], ['render']]);
-          spy.resetHistory();
+          expect(spy.mock.calls).to.deep.equal([['componentWillMount'], ['render']]);
+          spy.mockReset();
           wrapper.unmount();
-          expect(spy.args).to.deep.equal([['componentWillUnmount']]);
+          expect(spy.mock.calls).to.deep.equal([['componentWillUnmount']]);
         });
       });
 
       it('does not call when disableLifecycleMethods flag is true', () => {
-        const spy = sinon.spy();
+        const spy = vi.fn();
         class Foo extends React.Component {
           componentDidMount() {
             spy();
@@ -2325,7 +2324,7 @@ describe('shallow', () => {
       });
 
       it('calls shouldComponentUpdate when disableLifecycleMethods flag is true', () => {
-        const spy = sinon.spy();
+        const spy = vi.fn();
         class Foo extends React.Component {
           constructor(props) {
             super(props);

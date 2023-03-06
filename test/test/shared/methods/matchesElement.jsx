@@ -1,11 +1,10 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import sinon from 'sinon-sandbox';
 
 export default function describeMatchesElement({ Wrap, WrapRendered }) {
   describe('.matchesElement(node)', () => {
     it('matches on a root node that looks like the rendered one', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
       const wrapper = Wrap(
         <div>
           <div onClick={spy} style={{ fontSize: 12, color: 'red' }}>
@@ -47,8 +46,8 @@ export default function describeMatchesElement({ Wrap, WrapRendered }) {
     });
 
     it('does not match on a root node that doesn’t looks like the rendered one', () => {
-      const spy = sinon.spy();
-      const spy2 = sinon.spy();
+      const spy = vi.fn();
+      const spy2 = vi.fn();
       const wrapper = Wrap(
         <div>
           <div onClick={spy} style={{ fontSize: 12, color: 'red' }}>
