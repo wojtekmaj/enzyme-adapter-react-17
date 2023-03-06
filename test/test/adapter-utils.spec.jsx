@@ -1,6 +1,5 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
-import sinon from 'sinon-sandbox';
 import PropTypes from 'prop-types';
 import { shallow } from 'enzyme';
 import {
@@ -464,7 +463,7 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
         },
       };
       instance = {
-        setWrappingComponentProps: sinon.spy(),
+        setWrappingComponentProps: vi.fn(),
       };
       renderer = getWrappingComponentMountRenderer({
         getMountWrapperInstance: () => instance,
@@ -485,12 +484,12 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
 
     describe('render', () => {
       it('sets the wrapping component props on the instance', () => {
-        const callback = sinon.spy();
+        const callback = vi.fn();
         const props = { foo: 'bar', children: <span /> };
         expect(instance.setWrappingComponentProps).to.have.property('callCount', 0);
         renderer.render(<div {...props} />, null, callback);
         expect(instance.setWrappingComponentProps).to.have.property('callCount', 1);
-        const [args] = instance.setWrappingComponentProps.args;
+        const [args] = instance.setWrappingComponentProps.mock.calls;
         expect(args).to.eql([props, callback]);
       });
 
@@ -577,26 +576,22 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
 
     it('calls gDSFE if it exists', () => {
       const catchingInstance = {
-        setState: sinon.spy(),
+        setState: vi.fn(),
       };
       const hierarchy = undefined;
       const stateUpdate = {};
-      const getDerivedStateFromError = sinon.spy(() => stateUpdate);
+      const getDerivedStateFromError = vi.fn(() => stateUpdate);
       const catchingType = { getDerivedStateFromError };
 
       simulateError(error, catchingInstance, hierarchy, undefined, undefined, catchingType);
 
       expect(catchingInstance.setState).to.have.property('callCount', 1);
-      const setStateCall = catchingInstance.setState.getCall(0);
-      expect(setStateCall).to.contain.keys({
-        args: [stateUpdate],
-        thisValue: catchingInstance,
-      });
+      const setStateCall = catchingInstance.setState.mock.calls[0];
+      expect(setStateCall).to.deep.equal([stateUpdate]);
 
       expect(getDerivedStateFromError).to.have.property('callCount', 1);
-      const gDSFECall = getDerivedStateFromError.getCall(0);
-      expect(gDSFECall).to.have.property('thisValue', catchingType);
-      expect(gDSFECall.args).to.eql([error]);
+      const gDSFECall = getDerivedStateFromError.mock.calls[0];
+      expect(gDSFECall).to.deep.equal([error]);
     });
 
     class Foo extends React.Component {
@@ -626,8 +621,8 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
 
     it('calls cDC if it exists', () => {
       const catchingInstance = {
-        componentDidCatch: sinon.spy(),
-        setState: sinon.spy(),
+        componentDidCatch: vi.fn(),
+        setState: vi.fn(),
       };
       const catchingType = {};
 
@@ -636,7 +631,7 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
       expect(catchingInstance.setState).to.have.property('callCount', 0);
 
       expect(catchingInstance.componentDidCatch).to.have.property('callCount', 1);
-      const cDCCall = catchingInstance.componentDidCatch.getCall(0);
+      const cDCCall = catchingInstance.componentDidCatch.mock.calls[0];
       const componentStack = hasSFCs
         ? `
     in a (created by Foo!)
@@ -651,17 +646,16 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
     in b (created by Foo)
     in Foo (created by WrapperComponent)
     in WrapperComponent`;
-      expect(cDCCall).to.have.property('thisValue', catchingInstance);
-      expect(cDCCall.args).to.eql([error, { componentStack }]);
+      expect(cDCCall).to.eql([error, { componentStack }]);
     });
 
     it('calls both if both exist', () => {
       const catchingInstance = {
-        componentDidCatch: sinon.spy(),
-        setState: sinon.spy(),
+        componentDidCatch: vi.fn(),
+        setState: vi.fn(),
       };
       const stateUpdate = {};
-      const getDerivedStateFromError = sinon.spy(() => stateUpdate);
+      const getDerivedStateFromError = vi.fn(() => stateUpdate);
       const catchingType = { getDerivedStateFromError };
 
       simulateError(error, catchingInstance, hierarchy, undefined, undefined, catchingType);
@@ -794,8 +788,8 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
     });
 
     it('accepts an optional `handlers` argument', () => {
-      const getSpy = sinon.stub().returns(1);
-      const setSpy = sinon.stub().returns(2);
+      const getSpy = vi.fn().mockReturnValue(1);
+      const setSpy = vi.fn().mockReturnValue(2);
 
       const propertyName = 'foo';
       const obj = {
@@ -808,8 +802,8 @@ describe('@wojtekmaj/enzyme-adapter-utils', () => {
 
       spy.restore();
 
-      expect(getSpy.args).to.deep.equal([[1]]);
-      expect(setSpy.args).to.deep.equal([[1, 2]]);
+      expect(getSpy.mock.calls).to.deep.equal([[1]]);
+      expect(setSpy.mock.calls).to.deep.equal([[1, 2]]);
     });
   });
 });

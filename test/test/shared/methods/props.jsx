@@ -1,7 +1,8 @@
+import { describe, expect, it } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
 
 import { delay, itIf } from '../../_helpers';
+
 import sloppyReturnThis from '../../_helpers/untranspiledSloppyReturnThis';
 
 export default function describeProps({ Wrap, WrapRendered, isMount }) {

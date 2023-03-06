@@ -1,5 +1,6 @@
+import { describe, expect, it } from 'vitest';
+
 import React from 'react';
-import { expect } from 'chai';
 
 export default function describeAt({ Wrap }) {
   describe('.at(index)', () => {

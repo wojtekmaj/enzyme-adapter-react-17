@@ -1,6 +1,5 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import sinon from 'sinon-sandbox';
-import { expect } from 'chai';
 import PropTypes from 'prop-types';
 
 import { itIf, argSpy, expectArgs } from '../../_helpers';
@@ -341,8 +340,8 @@ export default function describeMisc({ Wrap, isShallow }) {
         let stateSpy;
 
         beforeEach(() => {
-          lifecycleSpy = sinon.spy();
-          stateSpy = sinon.spy();
+          lifecycleSpy = vi.fn();
+          stateSpy = vi.fn();
         });
 
         class ErrorBoundary extends React.Component {
@@ -385,10 +384,10 @@ export default function describeMisc({ Wrap, isShallow }) {
         itIf(isShallow, 'does not catch errors during shallow render', () => {
           const wrapper = Wrap(<ErrorBoundary />);
 
-          expect(lifecycleSpy.args).to.deep.equal([['constructor'], ['render']]);
-          lifecycleSpy.resetHistory();
+          expect(lifecycleSpy.mock.calls).to.deep.equal([['constructor'], ['render']]);
+          lifecycleSpy.mockReset();
 
-          expect(stateSpy.args).to.deep.equal([]);
+          expect(stateSpy.mock.calls).to.deep.equal([]);
 
           wrapper.setState({ throws: true });
 
@@ -398,27 +397,27 @@ export default function describeMisc({ Wrap, isShallow }) {
 
           expect(() => thrower.dive()).to.throw(errorToThrow);
 
-          expect(lifecycleSpy.args).to.deep.equal([['render']]);
-          expect(stateSpy.args).to.deep.equal([]);
+          expect(lifecycleSpy.mock.calls).to.deep.equal([['render']]);
+          expect(stateSpy.mock.calls).to.deep.equal([]);
         });
 
         it('calls getDerivedStateFromError first and then componentDidCatch for simulated error', () => {
           const wrapper = Wrap(<ErrorBoundary />);
 
-          expect(lifecycleSpy.args).to.deep.equal([['constructor'], ['render']]);
-          lifecycleSpy.resetHistory();
+          expect(lifecycleSpy.mock.calls).to.deep.equal([['constructor'], ['render']]);
+          lifecycleSpy.mockReset();
 
-          expect(stateSpy.args).to.deep.equal([]);
+          expect(stateSpy.mock.calls).to.deep.equal([]);
 
           expect(() => wrapper.find(Thrower).simulateError(errorToThrow)).not.to.throw();
 
-          expect(lifecycleSpy.args).to.deep.equal([
+          expect(lifecycleSpy.mock.calls).to.deep.equal([
             ['getDerivedStateFromError', errorToThrow],
             ['render'],
             ['componentDidCatch', errorToThrow, expectedInfo],
           ]);
 
-          expect(stateSpy.args).to.deep.equal([
+          expect(stateSpy.mock.calls).to.deep.equal([
             [
               {
                 throws: false,
@@ -433,15 +432,15 @@ export default function describeMisc({ Wrap, isShallow }) {
         it.skip('calls getDerivedStateFromError first and then componentDidCatch', () => {
           const wrapper = Wrap(<ErrorBoundary />);
 
-          expect(lifecycleSpy.args).to.deep.equal([['constructor'], ['render']]);
-          lifecycleSpy.resetHistory();
+          expect(lifecycleSpy.mock.calls).to.deep.equal([['constructor'], ['render']]);
+          lifecycleSpy.mockReset();
 
-          expect(stateSpy.args).to.deep.equal([]);
+          expect(stateSpy.mock.calls).to.deep.equal([]);
 
           wrapper.setState({ throws: true });
 
           expect(lifecycleSpy).to.have.property('callCount', 4);
-          const [first, second, third, fourth] = lifecycleSpy.args;
+          const [first, second, third, fourth] = lifecycleSpy.mock.calls;
           expect(first).to.deep.equal(['render']);
           expect(second).to.satisfy(
             ([name, error, ...rest]) =>
@@ -453,7 +452,7 @@ export default function describeMisc({ Wrap, isShallow }) {
           expect(error).to.satisfy(properErrorMessage);
           expect(info).to.deep.equal(expectedInfo);
 
-          expect(stateSpy.args).to.deep.equal([
+          expect(stateSpy.mock.calls).to.deep.equal([
             [
               {
                 throws: false,
@@ -524,7 +523,7 @@ export default function describeMisc({ Wrap, isShallow }) {
           const wrapper = Wrap(<ErrorBoundary />);
 
           expectArgs(spy, 1, [['constructor'], ['render']]);
-          spy.resetHistory();
+          spy.mockReset();
 
           try {
             wrapper.setState({ throws: true });
@@ -534,7 +533,7 @@ export default function describeMisc({ Wrap, isShallow }) {
           }
 
           expect(spy).to.have.property('callCount', 3);
-          const [first, second, third] = spy.args;
+          const [first, second, third] = spy.mock.calls;
           expect(first).to.deep.equal(['render']);
           expect(second).to.satisfy(
             ([name, arg, ...rest]) =>
@@ -575,7 +574,7 @@ export default function describeMisc({ Wrap, isShallow }) {
       });
     });
 
-    context('mounting phase', () => {
+    describe('mounting phase', () => {
       it('calls componentWillMount and componentDidMount', () => {
         class Foo extends React.Component {
           componentWillMount() {
@@ -630,7 +629,7 @@ export default function describeMisc({ Wrap, isShallow }) {
       });
     });
 
-    context('updating props', () => {
+    describe('updating props', () => {
       it('calls shouldComponentUpdate, componentWillUpdate, and componentDidUpdate', () => {
         class Foo extends React.Component {
           constructor(...args) {
@@ -932,7 +931,7 @@ export default function describeMisc({ Wrap, isShallow }) {
       );
     });
 
-    context('updating state', () => {
+    describe('updating state', () => {
       it('calls shouldComponentUpdate, componentWillUpdate, and componentDidUpdate', () => {
         class Foo extends React.Component {
           constructor(...args) {
@@ -1124,7 +1123,7 @@ export default function describeMisc({ Wrap, isShallow }) {
       );
     });
 
-    context('updating context', () => {
+    describe('updating context', () => {
       it('calls shouldComponentUpdate, componentWillUpdate and componentDidUpdate', () => {
         class Foo extends React.Component {
           constructor(...args) {

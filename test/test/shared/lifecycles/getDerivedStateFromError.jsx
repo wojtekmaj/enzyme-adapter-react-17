@@ -1,6 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import sinon from 'sinon-sandbox';
-import { expect } from 'chai';
 
 import { describeIf, itIf } from '../../_helpers';
 import { Fragment } from '../../_helpers/react-compat';
@@ -81,7 +80,7 @@ export default function describeCDC({ Wrap, isShallow }) {
       it('catches a simulated error', () => {
         const ErrorBoundary = getErrorBoundary();
 
-        const spy = sinon.spy(ErrorBoundary, 'getDerivedStateFromError');
+        const spy = vi.spyOn(ErrorBoundary, 'getDerivedStateFromError');
         const wrapper = Wrap(<ErrorBoundary />);
 
         expect(spy).to.have.property('callCount', 0);
@@ -90,8 +89,8 @@ export default function describeCDC({ Wrap, isShallow }) {
 
         expect(spy).to.have.property('callCount', 1);
 
-        expect(spy.args).to.be.an('array').and.have.lengthOf(1);
-        const [[actualError]] = spy.args;
+        expect(spy.mock.calls).to.be.an('array').and.have.lengthOf(1);
+        const [[actualError]] = spy.mock.calls;
         expect(actualError).to.equal(errorToThrow);
       });
 
@@ -112,7 +111,7 @@ export default function describeCDC({ Wrap, isShallow }) {
       itIf(isShallow, 'does not catch errors during Wrapper render', () => {
         const ErrorBoundary = getErrorBoundary();
 
-        const spy = sinon.spy(ErrorBoundary, 'getDerivedStateFromError');
+        const spy = vi.spyOn(ErrorBoundary, 'getDerivedStateFromError');
         const wrapper = Wrap(<ErrorBoundary />);
 
         expect(spy).to.have.property('callCount', 0);
@@ -151,7 +150,7 @@ export default function describeCDC({ Wrap, isShallow }) {
         it('catches errors during render', () => {
           const ErrorBoundary = getErrorBoundary();
 
-          const spy = sinon.spy(ErrorBoundary, 'getDerivedStateFromError');
+          const spy = vi.spyOn(ErrorBoundary, 'getDerivedStateFromError');
           const wrapper = Wrap(<ErrorBoundary />);
 
           expect(spy).to.have.property('callCount', 0);
@@ -160,15 +159,15 @@ export default function describeCDC({ Wrap, isShallow }) {
 
           expect(spy).to.have.property('callCount', 1);
 
-          expect(spy.args).to.be.an('array').and.have.lengthOf(1);
-          const [[actualError]] = spy.args;
+          expect(spy.mock.calls).to.be.an('array').and.have.lengthOf(1);
+          const [[actualError]] = spy.mock.calls;
           expect(actualError).to.satisfy(properErrorMessage);
         });
 
         it('works when the root is an SFC', () => {
           const ErrorBoundary = getErrorBoundary();
 
-          const spy = sinon.spy(ErrorBoundary, 'getDerivedStateFromError');
+          const spy = vi.spyOn(ErrorBoundary, 'getDerivedStateFromError');
           const wrapper = Wrap(<ErrorSFC component={() => <ErrorBoundary />} />);
 
           expect(spy).to.have.property('callCount', 0);
@@ -177,8 +176,8 @@ export default function describeCDC({ Wrap, isShallow }) {
 
           expect(spy).to.have.property('callCount', 1);
 
-          expect(spy.args).to.be.an('array').and.have.lengthOf(1);
-          const [[actualError]] = spy.args;
+          expect(spy.mock.calls).to.be.an('array').and.have.lengthOf(1);
+          const [[actualError]] = spy.mock.calls;
           expect(actualError).to.satisfy(properErrorMessage);
         });
       });

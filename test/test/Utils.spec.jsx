@@ -1,7 +1,6 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
 import wrap from 'mocha-wrap';
-import sinon from 'sinon-sandbox';
 import {
   childrenToSimplifiedArray,
   nodeEqual,
@@ -855,8 +854,8 @@ describe('Utils', () => {
     });
 
     it('accepts an optional `handlers` argument', () => {
-      const getSpy = sinon.stub().returns(1);
-      const setSpy = sinon.stub().returns(2);
+      const getSpy = vi.fn().mockReturnValue(1);
+      const setSpy = vi.fn().mockReturnValue(2);
 
       const propertyName = 'foo';
       const obj = {
@@ -869,8 +868,8 @@ describe('Utils', () => {
 
       spy.restore();
 
-      expect(getSpy.args).to.deep.equal([[1]]);
-      expect(setSpy.args).to.deep.equal([[1, 2]]);
+      expect(getSpy.mock.calls).to.deep.equal([[1]]);
+      expect(setSpy.mock.calls).to.deep.equal([[1, 2]]);
     });
   });
 
@@ -1077,26 +1076,26 @@ describe('Utils', () => {
         .withOverride(
           () => getAdapter(),
           'displayNameOfNode',
-          () => sinon.stub(),
+          () => vi.fn(),
         )
         .describe('when the adapter has a `displayNameOfNode` function', () => {
           it('is `true` when `displayNameOfNode` matches `type`', () => {
             const stub = getAdapter().displayNameOfNode;
             const sentinel = {};
-            stub.returns(sentinel);
+            stub.mockReturnValue(sentinel);
 
             const node = {};
             expect(nodeHasType(node, sentinel)).to.equal(true);
 
             expect(stub).to.have.property('callCount', 1);
-            const { args } = stub.firstCall;
+            const args = stub.mock.calls[0];
             expect(args).to.eql([node]);
           });
 
           it('is `false` when `displayNameOfNode` does not match `type`', () => {
             const stub = getAdapter().displayNameOfNode;
             const sentinel = {};
-            stub.returns(sentinel);
+            stub.mockReturnValue(sentinel);
 
             const node = {};
             expect(nodeHasType(node, {})).to.equal(false);
@@ -1113,14 +1112,14 @@ describe('Utils', () => {
       const component = {};
       const result = {};
       const adapter = new TestAdapter();
-      sinon.stub(adapter, 'isCustomComponent').returns(result);
+      vi.spyOn(adapter, 'isCustomComponent').mockReturnValue(result);
 
       const actual = isCustomComponent(component, adapter);
 
       expect(actual).to.equal(!!result);
 
       expect(adapter.isCustomComponent).to.have.property('callCount', 1);
-      const [args] = adapter.isCustomComponent.args;
+      const [args] = adapter.isCustomComponent.mock.calls;
       expect(args).to.eql([component]);
     });
 
@@ -1173,7 +1172,7 @@ describe('Utils', () => {
     });
 
     it('returns a thunk that calls each function in reverse order', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
       const fn1 = (...args) => {
         spy(1, args);
         return true;
@@ -1189,7 +1188,7 @@ describe('Utils', () => {
       expect(thunk()).to.equal(true);
 
       expect(spy).to.have.property('callCount', 2);
-      const { args } = spy;
+      const args = spy.mock.calls;
       expect(args).to.eql([
         [2, [undefined]],
         [1, [undefined]],

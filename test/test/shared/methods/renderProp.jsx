@@ -1,7 +1,6 @@
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
 import wrap from 'mocha-wrap';
-import sinon from 'sinon-sandbox';
 
 import getAdapter from 'enzyme/build/getAdapter';
 
@@ -49,15 +48,15 @@ export default function describeRenderProp({ Wrap, WrapRendered, WrapperName }) 
         const renderPropWrapperB = wrapperB.find(Bar).renderProp('render')();
         expect(renderPropWrapperB.find(Foo)).to.have.lengthOf(1);
 
-        const stub = sinon.stub().returns(<div />);
+        const stub = vi.fn().mockReturnValue(<div />);
         const wrapperC = Wrap(
           <div>
             <Bar render={stub} />
           </div>,
         );
-        stub.resetHistory();
+        stub.mockClear();
         wrapperC.find(Bar).renderProp('render')('one', 'two');
-        expect(stub.args).to.deep.equal([['one', 'two']]);
+        expect(stub.mock.calls).to.deep.equal([['one', 'two']]);
       });
 
       it('throws on a non-string prop name', () => {

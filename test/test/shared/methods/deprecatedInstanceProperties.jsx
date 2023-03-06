@@ -1,5 +1,5 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
 
 export default function describeDeprecatedInstanceProperties({ Wrap, isShallow }) {
   class Foo extends React.Component {

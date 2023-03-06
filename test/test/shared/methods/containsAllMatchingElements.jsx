@@ -1,6 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
-import sinon from 'sinon-sandbox';
 
 export default function describeContainsAllMatchingElements({ Wrap }) {
   describe('.containsAllMatchingElements(nodes)', () => {
@@ -29,8 +28,8 @@ export default function describeContainsAllMatchingElements({ Wrap }) {
     });
 
     it('matches on an array of nodes that all look like one of the rendered nodes', () => {
-      const spy1 = sinon.spy();
-      const spy2 = sinon.spy();
+      const spy1 = vi.fn();
+      const spy2 = vi.fn();
       const wrapper = Wrap(
         <div>
           <div onClick={spy1} style={{ fontSize: 12, color: 'red' }}>
@@ -107,8 +106,8 @@ export default function describeContainsAllMatchingElements({ Wrap }) {
     });
 
     it('does not match on nodes that do not all look like one of the rendered nodes', () => {
-      const spy1 = sinon.spy();
-      const spy2 = sinon.spy();
+      const spy1 = vi.fn();
+      const spy2 = vi.fn();
       const wrapper = Wrap(
         <div>
           <div onClick={spy1} style={{ fontSize: 12, color: 'red' }}>

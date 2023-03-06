@@ -1,6 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
-import sinon from 'sinon-sandbox';
 
 import { itIf } from '../../_helpers';
 
@@ -26,19 +25,18 @@ export default function describeHasClass({ Wrap, WrapRendered, WrapperName, isSh
     }
 
     it('warns when passing a CSS selector', () => {
-      const stub = sinon.stub(console, 'warn');
+      const stub = vi.spyOn(console, 'warn');
       const wrapper = Wrap(<div className="foo bar baz some-long-string FoOo" />);
 
       expect(wrapper.hasClass('oops.classname')).to.equal(false);
 
-      expect(stub).to.have.property('callCount', 1);
-      const [args] = stub.args;
-      expect(args).to.eql([
+      expect(stub).toHaveBeenCalledOnce();
+      expect(stub).toHaveBeenCalledWith(
         `It looks like you're calling \`${WrapperName}::hasClass()\` with a CSS selector. hasClass() expects a class name, not a CSS selector.`,
-      ]);
+      );
     });
 
-    context('when using a DOM component', () => {
+    describe('when using a DOM component', () => {
       it('returns whether or not node has a certain class', () => {
         const wrapper = Wrap(<div className="foo bar baz some-long-string FoOo" />);
 
@@ -77,7 +75,7 @@ export default function describeHasClass({ Wrap, WrapRendered, WrapperName, isSh
       });
     });
 
-    context('when using a Composite class component', () => {
+    describe('when using a Composite class component', () => {
       it('returns whether or not rendered node has a certain class', () => {
         const wrapper = WrapRendered(<Foo className="root" />);
 
@@ -103,7 +101,7 @@ export default function describeHasClass({ Wrap, WrapRendered, WrapperName, isSh
       });
     });
 
-    context('when using nested composite components', () => {
+    describe('when using nested composite components', () => {
       it('returns whether or not node has a certain class', () => {
         const wrapper = WrapRendered(<Bar className="root" />);
 
@@ -138,7 +136,7 @@ export default function describeHasClass({ Wrap, WrapRendered, WrapperName, isSh
       });
     });
 
-    context('when using a Composite component that renders null', () => {
+    describe('when using a Composite component that renders null', () => {
       it('returns whether or not node has a certain class', () => {
         const wrapper = Wrap(<RendersNull />);
 

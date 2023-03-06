@@ -1,5 +1,5 @@
+import { describe, expect, it } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
 
 export default function describeEquals({ Wrap, WrapRendered }) {
   describe('.equals(node)', () => {

@@ -1,5 +1,5 @@
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
 import { JSDOM } from 'jsdom';
 import { get } from 'enzyme/build/configuration';
 import { configure, shallow, EnzymeAdapter } from 'enzyme';

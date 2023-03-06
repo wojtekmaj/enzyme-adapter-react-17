@@ -1,7 +1,6 @@
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { expect } from 'chai';
-import sinon from 'sinon-sandbox';
 
 import { createClass } from '../../_helpers/react-compat';
 
@@ -70,7 +69,7 @@ export default function describeSetContext({ Wrap, WrapperName, isShallow }) {
     });
 
     it('calls componentWillReceiveProps when context is updated', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
       const updatedProps = { foo: 'baz' };
       class Foo extends React.Component {
         componentWillReceiveProps() {
@@ -93,7 +92,7 @@ export default function describeSetContext({ Wrap, WrapperName, isShallow }) {
 
       wrapper.setContext(updatedProps);
 
-      expect(spy.args).to.deep.equal([['render'], ['componentWillReceiveProps'], ['render']]);
+      expect(spy.mock.calls).to.deep.equal([['render'], ['componentWillReceiveProps'], ['render']]);
       expect(wrapper.context('foo')).to.equal(updatedProps.foo);
 
       expect(wrapper.debug()).to.equal(
@@ -110,7 +109,7 @@ export default function describeSetContext({ Wrap, WrapperName, isShallow }) {
     });
 
     it('calls componentWillReceiveProps and UNSAFE_componentWillReceiveProps when context is updated', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
       const updatedProps = { foo: 'baz' };
       class Foo extends React.Component {
         componentWillReceiveProps() {
@@ -137,7 +136,7 @@ export default function describeSetContext({ Wrap, WrapperName, isShallow }) {
 
       wrapper.setContext(updatedProps);
 
-      expect(spy.args).to.deep.equal([
+      expect(spy.mock.calls).to.deep.equal([
         ['render'],
         ['componentWillReceiveProps'],
         ['UNSAFE_componentWillReceiveProps'],

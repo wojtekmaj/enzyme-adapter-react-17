@@ -1,6 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import sinon from 'sinon-sandbox';
-import { expect } from 'chai';
 
 import { describeIf, itIf } from '../../_helpers';
 import { Fragment } from '../../_helpers/react-compat';
@@ -90,7 +89,7 @@ export default function describeCDC({ Wrap, isShallow }) {
       });
 
       it('catches a simulated error', () => {
-        const spy = sinon.spy();
+        const spy = vi.fn();
         const wrapper = Wrap(<ErrorBoundary spy={spy} />);
 
         expect(spy).to.have.property('callCount', 0);
@@ -99,8 +98,8 @@ export default function describeCDC({ Wrap, isShallow }) {
 
         expect(spy).to.have.property('callCount', 1);
 
-        expect(spy.args).to.be.an('array').and.have.lengthOf(1);
-        const [[actualError, info]] = spy.args;
+        expect(spy.mock.calls).to.be.an('array').and.have.lengthOf(1);
+        const [[actualError, info]] = spy.mock.calls;
         expect(() => {
           throw actualError;
         }).to.throw(errorToThrow);
@@ -121,7 +120,7 @@ export default function describeCDC({ Wrap, isShallow }) {
 
       it('catches a simulated error on memo() component', () => {
         const MemoThrower = React.memo(Thrower);
-        const spy = sinon.spy();
+        const spy = vi.fn();
         const wrapper = Wrap(<ErrorBoundary spy={spy} ThrowerComponent={MemoThrower} />);
 
         expect(spy).to.have.property('callCount', 0);
@@ -130,8 +129,8 @@ export default function describeCDC({ Wrap, isShallow }) {
 
         expect(spy).to.have.property('callCount', 1);
 
-        expect(spy.args).to.be.an('array').and.have.lengthOf(1);
-        const [[actualError, info]] = spy.args;
+        expect(spy.mock.calls).to.be.an('array').and.have.lengthOf(1);
+        const [[actualError, info]] = spy.mock.calls;
         expect(() => {
           throw actualError;
         }).to.throw(errorToThrow);
@@ -151,7 +150,7 @@ export default function describeCDC({ Wrap, isShallow }) {
       });
 
       it('rerenders on a simulated error', () => {
-        const wrapper = Wrap(<ErrorBoundary spy={sinon.stub()} />);
+        const wrapper = Wrap(<ErrorBoundary spy={vi.fn()} />);
 
         expect(wrapper.find({ children: 'HasThrown' })).to.have.lengthOf(0);
         expect(wrapper.find({ children: 'HasNotThrown' })).to.have.lengthOf(1);
@@ -163,7 +162,7 @@ export default function describeCDC({ Wrap, isShallow }) {
       });
 
       itIf(isShallow, 'does not catch errors during Wrapper render', () => {
-        const spy = sinon.spy();
+        const spy = vi.fn();
         const wrapper = Wrap(<ErrorBoundary spy={spy} />);
 
         expect(spy).to.have.property('callCount', 0);
@@ -186,7 +185,7 @@ export default function describeCDC({ Wrap, isShallow }) {
 
       describeIf(!isShallow, 'descendant components', () => {
         it('rerenders on a simulated error with an SFC root', () => {
-          const wrapper = Wrap(<ErrorSFC spy={sinon.stub()} />);
+          const wrapper = Wrap(<ErrorSFC spy={vi.fn()} />);
 
           expect(wrapper.find({ children: 'HasThrown' })).to.have.lengthOf(0);
           expect(wrapper.find({ children: 'HasNotThrown' })).to.have.lengthOf(1);
@@ -198,7 +197,7 @@ export default function describeCDC({ Wrap, isShallow }) {
         });
 
         it('catches errors during render', () => {
-          const spy = sinon.spy();
+          const spy = vi.fn();
           const wrapper = Wrap(<ErrorBoundary spy={spy} />);
 
           expect(spy).to.have.property('callCount', 0);
@@ -207,8 +206,8 @@ export default function describeCDC({ Wrap, isShallow }) {
 
           expect(spy).to.have.property('callCount', 1);
 
-          expect(spy.args).to.be.an('array').and.have.lengthOf(1);
-          const [[actualError /* , info */]] = spy.args;
+          expect(spy.mock.calls).to.be.an('array').and.have.lengthOf(1);
+          const [[actualError /* , info */]] = spy.mock.calls;
           expect(actualError).to.satisfy(properErrorMessage);
           // FIXME: Fails for @wojtekmaj/enzyme-adapter-react-17
           /*
@@ -229,7 +228,7 @@ export default function describeCDC({ Wrap, isShallow }) {
         });
 
         it('works when the root is an SFC', () => {
-          const spy = sinon.spy();
+          const spy = vi.fn();
           const wrapper = Wrap(<ErrorSFC spy={spy} />);
 
           expect(spy).to.have.property('callCount', 0);
@@ -238,8 +237,8 @@ export default function describeCDC({ Wrap, isShallow }) {
 
           expect(spy).to.have.property('callCount', 1);
 
-          expect(spy.args).to.be.an('array').and.have.lengthOf(1);
-          const [[actualError /* , info */]] = spy.args;
+          expect(spy.mock.calls).to.be.an('array').and.have.lengthOf(1);
+          const [[actualError /* , info */]] = spy.mock.calls;
           expect(actualError).to.satisfy(properErrorMessage);
 
           // FIXME: Fails for @wojtekmaj/enzyme-adapter-react-17

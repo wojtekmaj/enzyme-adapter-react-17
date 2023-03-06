@@ -7,8 +7,8 @@
   "scripts": {
     "clean": "rimraf build",
     "lint": "eslint . --ext .js,.jsx",
-    "mocha": "mocha --require @babel/register --extension js,jsx --recursive test",
     "prettier": "prettier --check . --cache",
+    "run": "vitest run test",
     "test": "yarn lint && yarn prettier"
   },
   "keywords": [
@@ -31,16 +31,15 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@wojtekmaj/async-array-utils": "^1.6.1",
     "@wojtekmaj/enzyme-adapter-react-17": "portal:../",
     "@wojtekmaj/enzyme-adapter-utils": "^0.2.0",
-    "chai": "^4.3.4",
     "create-react-class": "^15.7.0",
     "enzyme": "^3.11.0",
     "enzyme-shallow-equal": "^1.0.0",
     "html-element-map": "^1.3.0",
     "jsdom": "~15.1.0",
     "lodash.isequal": "^4.5.0",
-    "mocha": "^10.1.0",
     "mocha-wrap": "^2.1.0",
     "object-inspect": "^1.11.0",
     "prop-types": "^15.7.0",
@@ -48,13 +47,9 @@
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-is": "^17.0.0",
-    "sinon": "^15.0.1",
-    "sinon-sandbox": "^2.0.0"
+    "vitest": "^0.29.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.15.0",
-    "@babel/core": "^7.15.0",
-    "@babel/register": "^7.18.9",
     "eslint": "^8.26.0",
     "eslint-config-wojtekmaj": "^0.8.2",
     "prettier": "^2.7.0",

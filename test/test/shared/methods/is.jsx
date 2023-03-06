@@ -1,5 +1,5 @@
+import { describe, expect, it } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
 
 import { memo, forwardRef } from '../../_helpers/react-compat';
 

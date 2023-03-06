@@ -1,3 +1,4 @@
+import { describe, it } from 'vitest';
 import React from 'react';
 
 import { argSpy, expectArgs } from '../../_helpers';

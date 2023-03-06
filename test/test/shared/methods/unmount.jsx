@@ -1,6 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
-import sinon from 'sinon-sandbox';
 
 import { itIf } from '../../_helpers';
 
@@ -20,14 +19,14 @@ export default function describeUnmount({ isShallow, Wrap, WrapRendered }) {
     }
 
     it('calls componentWillUnmount()', () => {
-      const spy = sinon.spy(WillUnmount.prototype, 'componentWillUnmount');
+      const spy = vi.spyOn(WillUnmount.prototype, 'componentWillUnmount');
       const wrapper = Wrap(<WillUnmount id="foo" />);
       expect(spy).to.have.property('callCount', 0);
 
       wrapper.unmount();
 
       expect(spy).to.have.property('callCount', 1);
-      const [args] = spy.args;
+      const [args] = spy.mock.calls;
       expect(args).to.eql([]);
     });
 

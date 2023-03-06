@@ -1,6 +1,6 @@
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
-import sinon from 'sinon-sandbox';
+
 import { itIf } from '../../_helpers';
 
 import { useEffect, useState } from '../../_helpers/react-compat';
@@ -62,7 +62,7 @@ export default function describeInvoke({ Wrap, WrapperName, isShallow }) {
 
     it('can return the handlers’ return value', () => {
       const sentinel = {};
-      const spy = sinon.stub().returns(sentinel);
+      const spy = vi.fn().mockReturnValue(sentinel);
 
       const wrapper = Wrap(<ClickableLink onClick={spy} />);
 
@@ -72,7 +72,7 @@ export default function describeInvoke({ Wrap, WrapperName, isShallow }) {
     });
 
     it('can pass in arguments', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
 
       const wrapper = Wrap(<ClickableLink onClick={spy} />);
 
@@ -80,7 +80,7 @@ export default function describeInvoke({ Wrap, WrapperName, isShallow }) {
       const b = {};
       wrapper.find('a').invoke('onClick')(a, b);
       expect(spy).to.have.property('callCount', 1);
-      const [[arg1, arg2]] = spy.args;
+      const [[arg1, arg2]] = spy.mock.calls;
       expect(arg1).to.equal(a);
       expect(arg2).to.equal(b);
     });

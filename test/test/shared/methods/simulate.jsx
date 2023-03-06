@@ -1,6 +1,5 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
-import sinon from 'sinon-sandbox';
 
 import { itIf } from '../../_helpers';
 
@@ -52,7 +51,7 @@ export default function describeSimulate({ Wrap, WrapperName, isShallow, isMount
 
     // FIXME: figure out why this hangs forever
     itIf(!isMount, 'passes in event data', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
       class Clicker extends React.Component {
         render() {
           return <a onClick={spy}>foo</a>;
@@ -65,9 +64,9 @@ export default function describeSimulate({ Wrap, WrapperName, isShallow, isMount
 
       wrapper.simulate('click', a, b);
       expect(spy).to.have.property('callCount', 1);
-      expect(spy.args[0][0]).to.equal(a);
+      expect(spy.mock.calls[0][0]).to.equal(a);
       if (!isMount) {
-        expect(spy.args[0][1]).to.equal(b);
+        expect(spy.mock.calls[0][1]).to.equal(b);
       }
     });
 
@@ -75,7 +74,7 @@ export default function describeSimulate({ Wrap, WrapperName, isShallow, isMount
       const ClickerSFC = ({ onClick }) => <a onClick={onClick}>foo</a>;
 
       it('simulates events', () => {
-        const spy = sinon.spy();
+        const spy = vi.fn();
         const wrapper = Wrap(<ClickerSFC onClick={spy} />);
 
         expect(spy).to.have.property('callCount', 0);
@@ -85,24 +84,24 @@ export default function describeSimulate({ Wrap, WrapperName, isShallow, isMount
 
       // FIXME: figure out why this hangs forever
       itIf(!isMount, 'passes in event data', () => {
-        const spy = sinon.spy();
+        const spy = vi.fn();
         const wrapper = Wrap(<ClickerSFC onClick={spy} />);
         const a = {};
         const b = {};
 
         wrapper.simulate('click', a, b);
         expect(spy).to.have.property('callCount', 1);
-        expect(spy.args[0][0]).to.equal(a);
+        expect(spy.mock.calls[0][0]).to.equal(a);
         if (!isMount) {
-          expect(spy.args[0][1]).to.equal(b);
+          expect(spy.mock.calls[0][1]).to.equal(b);
         }
       });
     });
 
     describe('Normalizing JS event names', () => {
       it('converts lowercase events to React camelcase', () => {
-        const spy = sinon.spy();
-        const clickSpy = sinon.spy();
+        const spy = vi.fn();
+        const clickSpy = vi.fn();
         class Clicks extends React.Component {
           render() {
             return (
@@ -124,7 +123,7 @@ export default function describeSimulate({ Wrap, WrapperName, isShallow, isMount
 
       describe('normalizing mouseenter', () => {
         it('converts lowercase events to React camelcase', () => {
-          const spy = sinon.spy();
+          const spy = vi.fn();
           class Mousetrap extends React.Component {
             render() {
               return <a onMouseEnter={spy}>foo</a>;
@@ -138,7 +137,7 @@ export default function describeSimulate({ Wrap, WrapperName, isShallow, isMount
         });
 
         it('converts lowercase events to React camelcase in SFCs', () => {
-          const spy = sinon.spy();
+          const spy = vi.fn();
           const MousetrapSFC = () => <a onMouseEnter={spy}>foo</a>;
 
           const wrapper = Wrap(<MousetrapSFC />);
@@ -150,7 +149,7 @@ export default function describeSimulate({ Wrap, WrapperName, isShallow, isMount
 
       describe('animation events', () => {
         it('converts lowercase events to React camelcase', () => {
-          const spy = sinon.spy();
+          const spy = vi.fn();
           class Animator extends React.Component {
             render() {
               return <a onAnimationIteration={spy}>foo</a>;
@@ -164,7 +163,7 @@ export default function describeSimulate({ Wrap, WrapperName, isShallow, isMount
         });
 
         it('converts lowercase events to React camelcase in stateless components', () => {
-          const spy = sinon.spy();
+          const spy = vi.fn();
           const AnimatorSFC = () => <a onAnimationIteration={spy}>foo</a>;
 
           const wrapper = Wrap(<AnimatorSFC />);
@@ -176,7 +175,7 @@ export default function describeSimulate({ Wrap, WrapperName, isShallow, isMount
 
       describe('pointer events', () => {
         it('converts lowercase events to React camelcase', () => {
-          const spy = sinon.spy();
+          const spy = vi.fn();
           class Fingertrap extends React.Component {
             render() {
               return <a onGotPointerCapture={spy}>foo</a>;
@@ -190,7 +189,7 @@ export default function describeSimulate({ Wrap, WrapperName, isShallow, isMount
         });
 
         it('converts lowercase events to React camelcase in stateless components', () => {
-          const spy = sinon.spy();
+          const spy = vi.fn();
           const FingertrapSFC = () => <a onGotPointerCapture={spy}>foo</a>;
 
           const wrapper = Wrap(<FingertrapSFC />);
@@ -237,7 +236,7 @@ export default function describeSimulate({ Wrap, WrapperName, isShallow, isMount
       let onClick;
       let wrapper;
       beforeEach(() => {
-        onClick = sinon.stub();
+        onClick = vi.fn();
         wrapper = Wrap(
           <div className="div-elem">
             <span className="parent-elem" onClick={onClick}>
@@ -282,7 +281,7 @@ export default function describeSimulate({ Wrap, WrapperName, isShallow, isMount
           return <MemoizedChild onClick={onClick} />;
         }
 
-        const handleClick = sinon.spy();
+        const handleClick = vi.fn();
         const wrapper = Wrap(<Parent onClick={handleClick} />);
 
         wrapper.find(MemoizedChild).props().onClick();
@@ -297,7 +296,7 @@ export default function describeSimulate({ Wrap, WrapperName, isShallow, isMount
     describe('hooks', () => {
       // TODO: fix for shallow when useEffect works for shallow
       itIf(!isShallow, 'works with `useEffect` simulated events', () => {
-        const effectSpy = sinon.spy();
+        const effectSpy = vi.fn();
         function ComponentUsingEffectHook() {
           useEffect(effectSpy);
           const [counter, setCounter] = useState(0);

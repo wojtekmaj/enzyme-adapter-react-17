@@ -1,13 +1,12 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import sinon from 'sinon-sandbox';
-import { expect } from 'chai';
 
 export default function describeGDSFP({ Wrap }) {
   describe('getDerivedStateFromProps()', () => {
     let spy;
 
     beforeEach(() => {
-      spy = sinon.spy();
+      spy = vi.fn();
     });
 
     class Spy extends React.Component {
@@ -93,8 +92,8 @@ export default function describeGDSFP({ Wrap }) {
     it('calls cWRP when expected', () => {
       const prevProps = { a: 1 };
       const wrapper = Wrap(<CWRP {...prevProps} />);
-      expect(spy.args).to.deep.equal([['constructor'], ['render']]);
-      spy.resetHistory();
+      expect(spy.mock.calls).to.deep.equal([['constructor'], ['render']]);
+      spy.mockReset();
 
       const foo = {};
       const props = { foo };
@@ -116,7 +115,7 @@ export default function describeGDSFP({ Wrap }) {
         prevContext,
         nextContext,
       };
-      expect(spy.args).to.deep.equal([
+      expect(spy.mock.calls).to.deep.equal([
         ['componentWillReceiveProps', data],
         ['shouldComponentUpdate', data],
         ['componentWillUpdate', data],
@@ -134,8 +133,8 @@ export default function describeGDSFP({ Wrap }) {
     it('calls UNSAFE_cWRP when expected', () => {
       const prevProps = { a: 1 };
       const wrapper = Wrap(<U_CWRP {...prevProps} />);
-      expect(spy.args).to.deep.equal([['constructor'], ['render']]);
-      spy.resetHistory();
+      expect(spy.mock.calls).to.deep.equal([['constructor'], ['render']]);
+      spy.mockReset();
 
       const foo = {};
       const props = { foo };
@@ -157,7 +156,7 @@ export default function describeGDSFP({ Wrap }) {
         prevContext,
         nextContext,
       };
-      expect(spy.args).to.deep.equal([
+      expect(spy.mock.calls).to.deep.equal([
         [
           'UNSAFE_componentWillReceiveProps',
           {
@@ -182,7 +181,7 @@ export default function describeGDSFP({ Wrap }) {
       const prevProps = { a: 1 };
       const state = { state: true };
       const wrapper = Wrap(<GDSFP {...prevProps} />);
-      expect(spy.args).to.deep.equal([
+      expect(spy.mock.calls).to.deep.equal([
         ['constructor'],
         [
           'getDerivedStateFromProps',
@@ -193,7 +192,7 @@ export default function describeGDSFP({ Wrap }) {
         ],
         ['render'],
       ]);
-      spy.resetHistory();
+      spy.mockReset();
 
       const foo = {};
       const props = { foo };
@@ -215,7 +214,7 @@ export default function describeGDSFP({ Wrap }) {
         prevContext,
         nextContext,
       };
-      expect(spy.args).to.deep.equal([
+      expect(spy.mock.calls).to.deep.equal([
         [
           'getDerivedStateFromProps',
           {

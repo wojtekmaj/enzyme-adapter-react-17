@@ -1,6 +1,5 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
-import sinon from 'sinon-sandbox';
 
 export default function describeLast({ Wrap }) {
   describe('.isEmpty()', () => {
@@ -9,7 +8,7 @@ export default function describeLast({ Wrap }) {
     let missingNode;
 
     beforeEach(() => {
-      warningStub = sinon.stub(console, 'warn');
+      warningStub = vi.spyOn(console, 'warn');
       const wrapper = Wrap(<div className="foo" />);
       fooNode = wrapper.find('.foo');
       missingNode = wrapper.find('.missing');
@@ -20,13 +19,13 @@ export default function describeLast({ Wrap }) {
 
     it('displays a deprecation warning', () => {
       fooNode.isEmpty();
-      expect(
-        warningStub.calledWith('Enzyme::Deprecated method isEmpty() called, use exists() instead.'),
-      ).to.equal(true);
+      expect(warningStub).toHaveBeenCalledWith(
+        'Enzyme::Deprecated method isEmpty() called, use exists() instead.',
+      );
     });
 
     it('calls exists() instead', () => {
-      const existsSpy = sinon.spy();
+      const existsSpy = vi.fn();
       fooNode.exists = existsSpy;
       expect(fooNode.isEmpty()).to.equal(true);
       expect(existsSpy).to.have.property('called', true);
