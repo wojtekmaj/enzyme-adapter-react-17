@@ -1,5 +1,5 @@
+import { describe, expect, it } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 import { Portal } from 'react-is';
 
@@ -293,15 +293,15 @@ export default function describeFindWhere({
           ? `<div data-foo="${content}">
   Test SFC
 </div>`
-          : `<SFC data="${content}">
+          : `<SFC2 data="${content}">
   <div data-foo="${content}">
     Test SFC
   </div>
-</SFC>`;
+</SFC2>`;
         expect(wrapper.debug()).to.equal(expectedDebug);
       });
 
-      context('works with a nested SFC', () => {
+      describe('works with a nested SFC', () => {
         const Bar = realArrowFunction(<div>Hello</div>);
         class Foo extends React.Component {
           render() {

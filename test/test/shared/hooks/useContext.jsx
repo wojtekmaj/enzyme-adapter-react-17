@@ -1,5 +1,5 @@
+import { describe, expect, it } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
 
 import { describeIf, itIf } from '../../_helpers';
 

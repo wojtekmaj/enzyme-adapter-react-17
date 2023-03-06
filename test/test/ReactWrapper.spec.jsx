@@ -1,6 +1,6 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 import wrap from 'mocha-wrap';
 import { mount, ReactWrapper } from 'enzyme';
@@ -33,8 +33,13 @@ import describeHooks from './_helpers/describeHooks';
 
 describe('mount', () => {
   describe('top level entry points', () => {
-    expect(mountEntry).to.equal(mount);
-    expect(ReactWrapperEntry).to.equal(ReactWrapper);
+    it('exports the same mountEntry and mount', () => {
+      expect(mountEntry).to.equal(mount);
+    });
+
+    it('exports the same ReactWrapperEntry and ReactWrapper', () => {
+      expect(ReactWrapperEntry).to.equal(ReactWrapper);
+    });
   });
 
   describe('top level wrapper', () => {

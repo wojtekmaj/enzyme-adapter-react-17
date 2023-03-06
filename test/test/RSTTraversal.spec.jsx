@@ -1,6 +1,6 @@
+import { describe, expect, it } from 'vitest';
 import React from 'react';
 import sinon from 'sinon-sandbox';
-import { expect } from 'chai';
 import { elementToTree } from '@wojtekmaj/enzyme-adapter-utils';
 import {
   hasClassName,

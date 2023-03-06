@@ -1,5 +1,5 @@
+import { expect, it } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
 
 import { ITERATOR_SYMBOL } from 'enzyme/build/Utils';
 

@@ -1,5 +1,5 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 
 import { describeIf, itIf } from '../../_helpers';

@@ -1,6 +1,6 @@
-import shallowEqual from 'enzyme-shallow-equal';
+import { describe, expect, it } from 'vitest';
 
-import { expect } from 'chai';
+import shallowEqual from 'enzyme-shallow-equal';
 
 describe('shallowEqual', () => {
   it('returns true for things that are SameValue', () => {

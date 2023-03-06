@@ -1,5 +1,5 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
 import wrap from 'mocha-wrap';
 import getData from 'html-element-map/getData';
 
@@ -723,7 +723,7 @@ export default function describeFind({
         expect(wrapper.find('Portal')).to.have.lengthOf(1);
       });
 
-      context('finding through portals', () => {
+      describe('finding through portals', () => {
         let containerDiv;
         let FooPortal;
         let wrapper;

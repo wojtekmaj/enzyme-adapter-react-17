@@ -1,6 +1,6 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import React from 'react';
 import sinon from 'sinon-sandbox';
-import { expect } from 'chai';
 import isEqual from 'lodash.isequal';
 
 import { PureComponent } from '../../_helpers/react-compat';

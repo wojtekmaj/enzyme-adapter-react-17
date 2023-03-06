@@ -1,6 +1,6 @@
+import { describe, expect, it } from 'vitest';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 
 import { createClass } from '../../_helpers/react-compat';

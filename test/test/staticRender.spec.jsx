@@ -1,6 +1,6 @@
+import { describe, expect, it } from 'vitest';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { expect } from 'chai';
 import { render } from 'enzyme';
 import renderEntry from 'enzyme/render';
 import { fakeDynamicImport } from '@wojtekmaj/enzyme-adapter-utils';
@@ -10,7 +10,9 @@ import { createClass, lazy } from './_helpers/react-compat';
 
 describe('render', () => {
   describe('top level entry points', () => {
-    expect(renderEntry).to.equal(render);
+    it('exports the same renderEntry and render', () => {
+      expect(renderEntry).to.equal(render);
+    });
   });
 
   describe('context', () => {

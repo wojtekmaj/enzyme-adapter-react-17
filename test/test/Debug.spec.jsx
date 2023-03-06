@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { beforeEach, describe, expect, it } from 'vitest';
 import React from 'react';
 import wrap from 'mocha-wrap';
 import sinon from 'sinon-sandbox';

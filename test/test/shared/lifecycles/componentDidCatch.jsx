@@ -1,6 +1,6 @@
+import { describe, expect, it } from 'vitest';
 import React from 'react';
 import sinon from 'sinon-sandbox';
-import { expect } from 'chai';
 
 import { describeIf, itIf } from '../../_helpers';
 import { Fragment } from '../../_helpers/react-compat';

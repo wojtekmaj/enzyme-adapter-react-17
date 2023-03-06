@@ -1,6 +1,6 @@
+import { describe, expect, it } from 'vitest';
 import React from 'react';
 import sinon from 'sinon-sandbox';
-import { expect } from 'chai';
 
 export default function describeCDM({ Wrap }) {
   describe('componentDidUpdate()', () => {

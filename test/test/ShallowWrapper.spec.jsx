@@ -1,6 +1,6 @@
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 import wrap from 'mocha-wrap';
 import inspect from 'object-inspect';
@@ -32,8 +32,13 @@ import describeHooks from './_helpers/describeHooks';
 
 describe('shallow', () => {
   describe('top level entry points', () => {
-    expect(shallowEntry).to.equal(shallow);
-    expect(ShallowWrapperEntry).to.equal(ShallowWrapper);
+    it('exports the same shallowEntry and shallow', () => {
+      expect(shallowEntry).to.equal(shallow);
+    });
+
+    it('exports the same ShallowWrapperEntry and ShallowWrapper', () => {
+      expect(ShallowWrapperEntry).to.equal(ShallowWrapper);
+    });
   });
 
   describe('top level wrapper', () => {
@@ -733,7 +738,7 @@ describe('shallow', () => {
         const SimpleComponent = (props, { name }) => <div>{name}</div>;
         SimpleComponent.contextTypes = { name: PropTypes.string };
 
-        const wrapper = shallow(<SimpleComponent />, { context });
+        const wrapper = shallow(<SimpleComponent />, { context: describe });
 
         expect(() => wrapper.context()).to.throw(
           Error,

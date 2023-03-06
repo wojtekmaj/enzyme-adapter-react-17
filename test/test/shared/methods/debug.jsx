@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { expect } from 'chai';
 import inspect from 'object-inspect';
+import { describe, expect, it } from 'vitest';
 
 import { debugNodes } from 'enzyme/build/Debug';
 
@@ -9,7 +9,7 @@ import { createClass, memo, useCallback } from '../../_helpers/react-compat';
 
 export default function describeDebug({ Wrap, WrapRendered, isShallow }) {
   describe('.debug()', () => {
-    context('passes through to the debugNodes function', () => {
+    describe('passes through to the debugNodes function', () => {
       it('with wrapping an HTML element', () => {
         const wrapper = Wrap(<div />);
 

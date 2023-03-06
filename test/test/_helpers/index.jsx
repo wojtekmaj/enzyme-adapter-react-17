@@ -1,8 +1,8 @@
+import { describe, expect, it } from 'vitest';
 import React from 'react';
 import { Memo } from 'react-is';
 import { compareNodeTypeOf } from '@wojtekmaj/enzyme-adapter-utils';
 import sinon from 'sinon-sandbox';
-import { expect } from 'chai';
 
 /**
  * Simple wrapper around mocha describe which allows a boolean to be passed in first which

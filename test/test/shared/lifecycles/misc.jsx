@@ -1,6 +1,6 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import React from 'react';
 import sinon from 'sinon-sandbox';
-import { expect } from 'chai';
 import PropTypes from 'prop-types';
 
 import { itIf, argSpy, expectArgs } from '../../_helpers';
@@ -575,7 +575,7 @@ export default function describeMisc({ Wrap, isShallow }) {
       });
     });
 
-    context('mounting phase', () => {
+    describe('mounting phase', () => {
       it('calls componentWillMount and componentDidMount', () => {
         class Foo extends React.Component {
           componentWillMount() {
@@ -630,7 +630,7 @@ export default function describeMisc({ Wrap, isShallow }) {
       });
     });
 
-    context('updating props', () => {
+    describe('updating props', () => {
       it('calls shouldComponentUpdate, componentWillUpdate, and componentDidUpdate', () => {
         class Foo extends React.Component {
           constructor(...args) {
@@ -932,7 +932,7 @@ export default function describeMisc({ Wrap, isShallow }) {
       );
     });
 
-    context('updating state', () => {
+    describe('updating state', () => {
       it('calls shouldComponentUpdate, componentWillUpdate, and componentDidUpdate', () => {
         class Foo extends React.Component {
           constructor(...args) {
@@ -1124,7 +1124,7 @@ export default function describeMisc({ Wrap, isShallow }) {
       );
     });
 
-    context('updating context', () => {
+    describe('updating context', () => {
       it('calls shouldComponentUpdate, componentWillUpdate and componentDidUpdate', () => {
         class Foo extends React.Component {
           constructor(...args) {

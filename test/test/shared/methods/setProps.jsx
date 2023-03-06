@@ -1,6 +1,6 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 
 import { sym } from 'enzyme/build/Utils';
@@ -238,23 +238,23 @@ export default function describeSetProps({ Wrap, WrapperName, isShallow }) {
           return null;
         },
       };
-      const cWRP = sinon.stub(FooWithLifecycles.prototype, 'componentWillReceiveProps');
-      const U_cWRP = sinon.stub(FooWithLifecycles.prototype, 'UNSAFE_componentWillReceiveProps');
+      const cWRP = vi.spyOn(FooWithLifecycles.prototype, 'componentWillReceiveProps');
+      const U_cWRP = vi.spyOn(FooWithLifecycles.prototype, 'UNSAFE_componentWillReceiveProps');
 
       const nextProps = { id: 'bar', foo: 'bla' };
       const context = { foo: 'bar' };
       const wrapper = Wrap(<FooWithLifecycles id="foo" />, { context });
 
-      expect(cWRP).to.have.property('callCount', 0);
-      expect(U_cWRP).to.have.property('callCount', 0);
+      expect(cWRP).not.toHaveBeenCalled();
+      expect(U_cWRP).not.toHaveBeenCalled();
 
       wrapper.setProps(nextProps);
 
-      expect(cWRP).to.have.property('callCount', 1);
-      expect(cWRP.calledWith(nextProps, context)).to.equal(true);
+      expect(cWRP).toHaveBeenCalledOnce();
+      expect(cWRP).toHaveBeenCalledWith(nextProps, context);
 
-      expect(U_cWRP).to.have.property('callCount', 1);
-      expect(U_cWRP.calledWith(nextProps, context)).to.equal(true);
+      expect(U_cWRP).toHaveBeenCalledOnce();
+      expect(U_cWRP).toHaveBeenCalledWith(nextProps, context);
     });
 
     it('merges newProps with oldProps', () => {

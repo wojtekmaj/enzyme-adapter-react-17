@@ -1,6 +1,6 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import React from 'react';
 import sinon from 'sinon-sandbox';
-import { expect } from 'chai';
 
 export default function describeGDSFP({ Wrap }) {
   describe('getDerivedStateFromProps()', () => {

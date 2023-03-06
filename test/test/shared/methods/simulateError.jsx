@@ -1,5 +1,5 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
 import sinon from 'sinon-sandbox';
 import wrap from 'mocha-wrap';
 
@@ -90,7 +90,7 @@ export default function describeSimulateError({ Wrap, WrapRendered, isShallow })
         );
       });
 
-    context('calls through to renderer’s `simulateError`', () => {
+    describe('calls through to renderer’s `simulateError`', () => {
       let hierarchy;
       beforeEach(() => {
         const wrapper = WrapRendered(<Nested />);
