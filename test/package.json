@@ -47,7 +47,6 @@
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-is": "^17.0.0",
-    "sinon": "^15.0.1",
     "vitest": "^0.29.2"
   },
   "devDependencies": {
