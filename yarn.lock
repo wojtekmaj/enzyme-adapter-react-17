@@ -1309,8 +1309,8 @@ __metadata:
   linkType: hard
 
 "@babel/register@npm:^7.18.9":
-  version: 7.18.9
-  resolution: "@babel/register@npm:7.18.9"
+  version: 7.21.0
+  resolution: "@babel/register@npm:7.21.0"
   dependencies:
     clone-deep: ^4.0.1
     find-cache-dir: ^2.0.0
@@ -1319,7 +1319,7 @@ __metadata:
     source-map-support: ^0.5.16
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 4aeaff97e061a397f632659082ba86c539ef8194697b236d991c10d1c2ea8f73213d3b5b3b2c24625951a1ef726b7a7d2e70f70ffcb37f79ef0c1a745eebef21
+  checksum: 9745cc7520b4c5e64cc54f4851c3b78af82e1f8cffc9041f5cc0b9aef62d86a9a8617327fc975b5e0e39cb5cc0aba7ae02429884390ee93e0de29152fa849b4f
   languageName: node
   linkType: hard
 
