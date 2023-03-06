@@ -20,62 +20,8 @@ export default function describeUseEffect({ Wrap, isShallow }) {
       return <div>{ctr}</div>;
     }
 
-    it('works', (done) => {
-      const wrapper = Wrap(<ComponentUsingEffectHook />);
-
-      expect(wrapper.debug()).to.equal(
-        isShallow
-          ? `<div>
-  1
-</div>`
-          : `<ComponentUsingEffectHook>
-  <div>
-    1
-  </div>
-</ComponentUsingEffectHook>`,
-      );
-
-      setTimeout(() => {
-        wrapper.update();
-        expect(wrapper.debug()).to.equal(
-          isShallow
-            ? `<div>
-  2
-</div>`
-            : `<ComponentUsingEffectHook>
-  <div>
-    2
-  </div>
-</ComponentUsingEffectHook>`,
-        );
-        done();
-      }, timeout + 1);
-    });
-
-    describe('with mount effect', () => {
-      const didMountCount = 9;
-
-      function FooCounterWithMountEffect({ initialCount = 0 }) {
-        const [count, setCount] = useState(+initialCount);
-
-        useEffect(() => {
-          setCount(didMountCount);
-        }, []);
-        return (
-          <Fragment>
-            <span className="counter">{count}</span>
-          </Fragment>
-        );
-      }
-
-      it('initial render after did mount effect', () => {
-        const wrapper = Wrap(<FooCounterWithMountEffect />);
-        expect(wrapper.find('.counter').text()).to.equal(String(didMountCount));
-      });
-    });
-
-    describe('with async effect', () => {
-      it('works with `useEffect`', (done) => {
+    it('works', () => {
+      return new Promise((resolve) => {
         const wrapper = Wrap(<ComponentUsingEffectHook />);
 
         expect(wrapper.debug()).to.equal(
@@ -103,8 +49,66 @@ export default function describeUseEffect({ Wrap, isShallow }) {
   </div>
 </ComponentUsingEffectHook>`,
           );
-          done();
+          resolve();
         }, timeout + 1);
+      });
+    });
+
+    describe('with mount effect', () => {
+      const didMountCount = 9;
+
+      function FooCounterWithMountEffect({ initialCount = 0 }) {
+        const [count, setCount] = useState(+initialCount);
+
+        useEffect(() => {
+          setCount(didMountCount);
+        }, []);
+        return (
+          <Fragment>
+            <span className="counter">{count}</span>
+          </Fragment>
+        );
+      }
+
+      it('initial render after did mount effect', () => {
+        const wrapper = Wrap(<FooCounterWithMountEffect />);
+        expect(wrapper.find('.counter').text()).to.equal(String(didMountCount));
+      });
+    });
+
+    describe('with async effect', () => {
+      it('works with `useEffect`', () => {
+        return new Promise((resolve) => {
+          const wrapper = Wrap(<ComponentUsingEffectHook />);
+
+          expect(wrapper.debug()).to.equal(
+            isShallow
+              ? `<div>
+  1
+</div>`
+              : `<ComponentUsingEffectHook>
+  <div>
+    1
+  </div>
+</ComponentUsingEffectHook>`,
+          );
+
+          setTimeout(() => {
+            wrapper.update();
+            expect(wrapper.debug()).to.equal(
+              isShallow
+                ? `<div>
+  2
+</div>`
+                : `<ComponentUsingEffectHook>
+  <div>
+    2
+  </div>
+</ComponentUsingEffectHook>`,
+            );
+            resolve();
+          }, timeout + 1);
+        });
       });
     });
 

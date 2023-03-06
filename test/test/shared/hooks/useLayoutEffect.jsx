@@ -19,36 +19,38 @@ export default function describeUseLayoutEffect({ Wrap, isShallow }) {
     }
 
     // TODO: enable when https://github.com/facebook/react/issues/15275 is fixed
-    itIf(!isShallow, 'works with `useLayoutEffect`', (done) => {
-      const wrapper = Wrap(<ComponentUsingLayoutEffectHook />);
+    itIf(!isShallow, 'works with `useLayoutEffect`', () => {
+      return new Promise((resolve) => {
+        const wrapper = Wrap(<ComponentUsingLayoutEffectHook />);
 
-      expect(wrapper.debug()).to.equal(
-        isShallow
-          ? `<div>
+        expect(wrapper.debug()).to.equal(
+          isShallow
+            ? `<div>
   1
 </div>`
-          : `<ComponentUsingLayoutEffectHook>
+            : `<ComponentUsingLayoutEffectHook>
   <div>
     1
   </div>
 </ComponentUsingLayoutEffectHook>`,
-      );
+        );
 
-      setTimeout(() => {
-        wrapper.update();
-        expect(wrapper.debug()).to.equal(
-          isShallow
-            ? `<div>
+        setTimeout(() => {
+          wrapper.update();
+          expect(wrapper.debug()).to.equal(
+            isShallow
+              ? `<div>
   2
 </div>`
-            : `<ComponentUsingLayoutEffectHook>
+              : `<ComponentUsingLayoutEffectHook>
   <div>
     2
   </div>
 </ComponentUsingLayoutEffectHook>`,
-        );
-        done();
-      }, 100);
+          );
+          resolve();
+        }, 100);
+      });
     });
   });
 }
