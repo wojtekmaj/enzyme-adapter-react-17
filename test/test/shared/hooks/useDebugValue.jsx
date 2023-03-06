@@ -1,6 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
-import sinon from 'sinon';
 
 import { useDebugValue } from '../../_helpers/react-compat';
 
@@ -27,7 +26,7 @@ export default function describeUseDebugValue({ Wrap }) {
 
     it('can render component using useDebugValue and callback', () => {
       const value = 'foo';
-      const spy = sinon.spy();
+      const spy = vi.fn();
       const wrapper = Wrap(<ComponentUsingDebugValueAndCallback value={value} fn={spy} />);
       expect(wrapper.find('div').prop('children')).to.equal(value);
       expect(spy).to.have.property('callCount', 0);

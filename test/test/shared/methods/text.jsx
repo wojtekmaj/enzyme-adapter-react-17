@@ -1,5 +1,5 @@
+import { describe, expect, it } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
 
 import { render } from 'enzyme';
 
@@ -31,7 +31,7 @@ export default function describeText({ Wrap, isShallow }) {
       matchesRender(<Foo items={[<i key={1}>abc</i>, <i key={2}>def</i>, <i key={3}>hij</i>]} />);
     });
 
-    context('composite components', () => {
+    describe('composite components', () => {
       class Foo extends React.Component {
         render() {
           return <div>foo</div>;

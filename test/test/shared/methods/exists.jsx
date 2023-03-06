@@ -1,6 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
-import sinon from 'sinon-sandbox';
 
 export default function describeExists({ Wrap, Wrapper }) {
   describe('.exists()', () => {
@@ -33,14 +32,14 @@ export default function describeExists({ Wrap, Wrapper }) {
           },
         };
         const fakeSelector = '.someClass';
-        wrapper.find = sinon.stub().returns({
+        wrapper.find = vi.fn().mockReturnValue({
           exists() {
             return fakeFindExistsReturnVal;
           },
         });
         const existsResult = wrapper.exists(fakeSelector);
         expect(wrapper.find).to.have.property('callCount', 1);
-        expect(wrapper.find.firstCall.args[0]).to.equal(fakeSelector);
+        expect(wrapper.find.mock.calls[0][0]).to.equal(fakeSelector);
         expect(existsResult).to.equal(fakeFindExistsReturnVal);
       });
     });

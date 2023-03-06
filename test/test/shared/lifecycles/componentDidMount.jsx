@@ -1,11 +1,10 @@
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import sinon from 'sinon-sandbox';
-import { expect } from 'chai';
 
 export default function describeCDM({ Wrap }) {
   describe('componentDidUpdate()', () => {
     it('does not call `componentDidMount` twice when a child component is created', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
 
       class Foo extends React.Component {
         constructor(props) {
@@ -35,8 +34,8 @@ export default function describeCDM({ Wrap }) {
       }
 
       const wrapper = Wrap(<Foo />);
-      expect(spy.args).to.eql([['render'], ['componentDidMount']]);
-      spy.resetHistory();
+      expect(spy.mock.calls).to.eql([['render'], ['componentDidMount']]);
+      spy.mockReset();
 
       wrapper.find('button').prop('onClick')();
       expect(spy).to.have.property('callCount', 1);

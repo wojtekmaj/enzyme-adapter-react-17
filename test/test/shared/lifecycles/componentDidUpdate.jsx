@@ -1,6 +1,5 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import sinon from 'sinon-sandbox';
-import { expect } from 'chai';
 import isEqual from 'lodash.isequal';
 
 import { PureComponent } from '../../_helpers/react-compat';
@@ -9,7 +8,7 @@ import { argSpy, expectArgs } from '../../_helpers';
 export default function describeCDU({ Wrap, isShallow }) {
   describe('componentDidUpdate()', () => {
     it('calls `componentDidUpdate` when component’s `setState` is called', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
 
       class Foo extends React.Component {
         constructor(props) {
@@ -37,20 +36,20 @@ export default function describeCDU({ Wrap, isShallow }) {
       }
 
       const wrapper = Wrap(<Foo />);
-      spy.resetHistory();
+      spy.mockReset();
 
       wrapper.setState({ foo: 'wrapper setState update' });
       expect(wrapper.state('foo')).to.equal('wrapper setState update');
-      expect(spy.args).to.eql([['render'], ['componentDidUpdate']]);
-      spy.resetHistory();
+      expect(spy.mock.calls).to.eql([['render'], ['componentDidUpdate']]);
+      spy.mockReset();
 
       wrapper.instance().onChange();
       expect(wrapper.state('foo')).to.equal('onChange update');
-      expect(spy.args).to.eql([['render'], ['componentDidUpdate']]);
+      expect(spy.mock.calls).to.eql([['render'], ['componentDidUpdate']]);
     });
 
     it('calls `componentDidUpdate` when component’s `setState` is called through a bound method', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
 
       class Foo extends React.Component {
         constructor(props) {
@@ -86,15 +85,15 @@ export default function describeCDU({ Wrap, isShallow }) {
       }
 
       const wrapper = Wrap(<Foo />);
-      spy.resetHistory();
+      spy.mockReset();
 
       wrapper.find('button').prop('onClick')();
       expect(wrapper.state('foo')).to.equal('onChange update');
-      expect(spy.args).to.eql([['render'], ['componentDidUpdate']]);
+      expect(spy.mock.calls).to.eql([['render'], ['componentDidUpdate']]);
     });
 
     it('calls `componentDidUpdate` when component’s `setState` is called', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
 
       class Foo extends React.Component {
         constructor(props) {
@@ -124,7 +123,7 @@ export default function describeCDU({ Wrap, isShallow }) {
       const wrapper = Wrap(<Foo />);
       expect(wrapper.state('foo')).to.equal('update');
 
-      expect(spy.args).to.eql([
+      expect(spy.mock.calls).to.eql([
         ['render'],
         ['componentDidMount'],
         ['render'],
@@ -207,14 +206,14 @@ export default function describeCDU({ Wrap, isShallow }) {
       }
 
       it('rerenders on setState when new state is !==, but deeply equal to existing state', () => {
-        const updateSpy = sinon.spy();
+        const updateSpy = vi.fn();
         const wrapper = Wrap(<Test onUpdate={updateSpy} />);
         wrapper.instance().setDeepEqualState();
         expect(updateSpy).to.have.property('callCount', 1);
       });
 
       it('rerenders when setState is called with an object that doesnt have deep equality', () => {
-        const updateSpy = sinon.spy();
+        const updateSpy = vi.fn();
         const wrapper = Wrap(<Test onUpdate={updateSpy} />);
         wrapper.instance().setDeepDifferentState();
         expect(updateSpy).to.have.property('callCount', 1);

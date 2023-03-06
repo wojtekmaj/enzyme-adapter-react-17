@@ -1,7 +1,6 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { expect } from 'chai';
-import sinon from 'sinon-sandbox';
 
 import { sym } from 'enzyme/build/Utils';
 
@@ -238,23 +237,23 @@ export default function describeSetProps({ Wrap, WrapperName, isShallow }) {
           return null;
         },
       };
-      const cWRP = sinon.stub(FooWithLifecycles.prototype, 'componentWillReceiveProps');
-      const U_cWRP = sinon.stub(FooWithLifecycles.prototype, 'UNSAFE_componentWillReceiveProps');
+      const cWRP = vi.spyOn(FooWithLifecycles.prototype, 'componentWillReceiveProps');
+      const U_cWRP = vi.spyOn(FooWithLifecycles.prototype, 'UNSAFE_componentWillReceiveProps');
 
       const nextProps = { id: 'bar', foo: 'bla' };
       const context = { foo: 'bar' };
       const wrapper = Wrap(<FooWithLifecycles id="foo" />, { context });
 
-      expect(cWRP).to.have.property('callCount', 0);
-      expect(U_cWRP).to.have.property('callCount', 0);
+      expect(cWRP).not.toHaveBeenCalled();
+      expect(U_cWRP).not.toHaveBeenCalled();
 
       wrapper.setProps(nextProps);
 
-      expect(cWRP).to.have.property('callCount', 1);
-      expect(cWRP.calledWith(nextProps, context)).to.equal(true);
+      expect(cWRP).toHaveBeenCalledOnce();
+      expect(cWRP).toHaveBeenCalledWith(nextProps, context);
 
-      expect(U_cWRP).to.have.property('callCount', 1);
-      expect(U_cWRP.calledWith(nextProps, context)).to.equal(true);
+      expect(U_cWRP).toHaveBeenCalledOnce();
+      expect(U_cWRP).toHaveBeenCalledWith(nextProps, context);
     });
 
     it('merges newProps with oldProps', () => {
@@ -313,7 +312,7 @@ export default function describeSetProps({ Wrap, WrapperName, isShallow }) {
         }
       }
 
-      const cWRP = sinon.stub(HasInitialState.prototype, 'componentWillReceiveProps');
+      const cWRP = vi.spyOn(HasInitialState.prototype, 'componentWillReceiveProps');
 
       HasInitialState.defaultProps = {
         className: 'default-class',
@@ -328,7 +327,7 @@ export default function describeSetProps({ Wrap, WrapperName, isShallow }) {
       wrapper.setProps({ className: undefined });
 
       expect(cWRP).to.have.property('callCount', 1);
-      const [args] = cWRP.args;
+      const [args] = cWRP.mock.calls;
       expect(args).to.eql([{ className: HasInitialState.defaultProps.className }, context]);
     });
 
@@ -371,7 +370,7 @@ export default function describeSetProps({ Wrap, WrapperName, isShallow }) {
     });
 
     it('calls componentWillReceiveProps, shouldComponentUpdate, componentWillUpdate, and componentDidUpdate with merged newProps', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
 
       class HasLifecycleSpies extends React.Component {
         componentWillReceiveProps(nextProps) {
@@ -400,7 +399,7 @@ export default function describeSetProps({ Wrap, WrapperName, isShallow }) {
 
       wrapper.setProps({ b: 'c', d: 'e' });
 
-      expect(spy.args).to.deep.equal([
+      expect(spy.mock.calls).to.deep.equal([
         ['componentWillReceiveProps', { a: 'a', b: 'b' }, { a: 'a', b: 'c', d: 'e' }],
         ['shouldComponentUpdate', { a: 'a', b: 'b' }, { a: 'a', b: 'c', d: 'e' }],
         ['componentWillUpdate', { a: 'a', b: 'b' }, { a: 'a', b: 'c', d: 'e' }],
@@ -437,7 +436,7 @@ export default function describeSetProps({ Wrap, WrapperName, isShallow }) {
           }
         }
 
-        const spy = sinon.spy(Dummy.prototype, 'componentDidUpdate');
+        const spy = vi.spyOn(Dummy.prototype, 'componentDidUpdate');
         const wrapper = Wrap(<Dummy />);
         expect(spy).to.have.property('callCount', 0);
         return new Promise((resolve) => {
@@ -510,7 +509,7 @@ export default function describeSetProps({ Wrap, WrapperName, isShallow }) {
   describe('componentDidUpdate and componentWillReceiveProps with setState', () => {
     let spy;
     beforeEach(() => {
-      spy = sinon.spy();
+      spy = vi.fn();
     });
 
     class WithoutSetStateInCWRP extends React.Component {
@@ -564,7 +563,7 @@ export default function describeSetProps({ Wrap, WrapperName, isShallow }) {
     it('calls componentDidUpdate when componentWillReceiveProps without setting state', () => {
       const wrapper = Wrap(<WithoutSetStateInCWRP a="old a" b="old b" />);
       wrapper.setProps({ b: 'new b', d: 'new d' });
-      expect(spy.args).to.deep.equal([
+      expect(spy.mock.calls).to.deep.equal([
         ['render', oldProps, oldState],
         ['componentWillReceiveProps', oldProps, newProps],
         ['render', newProps, oldState],
@@ -577,7 +576,7 @@ export default function describeSetProps({ Wrap, WrapperName, isShallow }) {
       const wrapper = Wrap(<WithSetStateInCWRP a="old a" b="old b" />);
       wrapper.setProps({ b: 'new b', d: 'new d' });
 
-      expect(spy.args).to.deep.equal([
+      expect(spy.mock.calls).to.deep.equal([
         ['render', oldProps, oldState],
         ['componentWillReceiveProps', oldProps, newProps],
         ['render', newProps, newState],

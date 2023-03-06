@@ -1,6 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
-import sinon from 'sinon-sandbox';
 
 export default function describeFilterWhere({ Wrap, Wrapper }) {
   describe('.filterWhere(predicate)', () => {
@@ -13,10 +12,10 @@ export default function describeFilterWhere({ Wrap, Wrapper }) {
         </div>,
       );
 
-      const stub = sinon.stub();
-      stub.onCall(0).returns(false);
-      stub.onCall(1).returns(true);
-      stub.onCall(2).returns(false);
+      const stub = vi.fn();
+      stub.mockReturnValueOnce(false);
+      stub.mockReturnValueOnce(true);
+      stub.mockReturnValueOnce(false);
 
       const baz = wrapper.find('.foo').filterWhere(stub);
       expect(baz).to.have.lengthOf(1);
@@ -32,17 +31,16 @@ export default function describeFilterWhere({ Wrap, Wrapper }) {
         </div>,
       );
 
-      const stub = sinon.stub();
-      stub.returns(true);
-      const spy = sinon.spy(stub);
+      const spy = vi.fn();
+      spy.mockReturnValue(true);
       wrapper.find('.foo').filterWhere(spy);
       expect(spy).to.have.property('callCount', 3);
-      expect(spy.args[0][0]).to.be.instanceOf(Wrapper);
-      expect(spy.args[1][0]).to.be.instanceOf(Wrapper);
-      expect(spy.args[2][0]).to.be.instanceOf(Wrapper);
-      expect(spy.args[0][0].hasClass('bar')).to.equal(true);
-      expect(spy.args[1][0].hasClass('baz')).to.equal(true);
-      expect(spy.args[2][0].hasClass('bux')).to.equal(true);
+      expect(spy.mock.calls[0][0]).to.be.instanceOf(Wrapper);
+      expect(spy.mock.calls[1][0]).to.be.instanceOf(Wrapper);
+      expect(spy.mock.calls[2][0]).to.be.instanceOf(Wrapper);
+      expect(spy.mock.calls[0][0].hasClass('bar')).to.equal(true);
+      expect(spy.mock.calls[1][0].hasClass('baz')).to.equal(true);
+      expect(spy.mock.calls[2][0].hasClass('bux')).to.equal(true);
     });
   });
 }

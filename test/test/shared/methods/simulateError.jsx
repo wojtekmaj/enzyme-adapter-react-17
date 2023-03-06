@@ -1,6 +1,5 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
-import sinon from 'sinon-sandbox';
 import wrap from 'mocha-wrap';
 
 import getAdapter from 'enzyme/build/getAdapter';
@@ -90,11 +89,11 @@ export default function describeSimulateError({ Wrap, WrapRendered, isShallow })
         );
       });
 
-    context('calls through to renderer’s `simulateError`', () => {
+    describe('calls through to renderer’s `simulateError`', () => {
       let hierarchy;
       beforeEach(() => {
         const wrapper = WrapRendered(<Nested />);
-        const stub = sinon.stub().callsFake((_, __, e) => {
+        const stub = vi.fn().mockImplementation((_, __, e) => {
           throw e;
         });
         wrapper[sym('__renderer__')].simulateError = stub;
@@ -102,7 +101,7 @@ export default function describeSimulateError({ Wrap, WrapRendered, isShallow })
         expect(() => wrapper.simulateError(error)).to.throw(error);
         expect(stub).to.have.property('callCount', 1);
 
-        const [args] = stub.args;
+        const [args] = stub.mock.calls;
         expect(args).to.have.lengthOf(3);
         const [h, rootNode, actualError] = args;
         expect(actualError).to.equal(error);
@@ -140,7 +139,7 @@ export default function describeSimulateError({ Wrap, WrapRendered, isShallow })
 
     it('returns the wrapper', () => {
       const wrapper = WrapRendered(<Nested />);
-      wrapper[sym('__renderer__')].simulateError = sinon.stub();
+      wrapper[sym('__renderer__')].simulateError = vi.fn();
       expect(wrapper.simulateError()).to.equal(wrapper);
     });
   });

@@ -1,5 +1,5 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import React from 'react';
-import { expect } from 'chai';
 import wrap from 'mocha-wrap';
 import { mount, shallow } from 'enzyme';
 

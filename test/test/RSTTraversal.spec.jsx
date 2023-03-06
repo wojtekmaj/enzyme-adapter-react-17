@@ -1,6 +1,5 @@
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
-import sinon from 'sinon-sandbox';
-import { expect } from 'chai';
 import { elementToTree } from '@wojtekmaj/enzyme-adapter-utils';
 import {
   hasClassName,
@@ -57,14 +56,14 @@ describe('RSTTraversal', () => {
 
   describe('treeForEach', () => {
     it('is called once for a leaf node', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
       const node = $(<div />);
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 1);
     });
 
     it('handles a single child', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
       const node = $(
         <div>
           <div />
@@ -75,7 +74,7 @@ describe('RSTTraversal', () => {
     });
 
     it('handles several children', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
       const node = $(
         <div>
           <div />
@@ -87,7 +86,7 @@ describe('RSTTraversal', () => {
     });
 
     it('handles multiple hierarchies', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
       const node = $(
         <div>
           <div>
@@ -101,19 +100,19 @@ describe('RSTTraversal', () => {
     });
 
     it('handles array children', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
       const twoDivArray = [<div key="a" />, <div key="b" />];
       const divA = $(<div key="a" />);
       const divB = $(<div key="b" />);
       const node = $(<div>{twoDivArray}</div>);
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 3);
-      const nodes = spy.args.map((arg) => arg[0]);
+      const nodes = spy.mock.calls.map((arg) => arg[0]);
       expect(nodes).to.deep.equal([node, divA, divB]);
     });
 
     it('handles array siblings', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
       const array1 = [<div key="a" />, <div key="b" />];
       const array2 = [<div key="c" />, <div key="d" />];
       const divA = $(<div key="a" />);
@@ -128,24 +127,24 @@ describe('RSTTraversal', () => {
       );
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 5);
-      const nodes = spy.args.map((arg) => arg[0]);
+      const nodes = spy.mock.calls.map((arg) => arg[0]);
       expect(nodes).to.deep.equal([node, divA, divB, divC, divD]);
     });
 
     it('handles Map children', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
       const twoDivMap = new Map([[<div key="a" />], [<div key="b" />]]);
       const divA = $(<div key="a" />);
       const divB = $(<div key="b" />);
       const node = $(<div>{twoDivMap}</div>);
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 3);
-      const nodes = spy.args.map((arg) => arg[0]);
+      const nodes = spy.mock.calls.map((arg) => arg[0]);
       expect(nodes).to.deep.equal([node, divA, divB]);
     });
 
     it('handles Map siblings', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
       const map1 = new Map([[<div key="a" />], [<div key="b" />]]);
       const map2 = new Map([[<div key="c" />], [<div key="d" />]]);
       const divA = $(<div key="a" />);
@@ -160,24 +159,24 @@ describe('RSTTraversal', () => {
       );
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 5);
-      const nodes = spy.args.map((arg) => arg[0]);
+      const nodes = spy.mock.calls.map((arg) => arg[0]);
       expect(nodes).to.deep.equal([node, divA, divB, divC, divD]);
     });
 
     it('handles Set children', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
       const twoDivSet = new Set([<div key="a" />, <div key="b" />]);
       const divA = $(<div key="a" />);
       const divB = $(<div key="b" />);
       const node = $(<div>{twoDivSet}</div>);
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 3);
-      const nodes = spy.args.map((arg) => arg[0]);
+      const nodes = spy.mock.calls.map((arg) => arg[0]);
       expect(nodes).to.deep.equal([node, divA, divB]);
     });
 
     it('handles Set siblings', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
       const set1 = new Set([<div key="a" />, <div key="b" />]);
       const set2 = new Set([<div key="c" />, <div key="d" />]);
       const divA = $(<div key="a" />);
@@ -192,7 +191,7 @@ describe('RSTTraversal', () => {
       );
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 5);
-      const nodes = spy.args.map((arg) => arg[0]);
+      const nodes = spy.mock.calls.map((arg) => arg[0]);
       expect(nodes).to.deep.equal([node, divA, divB, divC, divD]);
     });
 
@@ -222,7 +221,7 @@ describe('RSTTraversal', () => {
       };
 
       it('handles iterable with Symbol.iterator property children', () => {
-        const spy = sinon.spy();
+        const spy = vi.fn();
 
         const iterableChildren = { [Symbol.iterator]: () => makeDivIterator(0, 2) };
 
@@ -232,12 +231,12 @@ describe('RSTTraversal', () => {
 
         treeForEach(node, spy);
         expect(spy).to.have.property('callCount', 3);
-        const nodes = spy.args.map((arg) => arg[0]);
+        const nodes = spy.mock.calls.map((arg) => arg[0]);
         expect(nodes).to.deep.equal([node, divA, divB]);
       });
 
       it('handles iterable with Symbol.iterator property siblings', () => {
-        const spy = sinon.spy();
+        const spy = vi.fn();
 
         const iterableChildren1 = { [Symbol.iterator]: () => makeDivIterator(0, 2) };
         const iterableChildren2 = { [Symbol.iterator]: () => makeDivIterator(2, 4) };
@@ -255,12 +254,12 @@ describe('RSTTraversal', () => {
 
         treeForEach(node, spy);
         expect(spy).to.have.property('callCount', 5);
-        const nodes = spy.args.map((arg) => arg[0]);
+        const nodes = spy.mock.calls.map((arg) => arg[0]);
         expect(nodes).to.deep.equal([node, divA, divB, divC, divD]);
       });
 
       it('handles iterable with @@iterator property children', () => {
-        const spy = sinon.spy();
+        const spy = vi.fn();
 
         const legacyIterableChildren = { '@@iterator': () => makeDivIterator(0, 2) };
 
@@ -270,12 +269,12 @@ describe('RSTTraversal', () => {
 
         treeForEach(node, spy);
         expect(spy).to.have.property('callCount', 3);
-        const nodes = spy.args.map((arg) => arg[0]);
+        const nodes = spy.mock.calls.map((arg) => arg[0]);
         expect(nodes).to.deep.equal([node, divA, divB]);
       });
 
       it('handles iterable with @@iterator property siblings', () => {
-        const spy = sinon.spy();
+        const spy = vi.fn();
 
         const legacyIterableChildren1 = { '@@iterator': () => makeDivIterator(0, 2) };
         const legacyIterableChildren2 = { '@@iterator': () => makeDivIterator(2, 4) };
@@ -293,13 +292,13 @@ describe('RSTTraversal', () => {
 
         treeForEach(node, spy);
         expect(spy).to.have.property('callCount', 5);
-        const nodes = spy.args.map((arg) => arg[0]);
+        const nodes = spy.mock.calls.map((arg) => arg[0]);
         expect(nodes).to.deep.equal([node, divA, divB, divC, divD]);
       });
     });
 
     it('does not get trapped from empty strings', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
       const node = $(
         <div>
           <p />
@@ -311,7 +310,7 @@ describe('RSTTraversal', () => {
     });
 
     it('passes in the node', () => {
-      const spy = sinon.spy();
+      const spy = vi.fn();
       const node = $(
         <div>
           <button type="button" />
@@ -322,10 +321,10 @@ describe('RSTTraversal', () => {
       );
       treeForEach(node, spy);
       expect(spy).to.have.property('callCount', 4);
-      expect(spy.args[0][0]).to.have.property('type', 'div');
-      expect(spy.args[1][0]).to.have.property('type', 'button');
-      expect(spy.args[2][0]).to.have.property('type', 'nav');
-      expect(spy.args[3][0]).to.have.property('type', 'input');
+      expect(spy.mock.calls[0][0]).to.have.property('type', 'div');
+      expect(spy.mock.calls[1][0]).to.have.property('type', 'button');
+      expect(spy.mock.calls[2][0]).to.have.property('type', 'nav');
+      expect(spy.mock.calls[3][0]).to.have.property('type', 'input');
     });
   });
 
