@@ -5,7 +5,6 @@
   "description": "JavaScript Testing utilities for React",
   "homepage": "https://enzymejs.github.io/enzyme/",
   "scripts": {
-    "clean": "rimraf build",
     "lint": "eslint . --ext .js,.jsx",
     "prettier": "prettier --check . --cache",
     "run": "vitest run test",
@@ -52,8 +51,7 @@
   "devDependencies": {
     "eslint": "^8.26.0",
     "eslint-config-wojtekmaj": "^0.8.3",
-    "prettier": "^2.7.0",
-    "rimraf": "^3.0.0"
+    "prettier": "^2.7.0"
   },
   "repository": {
     "type": "git",

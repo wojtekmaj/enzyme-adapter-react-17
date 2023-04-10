@@ -1494,7 +1494,6 @@ __metadata:
     react: ^17.0.0
     react-dom: ^17.0.0
     react-is: ^17.0.0
-    rimraf: ^3.0.0
     vitest: ^0.29.2
   languageName: unknown
   linkType: soft
@@ -4107,7 +4106,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rimraf@npm:^3.0.0, rimraf@npm:^3.0.2":
+"rimraf@npm:^3.0.2":
   version: 3.0.2
   resolution: "rimraf@npm:3.0.2"
   dependencies:
