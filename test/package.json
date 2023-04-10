@@ -53,7 +53,7 @@
     "eslint": "^8.26.0",
     "eslint-config-wojtekmaj": "^0.8.3",
     "prettier": "^2.7.0",
-    "rimraf": "^3.0.0"
+    "rimraf": "^5.0.0"
   },
   "repository": {
     "type": "git",
